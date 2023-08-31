@@ -6,7 +6,10 @@ from . import views
 
 urlpatterns = [
     # Define your app's URLs here
-    path('', views.home, name='home'),
+    path('adminSector', views.adminHome, name='adminHome'),
+    path('adminSector/products', views.adminProducts, name="adminProducts"),
+    path('adminSector/company', views.adminCompany, name="adminCompany"),
+    path('adminSector/catSubcat', views.adminCatSub, name="adminCatSub"),
 
     
     # Add more URLs as needed
