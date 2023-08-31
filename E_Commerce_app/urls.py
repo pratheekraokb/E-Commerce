@@ -11,6 +11,8 @@ urlpatterns = [
     path('adminSector/company', views.adminCompany, name="adminCompany"),
     path('adminSector/catSubcat', views.adminCatSub, name="adminCatSub"),
 
+    path('api/create_user/', views.user, name='create-user-api'),
+
     
     # Add more URLs as needed
 ]
