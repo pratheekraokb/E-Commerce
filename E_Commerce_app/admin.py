@@ -1,10 +1,10 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import (
     User, Product, Category, Subcategory, Tag, ProductTag, Company,
     Cart, CartItem, Order, OrderItem, OrderTracking, Address, Comment, ProductImage
 )
+
+# Register your models here.
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -23,7 +23,6 @@ class SubcategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
     list_filter = ('category',)
     search_fields = ('name',)
-
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
@@ -47,7 +46,6 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ('cart', 'product', 'quantity', 'calculate_subtotal')
     def calculate_subtotal(self, obj):
         return obj.calculate_subtotal()  
-
     calculate_subtotal.short_description = 'Subtotal'
 
 @admin.register(Order)
@@ -73,11 +71,3 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('product', 'image')
-
-
-
-
-
-
-
-

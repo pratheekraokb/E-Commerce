@@ -1,9 +1,392 @@
 {% extends "admin_pages/base_admin.html" %}
 
 {% block additional_styles %}
+
+div.heading{
+background-color:rgb(222, 214, 214);
+width:100%;
+height: 100px;
+border-radius: 5px;
+margin-bottom: 10px;
+margin-top: 10px;
+}
+div.heading h1{
+margin:10px;
+padding-left: 20px;
+padding-top: 35px;
+text-align: center;
+color: red;
+font-style: italic;
+font-weight:bolder;
+font-size: 25px;
+}
+form label{
+font-weight:bold;
+}
+
+button.custom-button {
+padding: 5px 10px;
+margin-right: 10px;
+border: none;
+border-radius: 50px;
+background-color: black;
+color: white;
+font-size: 14px;
+height: 20px;
+}
+
+.tag-button {
+margin: 3px;
+margin-right: 5px;
+border-radius: 6px;
+min-height: 40px;
+min-width: 60px;
+font-weight:bold;
+}
+.custom-file-upload {
+display: inline-block;
+padding: 6px 12px;
+cursor: pointer;
+background-color: #007bff;
+color: #fff;
+border: 1px solid #007bff;
+border-radius: 4px;
+margin-top:27px;
+width: 100%;
+text-align:center;
+}
+
+.custom-file-upload:hover {
+background-color: #0056b3;
+}
+.modal {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+background-color: #fff;
+}
+
+.close {
+position: absolute;
+right: 10px;
+top: 10px;
+font-size: 20px;
+font-weight: bold;
+color: #888;
+cursor: pointer;
+}
+
+img.modal-image {
+max-width: 100%;
+max-height: 80vh;
+display: block;
+margin: 0 auto;
+}
+
+div.image-button-container button{
+background-color:black;
+color:white;
+height: 50px;
+min-width: 30px;
+padding:5px;
+font-weight:bold;
+}
+/* Add this CSS to style the image buttons container */
+.image-buttons-container {
+display: flex;
+flex-wrap: wrap; /* Wrap the buttons to the next line when necessary */
+gap: 10px; /* Adjust the gap between buttons */
+align-items: center; /* Center-align items vertically */
+margin-bottom: 6px;
+}
+
+/* Style for each image button container */
+.image-button-container {
+display: flex;
+align-items: center;
+background-color: #f0f0f0; /* Background color for each container */
+border: 1px solid #ddd;
+border-radius: 5px;
+padding: 5px;
+}
+
+/* Style for the "View Image" button */
+.image-button {
+background-color: #007bff;
+color: #fff;
+border: none;
+border-radius: 4px;
+margin-right: 5px;
+cursor: pointer;
+}
+
+/* Style for the "X" button */
+.remove-button {
+background-color: #ff0000;
+color: #fff;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
 {% endblock %}
 
-{% block contents %}
+
+{% block content %}
+<div class="content container-fluid">
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <img id="modalImage" class="modal-image">
+        </div>
+    </div>
+    <div class="addNewProduct">
+        <div class="heading">
+            <h1>Add New Product</h1>
+        </div>
+        <div class="form">
+            <form>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="productnameLabel">Product Name</label>
+                        <input type="text" class="form-control" id="product_name" placeholder="eg:- Asus TUFF Lap"
+                            required>
+
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="mrpLabel">MRP</label>
+                        <input type="number" class="form-control" id="mrp" placeholder="eg:- 60000" required>
+
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="sellpriceLabel">Selling Price</label>
+                        <input type="number" class="form-control" id="sell_price" placeholder="eg:- 55000" required>
+
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <label for="stockLabel">Stock</label>
+                        <input type="number" class="form-control" id="stock" placeholder="eg:- 5" required>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label for="categoryLabel">Category</label>
+                        <input type="text" class="form-control" id="category" placeholder="eg:- Electronics" required>
+
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="subcategoryLabel">Sub-Category</label>
+                        <input type="text" class="form-control" id="subcategory" placeholder="eg:- Laptop" required>
+
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="companyLabel">Company</label>
+                        <input type="text" class="form-control" id="company" placeholder="eg:- ASUS Ltd" required>
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-8 mb-3">
+                        <textarea id="description" name="description" rows="13" cols="100"
+                            placeholder=" Enter your Product Description here"></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="/" alt="Description Image" height="100%"
+                            style="max-height: 20rem; max-width: 100%;" />
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="col-md-2 mb-3">
+                        <label for="tagsLabel">Enter Tags</label>
+                        <input type="text" class="form-control" id="textInput" placeholder="Enter tag and press Enter">
+
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <button id="createButton" disabled style="height: 60px; width: 120px; margin:5px">Create
+                            Tags</button>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div id="buttonContainer"></div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="custom-file-upload">
+                            <input type="file" id="mainImageInput" class="form-control" accept="image/*"
+                                style="display: none;">
+                            Upload Image
+                        </label>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-2 mb-3">
+
+                        <input type="file" id="imageInput" accept="image/*" multiple>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <!-- <button id="addImageButton" style="margin-top: 5px;">Add Image</button> -->
+                        <button id="addImageButton" style="height: 60px; width: 120px; margin:5px">Add Image</button>
+                    </div>
+                    <div class="col-md-5 mb-3">
+                        <p>
+                            First select the image to be uploaded in <i><b>Choose Files</b></i> , Then click <i><b>Add
+                                    Image</b></i> button. Now you can view image by clicking <i><b>View Image</b></i>,
+                            remove image by clicking <i><b>X</b></i> button.
+                        </p>
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <div id="imageButtons" class="image-buttons-container">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center"> <!-- Add a div to center-align content -->
+                    <button class="btn btn-primary" type="submit"><b>Submit</b></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="updateExistProduct">
+        <div class="heading">
+            <h1>Update Existing Product</h1>
+        </div>
+    </div>
+</div>
+<script>
+    const textInput = document.getElementById('textInput');
+    const createButton = document.getElementById('createButton');
+    const buttonContainer = document.getElementById('buttonContainer');
+    const mainImageInput = document.getElementById('mainImageInput');
+    const descriptionImage = document.querySelector('.col-md-4 img');
+
+    textInput.addEventListener('input', () => {
+        createButton.disabled = textInput.value.trim() === '';
+    });
+
+    textInput.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter' && textInput.value.trim() !== '') {
+            createButton.click();
+        }
+    });
+
+    createButton.addEventListener('click', () => {
+        const buttonText = textInput.value.trim();
+        if (buttonText !== '') {
+            const newButton = document.createElement('button');
+            newButton.textContent = buttonText;
+            newButton.classList.add('custom-button', 'tag-button');
+            buttonContainer.appendChild(newButton);
+            textInput.value = '';
+            createButton.disabled = true;
+        }
+    });
+
+    mainImageInput.addEventListener('change', (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const imageUrl = URL.createObjectURL(selectedFile);
+            descriptionImage.src = imageUrl;
+        }
+    });
+    // Image
+    const imageInput = document.getElementById('imageInput');
+    const addImageButton = document.getElementById('addImageButton');
+    const imageButtons = document.getElementById('imageButtons');
+    const modal = document.getElementById('myModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeModal = document.getElementById('closeModal');
+
+    addImageButton.addEventListener('click', () => {
+        for (let i = 0; i < imageInput.files.length; i++) {
+            const file = imageInput.files[i];
+
+
+            const imageButtonContainer = document.createElement('div');
+            imageButtonContainer.classList.add('image-button-container');
+
+
+            const newButton = document.createElement('button');
+            newButton.textContent = 'View Image ';
+            newButton.classList.add('image-button');
+
+            // Handle button click to display the image in a modal
+            newButton.addEventListener('click', () => {
+                displayImageInModal(file);
+            });
+
+            // Create a button to remove each image
+            const removeButton = document.createElement('button');
+            removeButton.textContent = ' X ';
+            removeButton.classList.add('remove-button');
+            removeButton.addEventListener('click', () => {
+                // Clear the input value for the selected image
+                const inputIndex = Array.from(imageInput.files).indexOf(file);
+                if (inputIndex >= 0) {
+                    imageInput.files = Array.from(imageInput.files).filter((_, index) => index !== inputIndex);
+                }
+                // Remove the entire container div
+                imageButtonContainer.remove();
+            });
+
+            // Append the buttons to the container
+            imageButtonContainer.appendChild(newButton);
+            imageButtonContainer.appendChild(removeButton);
+
+            // Append the container to the container for all image buttons
+            imageButtons.appendChild(imageButtonContainer);
+
+            // Clear the input value for the current image
+            imageInput.value = '';
+        }
+    });
+
+    // Function to display the image in the modal
+    function displayImageInModal(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            modalImage.src = reader.result;
+            modal.style.display = 'block'; // Display the modal
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Close the modal when the close button is clicked
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close the modal when clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+</script>
 {% endblock %}
 
 {% block direBtn %}Products{% endblock %}

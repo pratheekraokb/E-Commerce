@@ -6,10 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    {% block head %}
+    {% endblock %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* Common styles for both divs */
         * {
             padding: 0;
+            margin: 0;
         }
 
         body,
@@ -17,32 +21,32 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            /* width: 100%; */
+            background-color: black;
         }
 
         .container {
             display: flex;
-            height: 100%;
+            /* height: 100%; */
+           
         }
-        
-        
-        
+
         .leftdiv {
             flex: 0 0 15%;
             background-color: #000000;
             padding: 20px;
             color: #f8f8f8;
-            
+            overflow-y: auto;
         }
-        
-       
 
         .leftdiv h2 {
             text-align: center;
+
         }
-        
-        button.admOpt{
+
+        button.admOpt {
             margin-top: 9px;
-            height: 70px;
+            height: 100px;
             width: 100%;
             background-color: #322e2e;
             font-size: 18px;
@@ -53,7 +57,8 @@
             border-radius: 15px;
             transition: background-color 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
         }
-        button.admOpt:hover{
+
+        button.admOpt:hover {
             background-color: #dad0d0;
             color: #000000;
             cursor: pointer;
@@ -61,21 +66,20 @@
             transform: scale(1.05);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-    
-
-
 
         .rightdiv {
             flex: 1;
             background-color: #dad0d0;
             padding: 20px;
+            overflow-y: auto;
         }
-        
+
         .breadcrumb {
             display: flex;
             align-items: center;
             font-weight: bolder;
             font-style: italic;
+            background-color:#dad0d0;
         }
 
         .breadcrumb a {
@@ -83,26 +87,27 @@
             transition: color 0.3s;
             text-decoration: none;
         }
-        
+
         .breadcrumb a:hover {
             color: #27292a;
         }
-        
+
         .breadcrumb span {
             margin: 0 5px;
             color: #010202;
-     
         }
+
         {% block additional_styles %}{% endblock %}
     </style>
+
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid w-100" style="display: flex; height: 100%;margin-left: 0;padding: 0;">
         <div class="leftdiv">
 
             <h2><a href="/adminSector" style="color: #f8f8f8;">Admin Options</a></h2>
-            <a href="/adminSector/products"><button class="admOpt" id="btnProducts" onclick="setActiveButton('btnProducts')">Alter <br>Products</button></a>
+            <a href="/adminSector/products"><button class="admOpt" id="btnProducts" onclick="setActiveButton('btnProducts')">Add/Alter <br>Products</button></a>
             <a href="/adminSector/company"><button class="admOpt" id="btnCompany" onclick="setActiveButton('btnCompany')">Add/Alter <br>Company/Organisation</button></a>
             <a href="/adminSector/catSubcat"><button class="admOpt" id="btnCategory" onclick="setActiveButton('btnCategory')">Add/Alter <br>Category & Sub-Category</button></a>
         </div>

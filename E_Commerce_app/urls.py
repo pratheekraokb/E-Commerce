@@ -11,7 +11,15 @@ urlpatterns = [
     path('adminSector/company', views.adminCompany, name="adminCompany"),
     path('adminSector/catSubcat', views.adminCatSub, name="adminCatSub"),
 
-    path('api/create_user/', views.user, name='create-user-api'),
+    # User
+    path('api/create_user', views.create_user, name='create-user-api'),
+    path('api/update_user', views.edit_user, name='edit-user-api'),
+    path('api/delete_user/<int:user_id>/', views.delete_user, name='delete-user-api'),
+
+    # Product
+    path('api/create_product', views.create_product, name='create-product'),
+    path('api/update_product/<int:product_id>', views.update_product, name='update-product'),
+    path('api/delete_product/<int:product_id>/', views.delete_product, name='delete-product-api'),
 
     
     # Add more URLs as needed

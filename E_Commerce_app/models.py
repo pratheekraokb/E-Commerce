@@ -3,9 +3,9 @@ from django.utils import timezone
 
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=255)
-    email = models.EmailField()
-    password = models.CharField(max_length=255)  # Store hashed passwords
+    username = models.CharField(max_length=255, unique=True)  
+    email = models.EmailField(unique=True)  # Unique email
+    password = models.CharField(max_length=255) 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_admin = models.BooleanField(default=False)
@@ -29,10 +29,18 @@ class Product(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
     subcategory = models.ForeignKey('Subcategory', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/')  # Specify the upload path
+    image = models.ImageField(upload_to='product_images/') 
 
     def __str__(self):
         return self.name
+    def delete(self, *args, **kwargs):
+        # Delete associated ProductTags
+        self.producttag_set.all().delete()
+
+        # Delete associated ProductImages
+        self.productimage_set.all().delete()
+
+        super(Product, self).delete(*args, **kwargs)
     class Meta:
         db_table = 'Product'
     

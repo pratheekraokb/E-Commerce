@@ -4,7 +4,9 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import User
+from .models import User, Category, Subcategory, Product, Company, Tag, ProductImage, ProductTag
+from django.contrib.auth.hashers import make_password
+from django.db import connection
 
 # Create your views here.
 def adminHome(request):
@@ -25,7 +27,7 @@ def adminCatSub(request):
 
 # POST Requests API
 @csrf_exempt
-def user(request):
+def create_user(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -37,7 +39,7 @@ def user(request):
             
             username = data['username']
             email = data['email']
-            password = data['password']
+            password = make_password(data['password'])
             first_name = data['first_name']
             last_name = data['last_name']
             phone_number = data.get('phone_number')  
@@ -67,5 +69,197 @@ def user(request):
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
-
     return JsonResponse({'message': 'POST method required'}, status=405)
+
+@csrf_exempt
+def edit_user(request):
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            email = data.get('email')
+            
+     
+            try:
+                user = User.objects.get(username=username, email=email)
+            except User.DoesNotExist:
+                return JsonResponse({'error': 'User not found'}, status=404)
+            
+        
+            if 'password' in data:
+                user.password = make_password(data['password'])
+            if 'first_name' in data:
+                user.first_name = data['first_name']
+            if 'last_name' in data:
+                user.last_name = data['last_name']
+            if 'phone_number' in data:
+                user.phone_number = data['phone_number']
+            if 'is_admin' in data:
+                user.is_admin = data['is_admin']
+            if 'date_of_birth' in data:
+                user.date_of_birth = data['date_of_birth']
+            if 'profile_image' in data:
+                user.profile_image = data['profile_image']
+            
+            user.save()
+            
+            return JsonResponse({'message': 'User updated successfully'}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'message': 'Unsupported method'}, status=405)
+
+@csrf_exempt
+def delete_user(request, user_id):
+    if request.method == 'DELETE':
+        try:
+            user = User.objects.get(pk=user_id)
+            user.delete()
+            return JsonResponse({'message': 'User deleted successfully'}, status=200)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'message': 'Unsupported method'}, status=405)
+
+@csrf_exempt
+def create_product(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        name = data.get('name')
+        description = data.get('description')
+        mrp_price = data.get('mrp_price')
+        selling_price = data.get('selling_price')
+        stock_quantity = data.get('stock_quantity')
+        category_id = data.get('category_id')
+        company_id = data.get('company_id')
+        subcategory_id = data.get('subcategory_id')
+        tags = data.get('tags', [])  
+        main_img = data.get('images', {}).get('main_img', '')
+        other_img_list = data.get('images', {}).get('other_img', [])
+        
+        
+        try:
+            category = Category.objects.get(pk=category_id)
+            company = Company.objects.get(pk=company_id)
+            subcategory = Subcategory.objects.get(pk=subcategory_id)
+            
+            new_product = Product(
+                name=name,
+                description=description,
+                mrp_price=mrp_price,
+                selling_price=selling_price,
+                stock_quantity=stock_quantity,
+                category=category,
+                company=company,
+                subcategory=subcategory,
+                image=main_img  
+            )
+            new_product.save()
+
+            for tag_name in tags:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                new_product_tag = ProductTag(product=new_product, tag=tag)
+                new_product_tag.save()
+            
+            for other_img_url in other_img_list:
+                product_image = ProductImage(product=new_product, image=other_img_url)
+                product_image.save()
+            
+            return JsonResponse({'message': 'Product added successfully'}, status=201)
+        except Category.DoesNotExist:
+            return JsonResponse({'error': 'Category not found'}, status=404)
+        except Company.DoesNotExist:
+            return JsonResponse({'error': 'Company not found'}, status=404)
+        except Subcategory.DoesNotExist:
+            return JsonResponse({'error': 'Subcategory not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+@csrf_exempt
+def update_product(request, product_id):
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            
+            try:
+                product = Product.objects.get(pk=product_id)
+            except Product.DoesNotExist:
+                return JsonResponse({'error': 'Product not found'}, status=404)
+            
+            name = data.get('name', product.name)
+            description = data.get('description', product.description)
+            mrp_price = data.get('mrp_price', product.mrp_price)
+            selling_price = data.get('selling_price', product.selling_price)
+            stock_quantity = data.get('stock_quantity', product.stock_quantity)
+            category_id = data.get('category_id', product.category_id)
+            company_id = data.get('company_id', product.company_id)
+            subcategory_id = data.get('subcategory_id', product.subcategory_id)
+            tags = data.get('tags', [])
+            main_img = data.get('images', {}).get('main_img', product.image)
+            other_img_list = data.get('images', {}).get('other_img', [])
+            
+            try:
+                category = Category.objects.get(pk=category_id)
+                company = Company.objects.get(pk=company_id)
+                subcategory = Subcategory.objects.get(pk=subcategory_id)
+                
+                product.name = name
+                product.description = description
+                product.mrp_price = mrp_price
+                product.selling_price = selling_price
+                product.stock_quantity = stock_quantity
+                product.category = category
+                product.company = company
+                product.subcategory = subcategory
+                product.image = main_img
+                product.save()
+                
+                # Update product tags
+                product.producttag_set.all().delete()  # Delete existing tags
+                for tag_name in tags:
+                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    new_product_tag = ProductTag(product=product, tag=tag)
+                    new_product_tag.save()
+                
+                # Update product images
+                product.productimage_set.all().delete()  # Delete existing images
+                for other_img_url in other_img_list:
+                    product_image = ProductImage(product=product, image=other_img_url)
+                    product_image.save()
+                
+                return JsonResponse({'message': 'Product updated successfully'}, status=200)
+            
+            except Category.DoesNotExist:
+                return JsonResponse({'error': 'Category not found'}, status=404)
+            except Company.DoesNotExist:
+                return JsonResponse({'error': 'Company not found'}, status=404)
+            except Subcategory.DoesNotExist:
+                return JsonResponse({'error': 'Subcategory not found'}, status=404)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+@csrf_exempt
+def delete_product(request, product_id):
+    if request.method == 'DELETE':
+        try:
+            product = Product.objects.get(pk=product_id)
+            product.delete()
+            return JsonResponse({'message': 'Product deleted successfully'}, status=200)
+        except Product.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'message': 'Unsupported method'}, status=405)
+
