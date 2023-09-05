@@ -29,7 +29,10 @@ class Product(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
     subcategory = models.ForeignKey('Subcategory', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/') 
+    image = models.ImageField(upload_to='shop/product_images', default="")
+    
+    
+
 
     def __str__(self):
         return self.name

@@ -3,23 +3,32 @@ from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
 import json
 from .models import User, Category, Subcategory, Product, Company, Tag, ProductImage, ProductTag
 from django.contrib.auth.hashers import make_password
 from django.db import connection
-
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.storage import FileSystemStorage
+from .forms import ProductForm
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 # Create your views here.
 def adminHome(request):
+
     return render(request, 'admin_pages/home.html')
 
 def adminProducts(request):
-    return render(request, 'admin_pages/products.html')
+    form = ProductForm()
+    return render(request, 'admin_pages/products.html',{'form': form})
 
 def adminCompany(request):
     return render(request, 'admin_pages/company.html')
 
 def adminCatSub(request):
     return render(request,'admin_pages/catSubcat.html')
+
+
 
 
 # GET Requests API
@@ -125,61 +134,64 @@ def delete_user(request, user_id):
     else:
         return JsonResponse({'message': 'Unsupported method'}, status=405)
 
-@csrf_exempt
+
+
 def create_product(request):
     if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
+        form = ProductForm(request.POST, request.FILES)
         
-        name = data.get('name')
-        description = data.get('description')
-        mrp_price = data.get('mrp_price')
-        selling_price = data.get('selling_price')
-        stock_quantity = data.get('stock_quantity')
-        category_id = data.get('category_id')
-        company_id = data.get('company_id')
-        subcategory_id = data.get('subcategory_id')
-        tags = data.get('tags', [])  
-        main_img = data.get('images', {}).get('main_img', '')
-        other_img_list = data.get('images', {}).get('other_img', [])
+        if form.is_valid():
         
-        
-        try:
+            category_id = form.cleaned_data['categorySelect']
+            subcategory_id = form.cleaned_data['subcategorySelect']
+            company_id = form.cleaned_data['companySelect']
+
             category = Category.objects.get(pk=category_id)
-            company = Company.objects.get(pk=company_id)
             subcategory = Subcategory.objects.get(pk=subcategory_id)
-            
+            company = Company.objects.get(pk=company_id)
             new_product = Product(
-                name=name,
-                description=description,
-                mrp_price=mrp_price,
-                selling_price=selling_price,
-                stock_quantity=stock_quantity,
+                name=form.cleaned_data['product_name'],
+                description=form.cleaned_data['description'],
+                mrp_price=form.cleaned_data['mrp'],
+                selling_price=form.cleaned_data['sell_price'],
+                stock_quantity=form.cleaned_data['stock'],
                 category=category,
-                company=company,
                 subcategory=subcategory,
-                image=main_img  
+                company=company,
+                image=form.cleaned_data['file']
             )
             new_product.save()
 
-            for tag_name in tags:
-                tag, created = Tag.objects.get_or_create(name=tag_name)
-                new_product_tag = ProductTag(product=new_product, tag=tag)
-                new_product_tag.save()
-            
-            for other_img_url in other_img_list:
-                product_image = ProductImage(product=new_product, image=other_img_url)
-                product_image.save()
-            
-            return JsonResponse({'message': 'Product added successfully'}, status=201)
-        except Category.DoesNotExist:
-            return JsonResponse({'error': 'Category not found'}, status=404)
-        except Company.DoesNotExist:
-            return JsonResponse({'error': 'Company not found'}, status=404)
-        except Subcategory.DoesNotExist:
-            return JsonResponse({'error': 'Subcategory not found'}, status=404)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+            tags_data = request.POST.get('tagsData')  
+            if tags_data is not None:
+               
+                try:
+                    tags_dict = json.loads(tags_data)
+                    tags_array = list(set(tags_dict.get('tags', [])))
+                    print(tags_array)
+
+                except json.JSONDecodeError:
+                    tags_array = []
+
+                for tag_name in tags_array:
+                       
+                        tag, created = Tag.objects.get_or_create(name=tag_name)
+                        ProductTag.objects.create(product=new_product, tag=tag)
+
+        return redirect('/adminSector/products')
     
+
+        
+
+    else:
+        form = ProductForm()
+        form.fields['categorySelect'].choices = [(category.id, category.name) for category in Category.objects.all()]
+        form.fields['subcategorySelect'].choices = [(subcategory.id, subcategory.name) for subcategory in Subcategory.objects.all()]
+        form.fields['companySelect'].choices = [(company.id, company.name) for company in Company.objects.all()]
+
+    return HttpResponse("Something went wrong.")
+
+
 @csrf_exempt
 def update_product(request, product_id):
     if request.method == 'PUT':
@@ -263,3 +275,20 @@ def delete_product(request, product_id):
     else:
         return JsonResponse({'message': 'Unsupported method'}, status=405)
 
+def get_categories(request):
+    if request.method == 'GET':
+        categories = Category.objects.all()
+        category_dict = {category.category_id: category.name for category in categories}
+        return JsonResponse(category_dict)
+
+def get_subcategories(request, category_id):
+    if request.method == 'GET':
+        subcategories = Subcategory.objects.filter(category_id=category_id)
+        subcategory_dict = {subcategory.subcategory_id: subcategory.name for subcategory in subcategories}
+        return JsonResponse(subcategory_dict)
+
+def get_companies(request):
+    if request.method == 'GET':
+        companies = Company.objects.all()
+        company_dict = {company.company_id: company.name for company in companies}
+        return JsonResponse(company_dict)

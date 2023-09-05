@@ -157,59 +157,84 @@ cursor: pointer;
         <div class="heading">
             <h1>Add New Product</h1>
         </div>
-        <div class="form">
-            <form>
+        <!-- <div class="formDiv"> -->
+
+        <!-- <form enctype="multipart/form-data" method="POST" action=""> -->
+        <form enctype="multipart/form-data" method="POST" action="{% url 'create-product' %}">
+
+            {% csrf_token %}
+            <div class="form">
                 <div class="form-row">
                     <div class="col-md-6 mb-3">
                         <label for="productnameLabel">Product Name</label>
-                        <input type="text" class="form-control" id="product_name" placeholder="eg:- Asus TUFF Lap"
-                            required>
+                        <!-- <input type="text" class="form-control" id="product_name" name="product_name"
+                            placeholder="eg:- Asus TUFF Lap" required> -->
+                        {{ form.product_name }}
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="mrpLabel">MRP</label>
-                        <input type="number" class="form-control" id="mrp" placeholder="eg:- 60000" required>
+                        <!-- <input type="number" class="form-control" id="mrp" name="mrp" placeholder="eg:- 60000" required> -->
+                        {{ form.mrp }}
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="sellpriceLabel">Selling Price</label>
-                        <input type="number" class="form-control" id="sell_price" placeholder="eg:- 55000" required>
-
+                        <!-- <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="eg:- 55000"
+                            required> -->
+                        {{ form.sell_price }}
                     </div>
 
                 </div>
                 <div class="form-row">
                     <div class="col-md-3 mb-3">
                         <label for="stockLabel">Stock</label>
-                        <input type="number" class="form-control" id="stock" placeholder="eg:- 5" required>
+                        <!-- <input type="number" class="form-control" id="stock" name="stock" placeholder="eg:- 5" required> -->
+                        {{ form.stock }}
 
                     </div>
 
                     <div class="col-md-3 mb-3">
                         <label for="categoryLabel">Category</label>
-                        <input type="text" class="form-control" id="category" placeholder="eg:- Electronics" required>
+                        <select class="form-control" id="categorySelect" name="{{ form.categorySelect.name }}" required>
+                            <option value="">{{ form.categorySelect.choices.0.1 }}</option>
+                            {% for categoryId, categoryName in categories.items %}
+                            <option value="{{ categoryId }}">{{ categoryName }}</option>
+                            {% endfor %}
+                        </select>
 
                     </div>
+
                     <div class="col-md-3 mb-3">
                         <label for="subcategoryLabel">Sub-Category</label>
-                        <input type="text" class="form-control" id="subcategory" placeholder="eg:- Laptop" required>
-
+                        <select class="form-control" id="subcategorySelect" name="{{ form.subcategorySelect.name }}"
+                            required>
+                            <option value="">Select a Sub-Category</option>
+                            {% for subcategoryId, subcategoryName in subcategories.items %}
+                            <option value="{{ subcategoryId }}">{{ subcategoryName }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="col-md-3 mb-3">
                         <label for="companyLabel">Company</label>
-                        <input type="text" class="form-control" id="company" placeholder="eg:- ASUS Ltd" required>
-
+                        <select class="form-control" id="companySelect" name="{{ form.companySelect.name }}" required>
+                            <option value="">{{ form.companySelect.choices.0.1 }}</option>
+                            {% for companyId, companyName in companies.items %}
+                            <option value="{{ companyId }}">{{ companyName }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="col-md-8 mb-3">
-                        <textarea id="description" name="description" rows="13" cols="100"
-                            placeholder=" Enter your Product Description here"></textarea>
+                        {{ form.description }}
                     </div>
+
                     <div class="col-md-4 mb-3">
-                        <img src="/" alt="Description Image" height="100%"
-                            style="max-height: 20rem; max-width: 100%;" />
+                        <img id="selectedImage" src="" alt="Selected Image" style="max-height: 20rem; max-width: 100%;">
+
                     </div>
 
                 </div>
@@ -217,33 +242,43 @@ cursor: pointer;
 
                     <div class="col-md-2 mb-3">
                         <label for="tagsLabel">Enter Tags</label>
-                        <input type="text" class="form-control" id="textInput" placeholder="Enter tag and press Enter">
+                     
+                        {{ form.textInput }}
+                      
+
 
                     </div>
                     <div class="col-md-2 mb-3">
-                        <button id="createButton" disabled style="height: 60px; width: 120px; margin:5px">Create
+                        <button id="createButton" type="button" disabled
+                            style="height: 60px; width: 120px; margin:5px">Create
                             Tags</button>
                     </div>
                     <div class="col-md-4 mb-3">
                         <div id="buttonContainer"></div>
                     </div>
                     <div class="col-md-2 mb-3">
-                        <label class="custom-file-upload">
-                            <input type="file" id="mainImageInput" class="form-control" accept="image/*"
-                                style="display: none;">
-                            Upload Image
-                        </label>
+
+                        <label for="image">Product Image:</label>
+
+                        {{ form.file }}
+
                     </div>
+
 
                 </div>
                 <div class="form-row">
                     <div class="col-md-2 mb-3">
 
-                        <input type="file" id="imageInput" accept="image/*" multiple>
+                        <!-- <input type="file" name="imageInput" id="imageInput" accept="image/*" multiple> -->
+                        <!-- <input type="file" id="imageInput" accept="image/*" multiple> -->
+
                     </div>
                     <div class="col-md-3 mb-3">
                         <!-- <button id="addImageButton" style="margin-top: 5px;">Add Image</button> -->
-                        <button id="addImageButton" style="height: 60px; width: 120px; margin:5px">Add Image</button>
+                        <!-- <button type="button" id="addImageButton" style="height: 60px; width: 120px; margin:5px">Add
+                            Image</button> -->
+
+
                     </div>
                     <div class="col-md-5 mb-3">
                         <p>
@@ -262,11 +297,14 @@ cursor: pointer;
                         </div>
                     </div>
                 </div>
-                <div class="text-center"> <!-- Add a div to center-align content -->
-                    <button class="btn btn-primary" type="submit"><b>Submit</b></button>
-                </div>
-            </form>
-        </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload"><b>Submit</b></button>
+            </div>
+
+        </form>
+        <!-- </div> -->
     </div>
 
 
@@ -276,115 +314,242 @@ cursor: pointer;
         </div>
     </div>
 </div>
+
+
 <script>
-    const textInput = document.getElementById('textInput');
-    const createButton = document.getElementById('createButton');
-    const buttonContainer = document.getElementById('buttonContainer');
-    const mainImageInput = document.getElementById('mainImageInput');
-    const descriptionImage = document.querySelector('.col-md-4 img');
+    
+    const tagsArray = [];
 
-    textInput.addEventListener('input', () => {
-        createButton.disabled = textInput.value.trim() === '';
-    });
+    function createTagButton(tagText) {
+        const buttonContainer = document.getElementById('buttonContainer');
 
-    textInput.addEventListener('keyup', (event) => {
-        if (event.key === 'Enter' && textInput.value.trim() !== '') {
-            createButton.click();
-        }
-    });
-
-    createButton.addEventListener('click', () => {
-        const buttonText = textInput.value.trim();
-        if (buttonText !== '') {
-            const newButton = document.createElement('button');
-            newButton.textContent = buttonText;
-            newButton.classList.add('custom-button', 'tag-button');
-            buttonContainer.appendChild(newButton);
-            textInput.value = '';
-            createButton.disabled = true;
-        }
-    });
-
-    mainImageInput.addEventListener('change', (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const imageUrl = URL.createObjectURL(selectedFile);
-            descriptionImage.src = imageUrl;
-        }
-    });
-    // Image
-    const imageInput = document.getElementById('imageInput');
-    const addImageButton = document.getElementById('addImageButton');
-    const imageButtons = document.getElementById('imageButtons');
-    const modal = document.getElementById('myModal');
-    const modalImage = document.getElementById('modalImage');
-    const closeModal = document.getElementById('closeModal');
-
-    addImageButton.addEventListener('click', () => {
-        for (let i = 0; i < imageInput.files.length; i++) {
-            const file = imageInput.files[i];
+   
+        const tagButton = document.createElement('button');
+        tagButton.className = 'tag-button custom-button';
+        tagButton.textContent = tagText;
+        tagButton.type = 'button';
 
 
-            const imageButtonContainer = document.createElement('div');
-            imageButtonContainer.classList.add('image-button-container');
+        tagButton.addEventListener('click', function () {
+            buttonContainer.removeChild(tagButton);
+            const index = tagsArray.indexOf(tagText);
+            if (index !== -1) {
+                tagsArray.splice(index, 1);
+            }
+        });
 
 
-            const newButton = document.createElement('button');
-            newButton.textContent = 'View Image ';
-            newButton.classList.add('image-button');
-
-            // Handle button click to display the image in a modal
-            newButton.addEventListener('click', () => {
-                displayImageInModal(file);
-            });
-
-            // Create a button to remove each image
-            const removeButton = document.createElement('button');
-            removeButton.textContent = ' X ';
-            removeButton.classList.add('remove-button');
-            removeButton.addEventListener('click', () => {
-                // Clear the input value for the selected image
-                const inputIndex = Array.from(imageInput.files).indexOf(file);
-                if (inputIndex >= 0) {
-                    imageInput.files = Array.from(imageInput.files).filter((_, index) => index !== inputIndex);
-                }
-                // Remove the entire container div
-                imageButtonContainer.remove();
-            });
-
-            // Append the buttons to the container
-            imageButtonContainer.appendChild(newButton);
-            imageButtonContainer.appendChild(removeButton);
-
-            // Append the container to the container for all image buttons
-            imageButtons.appendChild(imageButtonContainer);
-
-            // Clear the input value for the current image
-            imageInput.value = '';
-        }
-    });
-
-    // Function to display the image in the modal
-    function displayImageInModal(file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            modalImage.src = reader.result;
-            modal.style.display = 'block'; // Display the modal
-        };
-        reader.readAsDataURL(file);
+        buttonContainer.appendChild(tagButton);
+        tagsArray.push(tagText);
     }
 
-    // Close the modal when the close button is clicked
-    closeModal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    
+    document.getElementById('{{ form.textInput.id_for_label }}').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); 
 
-    // Close the modal when clicking outside the modal content
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
+            const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
+            const tagText = tagInput.value.trim(); 
+
+            if (tagText) {
+                createTagButton(tagText); 
+                tagInput.value = '';
+            }
         }
     });
+
+    // Event listener for the "Create Tags" button (optional)
+    document.getElementById('createButton').addEventListener('click', function () {
+        const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
+        const tagText = tagInput.value.trim(); // Remove leading/trailing spaces
+
+        if (tagText) {
+            createTagButton(tagText); // Create a tag button
+            tagInput.value = ''; // Clear the input field
+        }
+    });
+
+    // Enable the "Create Tags" button when there's input
+    document.getElementById('{{ form.textInput.id_for_label }}').addEventListener('input', function () {
+        const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
+        const createButton = document.getElementById('createButton');
+        createButton.disabled = tagInput.value.trim() === '';
+    });
+
+
+
+    document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Create a new FormData object from the form
+        const formData = new FormData(this);
+        for (const pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+        }
+        console.log(tagsArray)
+        const jsonObject = {
+            tags: tagsArray
+        };
+        const jsonString = JSON.stringify(jsonObject);
+        formData.append('tagsData', jsonString);
+        // You can access the form data here if needed
+        // For example, to get the product name: formData.get('product_name')
+
+        // Send a POST request to the server using fetch
+        fetch('{% url "create-product" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                // Add any headers you need, e.g., CSRF token
+                'X-CSRFToken': getCSRFToken() // Assuming you have a function to get the CSRF token
+            }
+        })
+        .then(response => response.json()) // Assuming the server responds with JSON
+        .then(data => {
+            // Handle the response data, e.g., show a success message or redirect
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle errors here, e.g., show an error message to the user
+        });
+    });
+
+    // Function to get the CSRF token (assuming it's stored in a meta tag)
+    function getCSRFToken() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').getAttribute('content');
+        return csrfToken;
+    }
+</script>
+
+<script>
+
+
+    // Step 1
+    function populateCategories() {
+        fetch('http://127.0.0.1:8000/api/get_categories')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('categorySelect');
+
+
+                categorySelect.innerHTML = '';
+
+
+                const defaultCategoryOption = document.createElement('option');
+                defaultCategoryOption.value = '';
+                defaultCategoryOption.textContent = 'Select a Category';
+                categorySelect.appendChild(defaultCategoryOption);
+
+
+                for (const categoryId in data) {
+                    const option = document.createElement('option');
+                    option.value = categoryId;
+                    option.textContent = data[categoryId];
+                    categorySelect.appendChild(option);
+                }
+
+
+                categorySelect.addEventListener('change', function () {
+                    const selectedCategoryId = categorySelect.value;
+
+
+                    if (selectedCategoryId) {
+
+                        fetch(`http://127.0.0.1:8000/api/get_subcategory/${selectedCategoryId}`)
+                            .then(response => response.json())
+                            .then(subcategoryData => {
+                                const subcategorySelect = document.getElementById('subcategorySelect');
+
+
+                                subcategorySelect.innerHTML = '';
+
+
+                                const defaultSubcategoryOption = document.createElement('option');
+                                defaultSubcategoryOption.value = '';
+                                defaultSubcategoryOption.textContent = 'Select a Sub-Category';
+                                subcategorySelect.appendChild(defaultSubcategoryOption);
+
+
+                                for (const subcategoryId in subcategoryData) {
+                                    const option = document.createElement('option');
+                                    option.value = subcategoryId;
+                                    option.textContent = subcategoryData[subcategoryId];
+                                    subcategorySelect.appendChild(option);
+                                }
+                            })
+                            .catch(error => console.error('Error fetching subcategories:', error));
+                    } else {
+
+                        const subcategorySelect = document.getElementById('subcategorySelect');
+                        subcategorySelect.innerHTML = '';
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching categories:', error));
+    }
+
+    // Function to populate the company select element
+    function populateCompanies() {
+        fetch('http://127.0.0.1:8000/api/get_companies')
+            .then(response => response.json())
+            .then(data => {
+                const companySelect = document.getElementById('companySelect');
+
+                // Clear any existing options in the company select element
+                companySelect.innerHTML = '';
+
+                // Add the default "Select a Company" option
+                const defaultCompanyOption = document.createElement('option');
+                defaultCompanyOption.value = '';
+                defaultCompanyOption.textContent = 'Select a Company';
+                companySelect.appendChild(defaultCompanyOption);
+
+                // Iterate through the JSON response and add options for each company
+                for (const companyId in data) {
+                    const option = document.createElement('option');
+                    option.value = companyId; // Set the value to the company ID
+                    option.textContent = data[companyId]; // Set the text content to the company name
+                    companySelect.appendChild(option);
+                }
+            })
+            .catch(error => console.error('Error fetching companies:', error));
+    }
+
+    // Call the populateCompanies function to populate the company select element
+    populateCompanies();
+
+    populateCategories();
+
+
+</script>
+
+<script>
+    // Get references to the file input and image elements
+    const fileInput = document.getElementById('id_file'); // Replace 'id_file' with the actual ID of your file input
+    const selectedImage = document.getElementById('selectedImage');
+
+    // Add an event listener to the file input for when a file is selected
+    fileInput.addEventListener('change', function () {
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            // Read the selected file as a data URL
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result; // Set the image source to the data URL
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            // Clear the image source if no file is selected
+            selectedImage.src = '';
+        }
+    });
+</script>
+
+<script>
+    
+  
 
 </script>
 {% endblock %}

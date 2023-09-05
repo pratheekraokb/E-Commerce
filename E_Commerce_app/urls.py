@@ -21,8 +21,12 @@ urlpatterns = [
     path('api/update_product/<int:product_id>', views.update_product, name='update-product'),
     path('api/delete_product/<int:product_id>/', views.delete_product, name='delete-product-api'),
 
+    # GET
+    path('api/get_categories', views.get_categories, name='get_categories'),
+    path('api/get_subcategory/<int:category_id>', views.get_subcategories, name='get_subcategories_api'),
+    path('api/get_companies', views.get_companies, name='get_companies_api'),
+    # path('add_product/', views.add_product, name='add_product'),
+
     
     # Add more URLs as needed
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
