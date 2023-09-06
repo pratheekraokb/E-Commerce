@@ -315,6 +315,29 @@ def create_subcategory(request):
         return redirect('/adminSector/catSubcat')
     return HttpResponse("Invalid Request Method")
 
+def create_company(request):
+    if request.method == 'POST':
+        company_name = request.POST.get('company_name')
+        company_location = request.POST.get('company_location')
+        company_phone = request.POST.get('company_phone')
+        print(company_name,company_location,company_phone)
+        
+        # Check if a company with the same name already exists
+        existing_company = Company.objects.filter(name=company_name).first()
+
+        if existing_company:
+            # A company with the same name already exists, handle this case as needed
+            # For example, you might want to display an error message or redirect back to the form
+            # Add your handling code here
+            pass
+        else:
+            # Create a new company
+            new_company = Company(name=company_name, address=company_location, contact_number=company_phone)
+            new_company.save()
+            
+        return redirect('/adminSector/company')
+    
+    return HttpResponse("Invalid Request Method")
 
 def get_subcategories(request, category_id):
     if request.method == 'GET':

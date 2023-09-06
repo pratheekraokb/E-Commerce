@@ -3,7 +3,52 @@
 {% block additional_styles %}
 {% endblock %}
 
-{% block contents %}
+{% block content %}
+<div class="content container-fluid">     
+
+    <div class="addNewCompany">
+        <div class="heading">
+            <h1>Add New Company</h1>
+        </div>
+  
+        <form enctype="multipart/form-data" method="POST" action="/api/create_company">
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="CompanynameLabel">Company Name</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name"
+                            placeholder="eg:- ASUSTeK Computer Inc" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="CompanyanyLocationLabel">Location</label>
+                        <input type="text" class="form-control" id="company_location" name="company_location"
+                            placeholder="eg:- Beitou District, Taipei, Taiwan" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="PhoneNumLabel">Phone Number</label>
+                        <input type="text" class="form-control" id="company_phone" name="company_phone"
+                            placeholder="eg:- 1800 209 0365" required>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButtonCompany" type="submit" value="Upload"><b>Submit</b></button>
+            </div>
+            
+        </form>
+    </div>
+
+    <br>
+    <br>
+   
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    
+</script>
+
 {% endblock %}
 
-{% block direBtn %}Company{% endblock %}
+{% block direBtn %}Company{% endblock %} 

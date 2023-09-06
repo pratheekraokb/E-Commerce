@@ -102,9 +102,7 @@
             % comment %
         }
 
-        {% comment %} Common styles {
-            % endcomment %
-        } {% endcomment %}
+        
 
         div.heading {
             background-color: rgb(222, 214, 214);
@@ -129,14 +127,9 @@
         form label {
             font-weight: bold;
         }
+        {% block  additional_styles %}{% endblock %}
 
-            {
-            % block additional_styles %
-        }
-
-            {
-            % endblock %
-        }
+            
     </style>
 
 </head>

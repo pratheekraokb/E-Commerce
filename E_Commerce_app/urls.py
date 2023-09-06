@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/delete_product/<int:product_id>/', views.delete_product, name='delete-product-api'),
     path('api/create_category', views.create_category, name='create-category'),
     path('api/create_subcategory', views.create_subcategory, name='create-subcategory'),
+    path('api/create_company', views.create_company, name='create-company'),
 
     # GET
     path('api/get_categories', views.get_categories, name='get_categories'),

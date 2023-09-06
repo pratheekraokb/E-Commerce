@@ -44,17 +44,18 @@ min-width: 60px;
 font-weight:bold;
 }
 .custom-file-upload {
-display: inline-block;
-padding: 6px 12px;
-cursor: pointer;
-background-color: #007bff;
-color: #fff;
-border: 1px solid #007bff;
-border-radius: 4px;
-margin-top:27px;
-width: 100%;
-text-align:center;
-}
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #007bff;
+
+    color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    margin-top:27px;
+    width: 100%;
+    text-align:center;
+    }
 
 .custom-file-upload:hover {
 background-color: #0056b3;
@@ -104,12 +105,12 @@ min-width: 30px;
 padding:5px;
 font-weight:bold;
 }
-/* Add this CSS to style the image buttons container */
+
 .image-buttons-container {
 display: flex;
-flex-wrap: wrap; /* Wrap the buttons to the next line when necessary */
+flex-wrap: wrap; 
 gap: 10px; /* Adjust the gap between buttons */
-align-items: center; /* Center-align items vertically */
+align-items: center; 
 margin-bottom: 6px;
 }
 
@@ -170,12 +171,22 @@ color: white;
 
 cursor: pointer;
 }
-
+<style>
+    .image-buttons-container {
+display: flex;
+flex-wrap: wrap; 
+gap: 10px; /* Adjust the gap between buttons */
+align-items: center; 
+margin-bottom: 6px;
+}
+</style>
 
 {% endblock %}
 
 
 {% block content %}
+
+</style>
 <div class="content container-fluid">
     <div id="myModal" class="modal">
         <div class="modal-content">
