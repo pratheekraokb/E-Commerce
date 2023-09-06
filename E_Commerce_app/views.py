@@ -350,3 +350,45 @@ def get_companies(request):
         companies = Company.objects.all()
         company_dict = {company.company_id: company.name for company in companies}
         return JsonResponse(company_dict)
+
+def get_companies_by_id(request, comp_id):
+    if request.method == 'GET':
+        try:
+            company = Company.objects.get(company_id=comp_id)
+            company_data = {
+                'company_id': company.company_id,
+                'company_name': company.name,
+                'company_location': company.address,
+                'company_phone': company.contact_number
+            }
+            return JsonResponse(company_data)
+        except Company.DoesNotExist:
+            return JsonResponse({'error': 'Company not found'}, status=404)
+
+    return HttpResponse("Invalid Request Method")
+
+def alter_company(request):
+    if request.method == 'POST':
+        company_id = request.POST.get('companyAlter_id')
+        company_name_alter = request.POST.get('company_name_alter')
+        company_location_alter = request.POST.get('company_location_alter')
+        company_phone_alter = request.POST.get('company_phone_alter')
+        
+        try:
+            company = Company.objects.get(company_id=company_id)
+            
+            # Check which fields have changed and update them
+            if company_name_alter:
+                company.name = company_name_alter
+            if company_location_alter:
+                company.address = company_location_alter
+            if company_phone_alter:
+                company.contact_number = company_phone_alter
+            
+            company.save()
+            
+            return redirect('/adminSector/company')
+        except Company.DoesNotExist:
+            return JsonResponse({'error': 'Company not found'}, status=404)
+    
+    return JsonResponse({'error': 'Invalid Request Method'}, status=400)

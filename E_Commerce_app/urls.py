@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/get_categories', views.get_categories, name='get_categories'),
     path('api/get_subcategory/<int:category_id>', views.get_subcategories, name='get_subcategories_api'),
     path('api/get_companies', views.get_companies, name='get_companies_api'),
+    path('api/get_companies/<int:comp_id>', views.get_companies_by_id, name='get_companiesById_api'),
+    path('api/alter_company', views.alter_company, name='alter-company'),
     # path('add_product/', views.add_product, name='add_product'),
 
     

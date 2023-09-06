@@ -39,6 +39,49 @@
             
         </form>
     </div>
+{% comment %} Alter Company {% endcomment %}
+    <div class="alterCompany">
+        <div class="heading">
+            <h1>Alter Existing Company</h1>
+        </div>
+        <form enctype="multipart/form-data" method="POST" action="/api/alter_company">
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="companyAlterLabel">Select Company</label>
+                        <select id="companyAlterSelect" name="companyAlter_id" class="form-control" onchange="fetchCompanyData(this.value)">
+                            <!-- Options will be added here using JavaScript -->
+                        </select>
+                        <hr />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="CompanynameLabel">Company Name</label>
+                        <input type="text" class="form-control" id="company_name_alter" name="company_name_alter"
+                            placeholder="eg:- ASUSTeK Computer Inc" required>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label for="CompanyanyLocationLabel">Location</label>
+                        <input type="text" class="form-control" id="company_location_alter" name="company_location_alter"
+                            placeholder="eg:- Beitou District, Taipei, Taiwan" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="PhoneNumLabel">Phone Number</label>
+                        <input type="text" class="form-control" id="company_phone_alter" name="company_phone_alter"
+                            placeholder="eg:- 1800 209 0365" required>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButtonCompanyAlter" type="submit" value="Upload"><b>Submit</b></button>
+            </div>
+        </form>
+        
+        
+    </div>
 
     <br>
     <br>
@@ -46,7 +89,41 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    
+    function fetchCompanyData(companyId) {
+        $.ajax({
+            type: "GET",
+            url: `/api/get_companies/${companyId}`, // Use the correct URL for your API
+            dataType: "json",
+            success: function (data) {
+                // Populate form fields with the fetched data
+                $("#company_name_alter").val(data.company_name);
+                $("#company_location_alter").val(data.company_location);
+                $("#company_phone_alter").val(data.company_phone);
+            },
+            error: function (error) {
+                console.error("Error fetching company data:", error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Fetch companies for the select element
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/api/get_companies",
+            dataType: "json",
+            success: function (data) {
+                // Iterate through the JSON data and create options for the select element
+                var select = $("#companyAlterSelect");
+                $.each(data, function (key, value) {
+                    select.append($("<option>").val(key).text(value));
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching companies:", error);
+            }
+        });
+    });
 </script>
 
 {% endblock %}
