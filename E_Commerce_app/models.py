@@ -206,7 +206,7 @@ class Comment(models.Model):
 class ProductImage(models.Model):
     image_id = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='shop/additional_images/')
 
     def __str__(self):
         return f"ProductImage {self.image_id} - Product: {self.product.name}"

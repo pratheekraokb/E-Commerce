@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import connection
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import FileSystemStorage
-from .forms import ProductForm
+from .forms import ProductForm, ProductImageForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 # Create your views here.
@@ -19,8 +19,9 @@ def adminHome(request):
     return render(request, 'admin_pages/home.html')
 
 def adminProducts(request):
-    form = ProductForm()
-    return render(request, 'admin_pages/products.html',{'form': form})
+    product_form = ProductForm()
+    image_form = ProductImageForm()  # Create an instance of ProductImageForm
+    return render(request, 'admin_pages/products.html', {'product_form': product_form, 'image_form': image_form})
 
 def adminCompany(request):
     return render(request, 'admin_pages/company.html')
@@ -139,7 +140,6 @@ def delete_user(request, user_id):
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
-        
         if form.is_valid():
         
             category_id = form.cleaned_data['categorySelect']
@@ -161,35 +161,46 @@ def create_product(request):
                 image=form.cleaned_data['file']
             )
             new_product.save()
-
+            # images = request.FILES.getlist('images')
             tags_data = request.POST.get('tagsData')  
             if tags_data is not None:
                
-                try:
-                    tags_dict = json.loads(tags_data)
-                    tags_array = list(set(tags_dict.get('tags', [])))
-                    print(tags_array)
-
-                except json.JSONDecodeError:
-                    tags_array = []
-
+            
+                tags_dict = json.loads(tags_data)
+                tags_array = list(set(tags_dict.get('tags', [])))
                 for tag_name in tags_array:
-                       
-                        tag, created = Tag.objects.get_or_create(name=tag_name)
-                        ProductTag.objects.create(product=new_product, tag=tag)
-
-        return redirect('/adminSector/products')
-    
+                    tag, created = Tag.objects.get_or_create(name=tag_name)
+                    ProductTag.objects.create(product=new_product, tag=tag)
+                    # print(tags_array)
 
         
 
-    else:
-        form = ProductForm()
-        form.fields['categorySelect'].choices = [(category.id, category.name) for category in Category.objects.all()]
-        form.fields['subcategorySelect'].choices = [(subcategory.id, subcategory.name) for subcategory in Subcategory.objects.all()]
-        form.fields['companySelect'].choices = [(company.id, company.name) for company in Company.objects.all()]
+                
+            # print(images)
+            additional_images = []
+            for i in range(0, 20):  # Assuming you have up to 20 additional image inputs
+                file_key = f'additional_images_{i}'
+                if file_key in request.FILES:
+                    uploaded_file = request.FILES[file_key]
+                    additional_images.append(uploaded_file)
+            for image in additional_images:
+                product_image = ProductImage(product=new_product, image=image)
+                product_image.save()
+           
+            print("bye1")
+            return JsonResponse({'message': 'Product updated successfully'}, status=200)
+        # return HttpResponse("byse")
+        
+    # else:
+    #     form = ProductForm()
+    #     form.fields['categorySelect'].choices = [(category.id, category.name) for category in Category.objects.all()]
+    #     form.fields['subcategorySelect'].choices = [(subcategory.id, subcategory.name) for subcategory in Subcategory.objects.all()]
+    #     form.fields['companySelect'].choices = [(company.id, company.name) for company in Company.objects.all()]
+    #     # image_form = ProductImageForm()
+    #     print("hai1")
+    #     return HttpResponse("hai")
 
-    return HttpResponse("Something went wrong.")
+    # return HttpResponse("Something went wrong.")
 
 
 @csrf_exempt

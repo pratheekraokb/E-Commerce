@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'E_Commerce_app.apps.ECommerceAppConfig'
+    'E_Commerce_app.apps.ECommerceAppConfig',
+    'multiupload',
 ]
 
 MIDDLEWARE = [

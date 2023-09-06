@@ -142,6 +142,35 @@ border-radius: 4px;
 cursor: pointer;
 }
 
+
+
+.selected-image-button {
+background-color: black;
+color: white;
+border: none;
+border-radius: 10px;
+padding: 7px;
+margin: 5px;
+cursor: pointer;
+}
+
+.remove-image-button {
+background-color: black;
+color: white;
+border: none;
+border-radius: 10px;
+padding: 5px 10px;
+margin-left: 10px; /* Added margin-left for spacing */
+cursor: pointer;
+}
+
+#removeAllAdditionalImagesBtn {
+background-color: red;
+color: white;
+
+cursor: pointer;
+}
+
 {% endblock %}
 
 
@@ -150,9 +179,12 @@ cursor: pointer;
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
-            <img id="modalImage" class="modal-image">
+            <div id="modalContent">
+                <h2>Title Goes Here</h2>
+            </div>
         </div>
     </div>
+
     <div class="addNewProduct">
         <div class="heading">
             <h1>Add New Product</h1>
@@ -169,20 +201,20 @@ cursor: pointer;
                         <label for="productnameLabel">Product Name</label>
                         <!-- <input type="text" class="form-control" id="product_name" name="product_name"
                             placeholder="eg:- Asus TUFF Lap" required> -->
-                        {{ form.product_name }}
+                        {{ product_form.product_name }}
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="mrpLabel">MRP</label>
                         <!-- <input type="number" class="form-control" id="mrp" name="mrp" placeholder="eg:- 60000" required> -->
-                        {{ form.mrp }}
+                        {{ product_form.mrp }}
 
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="sellpriceLabel">Selling Price</label>
                         <!-- <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="eg:- 55000"
                             required> -->
-                        {{ form.sell_price }}
+                        {{ product_form.sell_price }}
                     </div>
 
                 </div>
@@ -190,14 +222,15 @@ cursor: pointer;
                     <div class="col-md-3 mb-3">
                         <label for="stockLabel">Stock</label>
                         <!-- <input type="number" class="form-control" id="stock" name="stock" placeholder="eg:- 5" required> -->
-                        {{ form.stock }}
+                        {{ product_form.stock }}
 
                     </div>
 
                     <div class="col-md-3 mb-3">
                         <label for="categoryLabel">Category</label>
-                        <select class="form-control" id="categorySelect" name="{{ form.categorySelect.name }}" required>
-                            <option value="">{{ form.categorySelect.choices.0.1 }}</option>
+                        <select class="form-control" id="categorySelect" name="{{ product_form.categorySelect.name }}"
+                            required>
+                            <option value="">{{ product_form.categorySelect.choices.0.1 }}</option>
                             {% for categoryId, categoryName in categories.items %}
                             <option value="{{ categoryId }}">{{ categoryName }}</option>
                             {% endfor %}
@@ -207,8 +240,8 @@ cursor: pointer;
 
                     <div class="col-md-3 mb-3">
                         <label for="subcategoryLabel">Sub-Category</label>
-                        <select class="form-control" id="subcategorySelect" name="{{ form.subcategorySelect.name }}"
-                            required>
+                        <select class="form-control" id="subcategorySelect"
+                            name="{{ product_form.subcategorySelect.name }}" required>
                             <option value="">Select a Sub-Category</option>
                             {% for subcategoryId, subcategoryName in subcategories.items %}
                             <option value="{{ subcategoryId }}">{{ subcategoryName }}</option>
@@ -218,8 +251,9 @@ cursor: pointer;
 
                     <div class="col-md-3 mb-3">
                         <label for="companyLabel">Company</label>
-                        <select class="form-control" id="companySelect" name="{{ form.companySelect.name }}" required>
-                            <option value="">{{ form.companySelect.choices.0.1 }}</option>
+                        <select class="form-control" id="companySelect" name="{{ product_form.companySelect.name }}"
+                            required>
+                            <option value="">{{ product_form.companySelect.choices.0.1 }}</option>
                             {% for companyId, companyName in companies.items %}
                             <option value="{{ companyId }}">{{ companyName }}</option>
                             {% endfor %}
@@ -229,7 +263,7 @@ cursor: pointer;
 
                 <div class="form-row">
                     <div class="col-md-8 mb-3">
-                        {{ form.description }}
+                        {{ product_form.description }}
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -242,9 +276,9 @@ cursor: pointer;
 
                     <div class="col-md-2 mb-3">
                         <label for="tagsLabel">Enter Tags</label>
-                     
-                        {{ form.textInput }}
-                      
+
+                        {{ product_form.textInput }}
+
 
 
                     </div>
@@ -260,47 +294,39 @@ cursor: pointer;
 
                         <label for="image">Product Image:</label>
 
-                        {{ form.file }}
+                        {{ product_form.file }}
 
                     </div>
 
 
                 </div>
+                
                 <div class="form-row">
-                    <div class="col-md-2 mb-3">
-
-                        <!-- <input type="file" name="imageInput" id="imageInput" accept="image/*" multiple> -->
-                        <!-- <input type="file" id="imageInput" accept="image/*" multiple> -->
-
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <!-- <button id="addImageButton" style="margin-top: 5px;">Add Image</button> -->
-                        <!-- <button type="button" id="addImageButton" style="height: 60px; width: 120px; margin:5px">Add
-                            Image</button> -->
-
-
-                    </div>
-                    <div class="col-md-5 mb-3">
-                        <p>
-                            First select the image to be uploaded in <i><b>Choose Files</b></i> , Then click <i><b>Add
-                                    Image</b></i> button. Now you can view image by clicking <i><b>View Image</b></i>,
-                            remove image by clicking <i><b>X</b></i> button.
-                        </p>
-                    </div>
-
-
-                </div>
-                <div class="form-row">
-                    <div class="col-md-12">
-                        <div id="imageButtons" class="image-buttons-container">
-
+                    <div class="col-md-4 mb-3">
+                        <div id="additionalImagesContainer">
+                            <!-- Initial file input element -->
+                            <div class="inputFilesDiv">
+                                <input type="file" name="additional_images_0" id="additional_images_0"
+                                    class="custom-file-upload" accept="image/*" multiple>
+                            </div>
+                        </div>
+                        <div class="buttons" style="display: flex; flex-direction: row; margin-top: 10px;">
+                            <button class="custom-file-upload" type="button" id="addAdditionalImageBtn">Add Another
+                                Image</button>
+                            <button class="custom-file-upload" type="button" id="removeAllAdditionalImagesBtn"
+                                style="display: none;">Remove All Images</button>
                         </div>
                     </div>
                 </div>
+
+
+                
+
             </div>
 
             <div class="text-center">
-                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload"><b>Submit</b></button>
+                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload" onclick="location.reload();"><b>Submit</b></button>
+
             </div>
 
         </form>
@@ -317,13 +343,18 @@ cursor: pointer;
 
 
 <script>
-    
+    const additionalImagesInput = document.getElementById('additionalImages');
+    const addAdditionalImagesBtn = document.getElementById('addAdditionalImagesBtn');
+    const selectedAdditionalImagesContainer = document.getElementById('selectedAdditionalImagesContainer');
+    const imageFiles = [];
+
+
     const tagsArray = [];
 
     function createTagButton(tagText) {
         const buttonContainer = document.getElementById('buttonContainer');
 
-   
+
         const tagButton = document.createElement('button');
         tagButton.className = 'tag-button custom-button';
         tagButton.textContent = tagText;
@@ -343,16 +374,16 @@ cursor: pointer;
         tagsArray.push(tagText);
     }
 
-    
-    document.getElementById('{{ form.textInput.id_for_label }}').addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            event.preventDefault(); 
 
-            const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
-            const tagText = tagInput.value.trim(); 
+    document.getElementById('{{ product_form.textInput.id_for_label }}').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+
+            const tagInput = document.getElementById('{{ product_form.textInput.id_for_label }}');
+            const tagText = tagInput.value.trim();
 
             if (tagText) {
-                createTagButton(tagText); 
+                createTagButton(tagText);
                 tagInput.value = '';
             }
         }
@@ -360,7 +391,7 @@ cursor: pointer;
 
     // Event listener for the "Create Tags" button (optional)
     document.getElementById('createButton').addEventListener('click', function () {
-        const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
+        const tagInput = document.getElementById('{{ product_form.textInput.id_for_label }}');
         const tagText = tagInput.value.trim(); // Remove leading/trailing spaces
 
         if (tagText) {
@@ -370,23 +401,61 @@ cursor: pointer;
     });
 
     // Enable the "Create Tags" button when there's input
-    document.getElementById('{{ form.textInput.id_for_label }}').addEventListener('input', function () {
-        const tagInput = document.getElementById('{{ form.textInput.id_for_label }}');
+    document.getElementById('{{ product_form.textInput.id_for_label }}').addEventListener('input', function () {
+        const tagInput = document.getElementById('{{ product_form.textInput.id_for_label }}');
         const createButton = document.getElementById('createButton');
         createButton.disabled = tagInput.value.trim() === '';
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        const additionalImagesContainer = document.getElementById('additionalImagesContainer');
+        const addAdditionalImageBtn = document.getElementById('addAdditionalImageBtn');
+        const removeAllAdditionalImagesBtn = document.getElementById('removeAllAdditionalImagesBtn');
 
+        let imageCount = 1; // Initial image input count
 
+        addAdditionalImageBtn.addEventListener('click', function () {
+            // Create a new file input element
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = `additional_images_${imageCount}`;
+            newInput.className = 'custom-file-upload';
+            newInput.accept = 'image/*';
+            newInput.multiple = true;
 
+            // Append the new input to the container
+            const inputFilesDiv = document.createElement('div');
+            inputFilesDiv.className = 'inputFilesDiv';
+            inputFilesDiv.appendChild(newInput);
+            additionalImagesContainer.appendChild(inputFilesDiv);
+
+            // Increment the image count
+            imageCount++;
+
+            // Show the "Remove All Images" button
+            removeAllAdditionalImagesBtn.style.display = 'block';
+        });
+
+        removeAllAdditionalImagesBtn.addEventListener('click', function () {
+            // Remove all dynamically added input elements and reset the count
+            while (additionalImagesContainer.firstChild) {
+                additionalImagesContainer.removeChild(additionalImagesContainer.firstChild);
+            }
+            imageCount = 1;
+
+            // Hide the "Remove All Images" button
+            removeAllAdditionalImagesBtn.style.display = 'none';
+        });
+    });
     document.querySelector('form').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
         // Create a new FormData object from the form
         const formData = new FormData(this);
-        for (const pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
-        console.log(tagsArray)
+  
+        // for (const pair of formData.entries()) {
+        //     console.log(pair[0], pair[1]);
+        // }
+        // console.log(tagsArray)
         const jsonObject = {
             tags: tagsArray
         };
@@ -401,18 +470,19 @@ cursor: pointer;
             body: formData,
             headers: {
                 // Add any headers you need, e.g., CSRF token
-                'X-CSRFToken': getCSRFToken() // Assuming you have a function to get the CSRF token
+                // 'X-CSRFToken': getCSRFToken() // Assuming you have a function to get the CSRF token
             }
         })
-        .then(response => response.json()) // Assuming the server responds with JSON
-        .then(data => {
-            // Handle the response data, e.g., show a success message or redirect
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle errors here, e.g., show an error message to the user
-        });
+            .then(response => response.json()) // Assuming the server responds with JSON
+            .then(data => {
+                // Handle the response data, e.g., show a success message or redirect
+                // console.log(data);
+                
+            })
+            // .catch(error => {
+            //     // console.error('Error:', error);
+            //     // Handle errors here, e.g., show an error message to the user
+            // });
     });
 
     // Function to get the CSRF token (assuming it's stored in a meta tag)
@@ -420,6 +490,8 @@ cursor: pointer;
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').getAttribute('content');
         return csrfToken;
     }
+
+
 </script>
 
 <script>
@@ -548,8 +620,8 @@ cursor: pointer;
 </script>
 
 <script>
-    
-  
+
+
 
 </script>
 {% endblock %}

@@ -1,6 +1,8 @@
 from django import forms
 from .models import Product
-from .models import Category, Subcategory, Company
+from .models import Category, Subcategory, Company, ProductImage
+from multiupload.fields import MultiFileField
+
 class ProductForm(forms.Form):
     product_name = forms.CharField(
         max_length=255,
@@ -68,5 +70,23 @@ class ProductForm(forms.Form):
             'class': 'custom-file-upload',
             'accept': 'image/*',
             
+        })
+    )
+
+
+
+class ProductImageForm(forms.Form):
+    additional_images = MultiFileField(
+        min_num=1,
+        max_num=10,
+        max_file_size=1024*1024*5,
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'custom-file-upload',
+            'accept': 'image/*',
+            'id': 'additionalImages',  # Add the id attribute
+            'name': 'additionalImages',  # Add the name attribute
+            
+            # 'style': 'display: none;',  # Your additional styling
         })
     )
