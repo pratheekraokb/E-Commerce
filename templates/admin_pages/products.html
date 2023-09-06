@@ -171,6 +171,7 @@ color: white;
 cursor: pointer;
 }
 
+
 {% endblock %}
 
 
@@ -300,18 +301,24 @@ cursor: pointer;
 
 
                 </div>
-                
                 <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                        <div id="additionalImagesContainer">
+                    <div class="col-md-12 mb-3">
+                        <label for="additionalImagesLabel">Additional Images:</label>
+                        <div id="additionalImagesContainer" style="display: flex; flex-wrap: wrap; width: 100%;">
                             <!-- Initial file input element -->
+                            
                             <div class="inputFilesDiv">
                                 <input type="file" name="additional_images_0" id="additional_images_0"
-                                    class="custom-file-upload" accept="image/*" multiple>
+                                    accept="image/*" multiple>
                             </div>
                         </div>
-                        <div class="buttons" style="display: flex; flex-direction: row; margin-top: 10px;">
-                            <button class="custom-file-upload" type="button" id="addAdditionalImageBtn">Add Another
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        
+                        <div class="buttons" style="display: flex; flex-direction: row; width:100%">
+                            <button class="custom-file-upload" type="button" id="addAdditionalImageBtn" style="width: 60%;">Add Another
                                 Image</button>
                             <button class="custom-file-upload" type="button" id="removeAllAdditionalImagesBtn"
                                 style="display: none;">Remove All Images</button>
@@ -320,12 +327,13 @@ cursor: pointer;
                 </div>
 
 
-                
+
 
             </div>
 
             <div class="text-center">
-                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload" onclick="location.reload();"><b>Submit</b></button>
+                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload"
+                    onclick="location.reload();"><b>Submit</b></button>
 
             </div>
 
@@ -418,7 +426,7 @@ cursor: pointer;
             const newInput = document.createElement('input');
             newInput.type = 'file';
             newInput.name = `additional_images_${imageCount}`;
-            newInput.className = 'custom-file-upload';
+            // newInput.className = 'custom-file-upload';
             newInput.accept = 'image/*';
             newInput.multiple = true;
 
@@ -430,6 +438,7 @@ cursor: pointer;
 
             // Increment the image count
             imageCount++;
+            
 
             // Show the "Remove All Images" button
             removeAllAdditionalImagesBtn.style.display = 'block';
@@ -451,11 +460,7 @@ cursor: pointer;
 
         // Create a new FormData object from the form
         const formData = new FormData(this);
-  
-        // for (const pair of formData.entries()) {
-        //     console.log(pair[0], pair[1]);
-        // }
-        // console.log(tagsArray)
+
         const jsonObject = {
             tags: tagsArray
         };
@@ -477,12 +482,12 @@ cursor: pointer;
             .then(data => {
                 // Handle the response data, e.g., show a success message or redirect
                 // console.log(data);
-                
+
             })
-            // .catch(error => {
-            //     // console.error('Error:', error);
-            //     // Handle errors here, e.g., show an error message to the user
-            // });
+        // .catch(error => {
+        //     // console.error('Error:', error);
+        //     // Handle errors here, e.g., show an error message to the user
+        // });
     });
 
     // Function to get the CSRF token (assuming it's stored in a meta tag)
