@@ -3,7 +3,87 @@
 {% block additional_styles %}
 {% endblock %}
 
-{% block contents %}
+{% block content %}
+
+<div class="content container-fluid">     
+
+    <div class="addNewCategory">
+        <div class="heading">
+            <h1>Add New Category</h1>
+        </div>
+  
+        <form enctype="multipart/form-data" method="POST" action="/api/create_category">
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="CategoryNameLabel">Category</label>
+                        <input type="text" class="form-control" id="category_name" name="category_name"
+                            placeholder="eg:- Electronics" required>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButtonCategory" type="submit" value="Upload"><b>Submit</b></button>
+            </div>
+            
+        </form>
+    </div>
+
+    <br>
+    <br>
+    <div class="addNewSubCategory">
+        <div class="heading">
+            <h1>Add New Sub-Category</h1>
+        </div>
+        <form enctype="multipart/form-data" method="POST" action="/api/create_subcategory">
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="categoryLabel">Category:-</label>
+                        <select id="categorySelect" name="category_id" class="form-control">
+                            <!-- Options will be added here using JavaScript -->
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label for="subcategoryLabel">Sub-Category:-</label>
+                        <input type="text" class="form-control" id="subcategory_name" name="subcategory_name"
+                            placeholder="eg:- Mobile Phones" required>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButtonSubcategory" type="submit" value="Upload"><b>Submit</b></button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Fetch categories from the API and populate the select element
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:8000/api/get_categories",
+            dataType: "json",
+            success: function (data) {
+                // Iterate through the JSON data and create options for the select element
+                var select = $("#categorySelect");
+                $.each(data, function (key, value) {
+                    select.append($("<option>").val(key).text(value));
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching categories:", error);
+            }
+        });
+    });
+</script>
+
+
 {% endblock %}
 
 {% block direBtn %}Category & Subcategory{% endblock %}

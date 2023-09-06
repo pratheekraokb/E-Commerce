@@ -36,7 +36,7 @@ def adminCatSub(request):
 
 
 # POST Requests API
-@csrf_exempt
+
 def create_user(request):
     if request.method == 'POST':
         try:
@@ -81,7 +81,7 @@ def create_user(request):
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'message': 'POST method required'}, status=405)
 
-@csrf_exempt
+
 def edit_user(request):
     if request.method == 'PUT':
         try:
@@ -121,7 +121,7 @@ def edit_user(request):
     else:
         return JsonResponse({'message': 'Unsupported method'}, status=405)
 
-@csrf_exempt
+
 def delete_user(request, user_id):
     if request.method == 'DELETE':
         try:
@@ -189,21 +189,7 @@ def create_product(request):
            
             print("bye1")
             return JsonResponse({'message': 'Product updated successfully'}, status=200)
-        # return HttpResponse("byse")
-        
-    # else:
-    #     form = ProductForm()
-    #     form.fields['categorySelect'].choices = [(category.id, category.name) for category in Category.objects.all()]
-    #     form.fields['subcategorySelect'].choices = [(subcategory.id, subcategory.name) for subcategory in Subcategory.objects.all()]
-    #     form.fields['companySelect'].choices = [(company.id, company.name) for company in Company.objects.all()]
-    #     # image_form = ProductImageForm()
-    #     print("hai1")
-    #     return HttpResponse("hai")
 
-    # return HttpResponse("Something went wrong.")
-
-
-@csrf_exempt
 def update_product(request, product_id):
     if request.method == 'PUT':
         try:
@@ -272,7 +258,7 @@ def update_product(request, product_id):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
-@csrf_exempt
+
 def delete_product(request, product_id):
     if request.method == 'DELETE':
         try:
@@ -286,11 +272,49 @@ def delete_product(request, product_id):
     else:
         return JsonResponse({'message': 'Unsupported method'}, status=405)
 
+def create_category(request):
+    if request.method == 'POST':
+        category_name = request.POST.get('category_name')
+        existing_category = Category.objects.filter(name=category_name).first()
+
+        try:
+            if existing_category is None:
+                # If the category doesn't exist, create a new one
+                new_category = Category(name=category_name)
+                new_category.save()
+                
+                # return JsonResponse({"msg": "Success! New category is created."})
+         
+            return redirect('/adminSector/catSubcat')
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+        # return 
+
+    return HttpResponse("Invalid Request Method")
+
 def get_categories(request):
     if request.method == 'GET':
         categories = Category.objects.all()
         category_dict = {category.category_id: category.name for category in categories}
         return JsonResponse(category_dict)
+
+def create_subcategory(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        subcategory_name = request.POST.get('subcategory_name')
+        existing_subcategory = Subcategory.objects.filter(name=subcategory_name, category_id=category_id).first()
+
+        if existing_subcategory:
+            pass
+        else:
+            category = Category.objects.get(pk=category_id)
+            new_subcategory = Subcategory(name=subcategory_name, category=category)
+            new_subcategory.save()
+            
+        return redirect('/adminSector/catSubcat')
+    return HttpResponse("Invalid Request Method")
+
 
 def get_subcategories(request, category_id):
     if request.method == 'GET':
