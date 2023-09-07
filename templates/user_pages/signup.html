@@ -1,0 +1,406 @@
+{% extends "user_pages/base_auth.html" %}
+
+{% block additional_styles %}
+div.text h2 {
+font-weight: bolder;
+padding-top: 30px;
+padding-bottom: 40px;
+}
+
+div.text p {
+font-size: 21px;
+text-align: left;
+padding-left: 15px;
+font-weight: 800;
+color: rgb(130, 118, 118);
+}
+
+div.text p:hover {
+color: rgb(255, 255, 255);
+}
+.form{
+font-size: 18px;
+}
+label{
+padding-top:15px;
+}
+
+.custom-radio input[type="radio"] {
+width: 20px; /* Adjust the width as needed */
+height: 20px; /* Adjust the height as needed */
+}
+
+/* Optional: Add some margin to improve spacing */
+.custom-radio label {
+margin-right: 10px; /* Adjust the margin as needed */
+}
+.form-control {
+padding-top: 20px;
+padding-bottom: 20px;
+}
+#submitButton{
+
+height: 60px;
+width: 180px;
+background-color:white;
+color:black;
+border: 5px black solid;
+border-radius:15px;
+margin-bottom:20px;
+}
+#submitButton:hover{
+background-color:black;
+color: white;
+font-weight:bold;
+
+}
+input[type="date"] {
+padding: 10px; /* Adjust padding as needed */
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 16px; /* Adjust font size as needed */
+}
+div.rightdiv{
+background-color:black;
+
+}
+
+.errorMsg{
+font-weight: 700;
+font-size:15px;
+}
+.custom-radio-inline label {
+    display: inline-block;
+    margin-right: 20px;  /* Adjust the margin as needed */
+}
+{% endblock %}
+
+{% block leftDivContent %}
+<div class="text">
+    <br>
+    <h2>Welcome to ShopEase !</h1>
+        <p>
+
+            <span style="font-size: 40px;padding-left: 120px;font-style: italic;color: yellow;">W</span>
+            elcome
+            to our platform! Signing up is your gateway to a world of high-quality products at unbeatable
+            prices.
+            <span style="font-size: 40px;font-style: italic;color: yellow;">E</span>
+            mbark on your shopping journey by completing the signup process in just a few easy
+            steps.
+            <br />
+        </p>
+        <p>
+            <!-- <br> -->
+            <span style="padding-left: 100px;">Hey user, use can access our services, </span>
+            <span style="font-size: 40px;font-style: italic;color: yellow;">B</span>y simply visiting our login page and
+            entering your username and password, you can gain instant access to your account. Our commitment to
+            providing a seamless and secure login experience is aimed at making your shopping as convenient as possible.
+            Happy shopping!
+            <br />
+
+        </p>
+        <h2 style="color: rgb(46, 46, 255);">Enjoy Our Services</h2>
+</div>
+{% endblock %}
+
+{% block rightDivContent %}
+
+<div class="content container-fluid">
+
+
+    <div class="signup">
+        <div class="heading">
+            <h1>SignUP</h1>
+        </div>
+
+        <form enctype="multipart/form-data" id="signupForm">
+
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstnameLabel">First Name *</label>
+                        <!-- <input type="text" class="form-control" id="first_name" name="first_name"
+                            placeholder="eg:- Virat" required> -->
+                        {{user_form.first_name}}
+                     
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastnameLabel">Last Name *</label>
+                        <!-- <input type="text" class="form-control" id="last_name" name="last_name" placeholder="eg:- Kohli"
+                            required> -->
+                        {{ user_form.last_name }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="emailIdLabel">E-Mail *</label>
+                        <!-- <input type="email" class="form-control" id="emailId" name="emailId"
+                            placeholder="eg:- viratkohli@gmail.com" required> -->
+                        {{user_form.email}}
+                    </div>
+                    <span class="errorMsg" id="errorMsgEmail" style="color: red;"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="usernameLabel">Username *</label>
+                        <!-- <input type="text" class="form-control" id="username" name="username"
+                            placeholder="eg:- viratkohli" required> -->
+                    {{user_form.username}}
+                    </div>
+                    <span id="errorMsgUsername" class="errorMsg" style="color: red;"> </span>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="password">Password *</label>
+                        <div class="input-group">
+                            {{user_form.password}}
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="confirmpassword">Confirm Password *</label>
+                        <div class="input-group">
+                            <!-- <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
+                                placeholder="eg:- Viratkohli@18" required> -->
+                                {{user_form.confirmpassword}}
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="errorMsgPassword" class="errorMsg" style="color: red;"> </span>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="contact_number">Contact Number *</label>
+                        <!-- <input type="number" class="form-control" id="contact_number" name="contact_number"
+                            placeholder="eg:- 8547120204"> -->
+                            {{user_form.contact_number}}
+                        
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="dateofbirth">Date of Birth</label>
+                        {{user_form.dateofbirth}}
+                    </div>  
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="file"> <span> Profile Image</span> </label>
+                        <!-- <div class="col-md-6 mb-3">
+                            <input type="file" name="profile_image" id="profile_image" accept="image/*" multiple>
+                        </div> -->
+                        {{user_form.profile_image}}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="adminLabel">Are you Admin?</label>
+                        <div class="custom-radio-inline">
+                            {{ user_form.admin }}
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+
+
+                </div>
+                
+
+            </div>
+            <div class="invalid-feedback" id="emailError"></div>
+            <div class="invalid-feedback" id="usernameError"></div>
+            <div class="text-center">
+                <button class="btn btn-primary" id="submitButton" type="submit" value="Upload"><b>SignUP</b></button>
+                <p>Do you already have account? <a href=""><span id="loginLink"
+                            style="font-weight: bolder;font-style: italic;color:red;">Click Here</span></a></p>
+            </div>
+
+        </form>
+        <!-- </div> -->
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Function to check email availability
+    let emailTimeout;
+    function checkEmailAvailability() {
+        clearTimeout(emailTimeout);
+        const emailInput = $('#id_email'); // Use the correct field ID
+        const emailValue = emailInput.val();
+        const emailError = document.getElementById("errorMsgEmail")
+
+        // Add a delay of 500 milliseconds before making the request
+        emailTimeout = setTimeout(function () {
+            $.ajax({
+                url: '/api/check_email/',
+                data: { 'email': emailValue },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.is_taken) {
+                        // Email is already taken, show an error message
+                        emailInput.addClass('is-invalid');
+                        $('#emailError').text('This email is already taken.');
+                        emailError.textContent = "Error!! E-Mail already exists.";
+
+                        $('#submitButton').prop('disabled', true);
+                    } else {
+                        // Email is available, remove error message
+                        emailInput.removeClass('is-invalid');
+                        $('#emailError').text('');
+                        $('#submitButton').prop('disabled', false);
+                        emailError.textContent = "";
+                    }
+                }
+            });
+        }, 500); // Adjust the delay as needed
+    }
+
+    // Function to check username availability
+    let usernameTimeout;
+    function checkUsernameAvailability() {
+        const usernameError = document.getElementById("errorMsgUsername")
+        clearTimeout(usernameTimeout);
+        const usernameInput = $('#id_username'); // Use the correct field ID
+        const usernameValue = usernameInput.val();
+
+        // Add a delay of 500 milliseconds before making the request
+        usernameTimeout = setTimeout(function () {
+            $.ajax({
+                url: '/api/check_username/',
+                data: { 'username': usernameValue },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.is_taken) {
+                        // Username is already taken, show an error message
+                        usernameInput.addClass('is-invalid');
+                        usernameError.textContent = "Error!! Username already exists";
+                        $('#submitButton').prop('disabled', true);
+                    } else {
+                        // Username is available, remove error message
+                        usernameInput.removeClass('is-invalid');
+                        usernameError.textContent = "";
+                        $('#submitButton').prop('disabled', false);
+                    }
+                }
+            });
+        }, 500); // Adjust the delay as needed
+    }
+
+    // Event listeners to trigger email and username checks on input
+    $('#id_email').on('input', checkEmailAvailability); // Use the correct field ID
+    $('#id_username').on('input', checkUsernameAvailability); // Use the correct field ID
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('id_password'); // Use the correct field ID
+        const confirmPasswordInput = document.getElementById('id_confirmpassword'); // Use the correct field ID
+        const errorMsgPassword = document.getElementById('errorMsgPassword');
+        const submitButton = document.getElementById('submitButton');
+
+        // Function to validate password match
+        function validatePassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (password !== confirmPassword) {
+                errorMsgPassword.textContent = 'Passwords do not match.';
+                submitButton.disabled = true;
+            } else {
+                errorMsgPassword.textContent = '';
+                submitButton.disabled = false;
+            }
+        }
+
+        // Add input event listeners to confirm password field
+        confirmPasswordInput.addEventListener('input', validatePassword);
+    });
+
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePasswordButton = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('id_password'); // Use the correct field ID
+
+        togglePasswordButton.addEventListener('click', function () {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        });
+
+        const toggleConfirmPasswordButton = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordInput = document.getElementById('id_confirmpassword'); // Use the correct field ID
+
+        toggleConfirmPasswordButton.addEventListener('click', function () {
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+            } else {
+                confirmPasswordInput.type = 'password';
+            }
+        });
+    });
+</script>
+
+<script>
+    // Function to send form data to the API
+    function submitFormToAPI(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Serialize the form data
+        const formData = new FormData(document.getElementById('signupForm'));
+
+        $.ajax({
+            url: '/api/create_user', // Replace with your API endpoint
+            method: 'POST',
+            data: formData,
+            processData: false, // Don't process the data
+            contentType: false, // Don't set content type
+            success: function (data) {
+                // Handle the success response from the API
+
+                console.log('API Response:', data);
+                window.location.href = '/';
+                // alert(data.message)
+
+                // if (data.message) {
+                //     // Display the success message from the API in an alert
+                //     alert(data.message);
+                // } else {
+                //     // Handle other scenarios if needed
+                // }
+            },
+            error: function (xhr, status, error) {
+                // Handle any errors from the API request
+                console.error('API Error:', error);
+            }
+        });
+    }
+
+    // Add a submit event listener to the form
+    document.getElementById('signupForm').addEventListener('submit', submitFormToAPI);
+</script>
+
+
+
+
+
+{% endblock %}
+{% block direBtn %}SignUp{% endblock %}

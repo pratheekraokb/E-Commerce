@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import connection
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import FileSystemStorage
-from .forms import ProductForm, ProductImageForm
+from .forms import ProductForm, ProductImageForm, UserForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 # Create your views here.
@@ -29,8 +29,25 @@ def adminCompany(request):
 def adminCatSub(request):
     return render(request,'admin_pages/catSubcat.html')
 
+def signUp(request):
+    user_form = UserForm()
+    return render(request,'user_pages/signup.html', {'user_form': user_form})
 
+def signIn(request):
+    return render(request,'user_pages/signin.html' )
+def check_email(request):
+    email = request.GET.get('email', None)
+    data = {
+        'is_taken': User.objects.filter(email__iexact=email).exists()
+    }
+    return JsonResponse(data)
 
+def check_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(data)
 
 # GET Requests API
 
@@ -39,28 +56,42 @@ def adminCatSub(request):
 
 def create_user(request):
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            required_fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        form = UserForm(request.POST, request.FILES)  # Include request.FILES to handle file uploads
 
-            for field in required_fields:
-                if field not in data:
-                    return JsonResponse({'error': f'Missing field: {field}'}, status=400)
+        if form.is_valid():
+            # Form is valid, process the data
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = make_password(form.cleaned_data['password'])
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            phone_number = form.cleaned_data['contact_number']
+            is_admin = form.cleaned_data['admin']
+            date_of_birth = form.cleaned_data['dateofbirth']
+
+            # Check if profile_image is uploaded, use default if not
+            profile_image = form.cleaned_data.get('profile_image')
+
+            # Define default image paths
+            default_admin_image = 'shop/users_images/default_admin.png'
+            default_user_image = 'shop/users_images/default_user.png'
+            # profile_image = profile_image or default_user_image
             
-            username = data['username']
-            email = data['email']
-            password = make_password(data['password'])
-            first_name = data['first_name']
-            last_name = data['last_name']
-            phone_number = data.get('phone_number')  
-            is_admin = data.get('is_admin', False)
-            date_of_birth = data.get('date_of_birth')  
-            profile_image = data.get('profile_image')
-
-            if is_admin and not profile_image:
-                profile_image = 'user_images/default_admin.png'
-            elif not is_admin and not profile_image:
-                profile_image = 'user_images/default_user.png'
+            if(profile_image is None):
+                profile_image = default_user_image
+                print("default user")
+                
+                if(int(is_admin) == 1):
+                    profile_image = default_admin_image
+                    print("default admin")
+                
+                    
+            else:
+                profile_image = profile_image
+                print("custom")
+            # if is_admin:
+            #     profile_image = profile_image or default_admin_image
+  
 
             user = User.objects.create(
                 username=username,
@@ -74,11 +105,15 @@ def create_user(request):
                 profile_image=profile_image
             )
 
+            # Redirect to the signIn view on successful user creation
+            # sign_in_url = reverse('signIn')  # Generate the URL for the signIn view
+            # return redirect(sign_in_url)
             return JsonResponse({'message': 'User created successfully'}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+        else:
+            # Form is not valid, return validation errors as JSON response
+            errors = form.errors.as_json()
+            return JsonResponse({'errors': errors}, status=400)
+
     return JsonResponse({'message': 'POST method required'}, status=405)
 
 
@@ -163,6 +198,7 @@ def create_product(request):
             new_product.save()
             # images = request.FILES.getlist('images')
             tags_data = request.POST.get('tagsData')  
+            
             if tags_data is not None:
                
             
@@ -182,6 +218,7 @@ def create_product(request):
                 file_key = f'additional_images_{i}'
                 if file_key in request.FILES:
                     uploaded_file = request.FILES[file_key]
+                    
                     additional_images.append(uploaded_file)
             for image in additional_images:
                 product_image = ProductImage(product=new_product, image=image)

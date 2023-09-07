@@ -6,6 +6,9 @@ from . import views
 
 urlpatterns = [
     # Define your app's URLs here
+    path('', views.signIn, name='signIn'),
+    path('signUp', views.signUp, name='signUp'),
+
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),
     path('adminSector/company', views.adminCompany, name="adminCompany"),
@@ -15,6 +18,9 @@ urlpatterns = [
     path('api/create_user', views.create_user, name='create-user-api'),
     path('api/update_user', views.edit_user, name='edit-user-api'),
     path('api/delete_user/<int:user_id>/', views.delete_user, name='delete-user-api'),
+
+    path('api/check_email/', views.check_email, name='check_email'),
+    path('api/check_username/', views.check_username, name='check_username'),
 
     # Product
     path('api/create_product', views.create_product, name='create-product'),

@@ -90,3 +90,64 @@ class ProductImageForm(forms.Form):
             # 'style': 'display: none;',  # Your additional styling
         })
     )
+
+
+class UserForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=255,
+        label='First Name *',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'eg:- Virat', 'required': True})
+    )
+    last_name = forms.CharField(
+        max_length=255,
+        label='Last Name *',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'eg:- Kohli', 'required': True})
+    )
+    email = forms.EmailField(
+        label='E-Mail *',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'eg:- viratkohli@gmail.com', 'required': True})
+    )
+    username = forms.CharField(
+        max_length=255,
+        label='Username *',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'eg:- viratkohli', 'required': True})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'eg:- Viratkohli@18', 'required': True}),
+        label='Password *'
+    )
+    confirmpassword = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'eg:- Viratkohli@18', 'required': True}),
+        label='Confirm Password *'
+    )
+    contact_number = forms.CharField(
+        max_length=20,
+        required=False,
+        label='Contact Number',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'eg:- 8547120204'})
+    )
+    dateofbirth = forms.DateField(
+        required=False,
+        label='Date of Birth',
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+    )
+    admin = forms.ChoiceField(
+        choices=[('1', 'Yes'), ('0', 'No')],
+        widget=forms.RadioSelect(attrs={'class': 'custom-radio'}),
+        label='Are you Admin?',
+        initial='0'  # Set an initial value if needed
+    )
+    profile_image = forms.FileField(
+        required=False,
+        label='Profile Image',
+        widget=forms.FileInput(attrs={'class': 'form-control-file', 'accept': 'image/*'})
+    )
+
+    # Custom validation for password match
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirmpassword = cleaned_data.get('confirmpassword')
+
+        if password != confirmpassword:
+            self.add_error('confirmpassword', 'Passwords do not match.')
