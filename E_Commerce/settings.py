@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'E_Commerce_app.apps.ECommerceAppConfig',
-    'multiupload',
+    # 'multiupload',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +52,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'E_Commerce.urls'
+# AUTH_USER_MODEL = 'E_Commerce_app.User'
+# AUTH_USER_MODEL = 'E_Commerce_app.CustomUser'
+# AUTH_USER_MODEL = 'E_Commerce_app.User'
+
+
 
 TEMPLATES = [
     {

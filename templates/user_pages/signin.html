@@ -1,0 +1,142 @@
+{% extends 'user_pages/base_auth.html' %}
+
+{% block additional_styles %}
+div.text h2 {
+font-weight: bolder;
+padding-top: 30px;
+padding-bottom: 40px;
+}
+
+div.text p {
+font-size: 21px;
+text-align: left;
+padding-left: 15px;
+font-weight: 800;
+color: rgb(130, 118, 118);
+}
+
+div.text p:hover {
+color: rgb(255, 255, 255);
+}
+form{
+    font-size:21px;
+}
+#submitButton{
+
+    height: 60px;
+    width: 180px;
+    background-color:white;
+    color:black;
+    border: 5px black solid;
+    border-radius:15px;
+    margin-bottom:20px;
+    }
+    #submitButton:hover{
+    background-color:black;
+    color: white;
+    font-weight:bold;
+    
+    }
+{% endblock %}
+
+{% block leftDivContent %}
+<div class="text">
+    <br>
+    <h2>Welcome to ShopEase !</h1>
+        <p>
+
+            <span style="font-size: 40px;padding-left: 120px;font-style: italic;color: yellow;">W</span>
+            elcome back! To access our services, simply visit our login page and enter your username and password. We
+            prioritize a
+            seamless and secure login experience to make your shopping convenient. Happy shopping!
+        </p>
+
+        <h2 style="color: rgb(46, 46, 255);position: absolute;bottom: 0; left:17%">Enjoy Our Services</h2>
+</div>
+
+{% endblock %}
+
+{% block rightDivContent %}
+<div class="content container-fluid">
+
+
+    <div class="signup">
+        <div class="heading">
+            <h1>SignIn</h1>
+        </div>
+
+        <form enctype="multipart/form-data" id="loginForm" method="post" action="{% url 'user_login' %}">
+            {% csrf_token %}
+            {% csrf_token %}
+            <div class="d-flex justify-content-center align-items-center" style="height: 69vh;">
+                <div class="form" style="flex-basis: content;">
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="usernameLabel">Username *</label>
+                            <input type="text" class="form-control form-control-lg rounded-pill" id="usernameSignIn" name="usernameSignIn"
+                                placeholder="Enter your Username here" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="passwordSignIn">Password *</label>
+                            <input type="password" class="form-control form-control-lg rounded-pill" id="passwordSignIn" name="passwordSignIn"
+                                placeholder="Enter your Password here" required>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <br>
+                        <button class="btn btn-primary btn-lg" id="submitButton" type="submit"><b>Log In</b></button>
+                        <br>
+                        <br>
+                        <p>Don't you already have an account? <a href="/signUp"><span id="loginLink"
+                                    style="font-weight: bolder; font-style: italic; color: red;">Click Here</span></a> to Create an account.</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </form>
+        
+        
+    </div>
+</div>
+<script>
+    const csrfToken = "{{ csrf_token }}";
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.getElementById("loginForm");
+        
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Serialize the form data (you can use a library like FormData for more complex forms)
+            const formData = new FormData(loginForm);
+            
+            // Create a POST request
+            fetch("{% url 'user_login' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": csrfToken // Replace csrf_token with the actual token value (if not provided by Django)
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                if (data.success) {
+                    // Redirect to a success page or do something else
+                } else {
+                    // Handle login failure
+                   
+                }
+            })
+            .catch(error => {
+                // Handle network or other errors
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
+{% block direBtn %}SignIn{% endblock %}

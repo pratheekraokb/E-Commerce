@@ -48,6 +48,13 @@ class ProductForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}),
         choices=[('', 'Select a Company')] + [(company.company_id, company.name) for company in Company.objects.all()]
     )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Populate choices dynamically from the database when the form is instantiated
+        self.fields['categorySelect'].choices += [(category.category_id, category.name) for category in Category.objects.all()]
+        self.fields['subcategorySelect'].choices += [(subcategory.subcategory_id, subcategory.name) for subcategory in Subcategory.objects.all()]
+        self.fields['companySelect'].choices += [(company.company_id, company.name) for company in Company.objects.all()]
     
    
     description = forms.CharField(
@@ -74,7 +81,8 @@ class ProductForm(forms.Form):
     )
 
 
-
+# class ProductForm(forms.Form):
+#     pass
 class ProductImageForm(forms.Form):
     additional_images = MultiFileField(
         min_num=1,

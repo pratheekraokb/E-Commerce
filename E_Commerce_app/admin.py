@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import (
-    User, Product, Category, Subcategory, Tag, ProductTag, Company,
+    CustomUser, Product, Category, Subcategory, Tag, ProductTag, Company,
     Cart, CartItem, Order, OrderItem, OrderTracking, Address, Comment, ProductImage
 )
 
 # Register your models here.
 
-@admin.register(User)
+@admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'is_admin', 'date_of_birth')
 
@@ -71,3 +71,4 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('product', 'image')
+

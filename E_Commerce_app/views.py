@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 import json
-from .models import User, Category, Subcategory, Product, Company, Tag, ProductImage, ProductTag
+from .models import CustomUser, Category, Subcategory, Product, Company, Tag, ProductImage, ProductTag
 from django.contrib.auth.hashers import make_password
 from django.db import connection
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -13,6 +13,11 @@ from django.core.files.storage import FileSystemStorage
 from .forms import ProductForm, ProductImageForm, UserForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 # Create your views here.
 def adminHome(request):
 
@@ -38,14 +43,14 @@ def signIn(request):
 def check_email(request):
     email = request.GET.get('email', None)
     data = {
-        'is_taken': User.objects.filter(email__iexact=email).exists()
+        'is_taken': CustomUser.objects.filter(email__iexact=email).exists()
     }
     return JsonResponse(data)
 
 def check_username(request):
     username = request.GET.get('username', None)
     data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
+        'is_taken': CustomUser.objects.filter(username__iexact=username).exists()
     }
     return JsonResponse(data)
 
@@ -93,7 +98,7 @@ def create_user(request):
             #     profile_image = profile_image or default_admin_image
   
 
-            user = User.objects.create(
+            user = CustomUser.objects.create(
                 username=username,
                 email=email,
                 password=password,
@@ -126,8 +131,8 @@ def edit_user(request):
             
      
             try:
-                user = User.objects.get(username=username, email=email)
-            except User.DoesNotExist:
+                user = CustomUser.objects.get(username=username, email=email)
+            except CustomUser.DoesNotExist:
                 return JsonResponse({'error': 'User not found'}, status=404)
             
         
@@ -160,10 +165,10 @@ def edit_user(request):
 def delete_user(request, user_id):
     if request.method == 'DELETE':
         try:
-            user = User.objects.get(pk=user_id)
+            user = CustomUser.objects.get(pk=user_id)
             user.delete()
             return JsonResponse({'message': 'User deleted successfully'}, status=200)
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
@@ -429,3 +434,26 @@ def alter_company(request):
             return JsonResponse({'error': 'Company not found'}, status=404)
     
     return JsonResponse({'error': 'Invalid Request Method'}, status=400)
+
+def usersHome(request):
+    return HttpResponse("Hello Welcome")
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['usernameSignIn']
+        password = request.POST['passwordSignIn']
+        
+        # Authenticate the user using the provided credentials
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)  # Log in the user
+            
+            if user.is_admin:
+                return redirect('adminHome')  # Redirect to admin dashboard
+            else:
+                return redirect('users_home')  # Redirect to regular user page
+        else:
+            messages.error(request, 'Invalid login attempt. Please check your username and password.')
+
+    return render(request, 'user_pages/signin.html')  # Replace with your actual template name
