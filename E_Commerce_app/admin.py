@@ -8,7 +8,7 @@ from .models import (
 
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'is_admin', 'date_of_birth')
+    list_display = ('username', 'email', 'is_staff', 'date_of_birth')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

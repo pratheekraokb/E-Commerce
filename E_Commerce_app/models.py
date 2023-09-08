@@ -11,24 +11,77 @@ from django.utils import timezone
 # from django.utils.translation import gettext as _  # Add this import
 
 
-class CustomUser(models.Model):
+# class CustomUser(models.Model):
+#     user_id = models.AutoField(primary_key=True)
+#     username = models.CharField(max_length=255, unique=True)
+#     email = models.EmailField(unique=True)
+#     password = models.CharField(max_length=255)
+#     first_name = models.CharField(max_length=255)
+#     last_name = models.CharField(max_length=255)
+#     is_admin = models.BooleanField(default=False)
+#     phone_number = models.CharField(max_length=20, blank=True, null=True)
+#     date_of_birth = models.DateField(blank=True, null=True)
+#     profile_image = models.ImageField(upload_to='shop/users_images', null=True)
+    
+
+#     def __str__(self):
+#         return self.username
+
+#     class Meta:
+#         db_table = 'User'
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        # Check if 'is_staff' is True, and if so, make the user a superuser
+        if extra_fields.get("is_staff") is True:
+            user.is_superuser = True
+            user.save()
+
+        return user
+
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)  # Set is_staff to True for superusers
+        extra_fields.setdefault("is_superuser", True)
+        
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+        
+        return self.create_user(email, username, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)  # Keep 'is_staff' for admin privileges
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     profile_image = models.ImageField(upload_to='shop/users_images', null=True)
-    
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username
 
     class Meta:
         db_table = 'User'
+
+    groups = models.ManyToManyField(Group, blank=True, related_name='customuser_set')
+    user_permissions = models.ManyToManyField(Permission, blank=True, related_name='customuser_set')
 
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)

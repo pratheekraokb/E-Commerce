@@ -6,7 +6,8 @@ from . import views
 
 urlpatterns = [
     # Define your app's URLs here
-    path('', views.signIn, name='signIn'),
+    path('', views.usersHome, name='usersHome'),
+    path('signIn', views.signIn, name='signIn'),
     path('signUp', views.signUp, name='signUp'),
 
     path('adminSector', views.adminHome, name='adminHome'),
@@ -37,7 +38,8 @@ urlpatterns = [
     path('api/get_companies/<int:comp_id>', views.get_companies_by_id, name='get_companiesById_api'),
     path('api/alter_company', views.alter_company, name='alter-company'),
 
-    path('home', views.usersHome, name='users_home'),
+    # path('home', views.usersHome, name='usersHome'),
+
     path('login', views.user_login, name='user_login'),
     # path('add_product/', views.add_product, name='add_product'),
 

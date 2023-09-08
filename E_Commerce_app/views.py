@@ -105,7 +105,7 @@ def create_user(request):
                 first_name=first_name,
                 last_name=last_name,
                 phone_number=phone_number,
-                is_admin=is_admin,
+                is_staff=is_admin,
                 date_of_birth=date_of_birth,
                 profile_image=profile_image
             )
@@ -436,7 +436,7 @@ def alter_company(request):
     return JsonResponse({'error': 'Invalid Request Method'}, status=400)
 
 def usersHome(request):
-    return HttpResponse("Hello Welcome")
+    return HttpResponse("Welcome to the usersHome view.")
 
 def user_login(request):
     if request.method == 'POST':
@@ -445,14 +445,17 @@ def user_login(request):
         
         # Authenticate the user using the provided credentials
         user = authenticate(request, username=username, password=password)
+        print("User:", user)
         
         if user is not None:
             login(request, user)  # Log in the user
             
-            if user.is_admin:
-                return redirect('adminHome')  # Redirect to admin dashboard
+            if user.is_staff:
+                print("Redirecting to adminSector...")
+                return redirect('/adminSector')  # Redirect to admin dashboard
             else:
-                return redirect('users_home')  # Redirect to regular user page
+                print("Redirecting to usersHome...")
+                return redirect('/')  # Redirect to regular user page
         else:
             messages.error(request, 'Invalid login attempt. Please check your username and password.')
 

@@ -65,7 +65,7 @@ form{
             <h1>SignIn</h1>
         </div>
 
-        <form enctype="multipart/form-data" id="loginForm" method="post" action="{% url 'user_login' %}">
+        <form enctype="multipart/form-data" id="loginForm" method="POST" action="/login">
             {% csrf_token %}
             {% csrf_token %}
             <div class="d-flex justify-content-center align-items-center" style="height: 69vh;">
@@ -101,7 +101,7 @@ form{
         
     </div>
 </div>
-<script>
+<!-- <script>
     const csrfToken = "{{ csrf_token }}";
     document.addEventListener("DOMContentLoaded", function () {
         const loginForm = document.getElementById("loginForm");
@@ -135,7 +135,7 @@ form{
             });
         });
     });
-</script>
+</script> -->
 
 {% endblock %}
 

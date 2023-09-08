@@ -42,20 +42,24 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    #  'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'E_Commerce.urls'
-# AUTH_USER_MODEL = 'E_Commerce_app.User'
-# AUTH_USER_MODEL = 'E_Commerce_app.CustomUser'
-# AUTH_USER_MODEL = 'E_Commerce_app.User'
 
+
+AUTH_USER_MODEL = 'E_Commerce_app.CustomUser'
+LOGIN_REDIRECT_URL = '/home'
+LOGIN_URL = '/login'  # Or the URL pattern name if defined in urls.py
 
 
 TEMPLATES = [
@@ -132,7 +136,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
 STATICFILES_DIRS = []
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

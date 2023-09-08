@@ -226,7 +226,7 @@ font-size:15px;
             <div class="invalid-feedback" id="usernameError"></div>
             <div class="text-center">
                 <button class="btn btn-primary" id="submitButton" type="submit" value="Upload"><b>SignUP</b></button>
-                <p>Do you already have account? <a href="/"><span id="loginLink"
+                <p>Do you already have account? <a href="/signIn"><span id="loginLink"
                             style="font-weight: bolder;font-style: italic;color:red;">Click Here</span></a></p>
             </div>
 
@@ -379,7 +379,7 @@ font-size:15px;
                 // Handle the success response from the API
 
                 console.log('API Response:', data);
-                window.location.href = '/';
+                window.location.href = '/signIn';
                 // alert(data.message)
 
                 // if (data.message) {
