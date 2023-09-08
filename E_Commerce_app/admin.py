@@ -12,7 +12,8 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'mrp_price', 'selling_price', 'stock_quantity')
+    list_display = ('name', 'mrp_price', 'selling_price', 'stock_quantity','company')
+    list_filter = ('company','category')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
