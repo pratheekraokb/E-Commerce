@@ -18,6 +18,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def adminHome(request):
 
@@ -435,8 +436,14 @@ def alter_company(request):
     
     return JsonResponse({'error': 'Invalid Request Method'}, status=400)
 
+@login_required
 def usersHome(request):
     return HttpResponse("Welcome to the usersHome view.")
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')  # Redirect to the home page or any other desired URL after logout
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -460,3 +467,4 @@ def user_login(request):
             messages.error(request, 'Invalid login attempt. Please check your username and password.')
 
     return render(request, 'user_pages/signin.html')  # Replace with your actual template name
+
