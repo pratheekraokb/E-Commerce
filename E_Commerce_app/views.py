@@ -19,6 +19,15 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+
+from django.db import connection
+
+def retrieveData(query):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        results = cursor.fetchall()
+    return results
+
 # Create your views here.
 def adminHome(request):
 
@@ -437,8 +446,109 @@ def alter_company(request):
     return JsonResponse({'error': 'Invalid Request Method'}, status=400)
 
 @login_required
-def usersHome(request):
-    return HttpResponse("Welcome to the usersHome view.")
+def productsHome(request):
+    query1 = """
+        SELECT
+            p.product_id AS product_id,
+            p.name AS product_name,
+            p.description AS description,
+            p.mrp_price AS mrp,
+            p.selling_price AS selling_price,
+            p.stock_quantity AS stock,
+            p.image AS product_image,
+            p.company_id AS company_id,
+            c.name AS company_name,
+            cat.category_id AS category_id,
+            cat.name AS category_name,
+            subcat.name AS subcategory_name,
+            JSON_ARRAYAGG(t.name) AS tags,
+            JSON_ARRAYAGG(COALESCE(pi.image, NULL)) AS additional_images,
+            subcat.subcategory_id AS subcat_id
+
+        FROM Product AS p
+        JOIN Company AS c ON p.company_id = c.company_id
+        JOIN Category AS cat ON p.category_id = cat.category_id
+        JOIN Subcategory AS subcat ON p.subcategory_id = subcat.subcategory_id
+        LEFT JOIN ProductTag AS pt ON p.product_id = pt.product_id
+        LEFT JOIN Tag AS t ON pt.tag_id = t.tag_id
+        LEFT JOIN ProductImage AS pi ON p.product_id = pi.product_id
+        GROUP BY subcat.subcategory_id, p.product_id
+        ORDER BY subcat.subcategory_id, p.product_id;
+    """
+    
+    results = retrieveData(query1)  # Assuming you have a function retrieveData for executing the query
+
+    json_data = []
+
+    current_subcategory_id = None
+    current_category_id = None
+    current_category_name = None
+    subcategory_product_batch = []  # List to store products for the current subcategory
+    subcategory_tags = set()  # Create a set to store unique tags for each subcategory
+
+    for row in results:
+        product_json = {
+            "product_id": row[0],
+            "product_name": row[1],
+            "description": row[2],
+            "mrp": row[3],
+            "selling_price": row[4],
+            "stock": row[5],
+            "product_image": row[6],
+            "company_id": row[7],
+            "company_name": row[8],
+            "category_id": row[9],
+            "category_name": row[10],
+            "subcategory_id": row[14],
+            "subcategory_name": row[11],
+            "tags": json.loads(row[12]),  # Parse JSON array from MySQL
+            "additional_images": json.loads(row[13]) if row[13] else []  # Parse JSON array from MySQL or use an empty list
+        }
+
+        # Add unique tags for each product to the set
+        subcategory_tags.update(product_json["tags"])
+
+        if row[10] != current_category_name or row[11] != current_subcategory_id:
+            if subcategory_product_batch:
+                # Convert the set of unique tags to a list
+                subcategory_tags_list = list(subcategory_tags)
+                json_data.append({
+                    "category_id": current_category_id,  
+                    "category_name": current_category_name,
+                    "subcategory_name": current_subcategory_id,
+                    "tags": subcategory_tags_list,
+                    "product_list": subcategory_product_batch
+                })
+            current_category_id = row[9]
+            current_category_name = row[10]
+            current_subcategory_id = row[11]
+            subcategory_product_batch = [product_json]
+            subcategory_tags = set(product_json["tags"])  # Reset the set for the new subcategory
+        else:
+            subcategory_product_batch.append(product_json)
+
+    if subcategory_product_batch:
+        # Convert the set of unique tags to a list for the last subcategory
+        subcategory_tags_list = list(subcategory_tags)
+        json_data.append({
+            "category_id": current_category_id,  
+            "category_name": current_category_name,
+            "subcategory_name": current_subcategory_id,
+            "tags": subcategory_tags_list,
+            "product_list": subcategory_product_batch
+        })
+
+    # Split product lists into batches of 4 products
+    for subcategory_data in json_data:
+        subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
+                                             range(0, len(subcategory_data["product_list"]), 4)]
+
+    # Create a JsonResponse and send it as a response
+    response_data = JsonResponse(json_data, safe=False)
+    return response_data
+
+
+
 
 def user_logout(request):
     logout(request)

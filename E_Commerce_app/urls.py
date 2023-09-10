@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     # Define your app's URLs here
-    path('', views.usersHome, name='usersHome'),
+    path('', views.productsHome, name='productsHome'),
     path('signIn', views.signIn, name='signIn'),
     path('signUp', views.signUp, name='signUp'),
 
