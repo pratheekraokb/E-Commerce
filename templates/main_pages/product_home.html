@@ -9,10 +9,7 @@
         /* justify-content: space-around; */
     }
 
-    body {
-        /* background: linear-gradient(to bottom , orange, white, green); */
-        background-color: rgba(201, 197, 191, 0.767);
-    }
+
 
     .content {
         width: 100%;
@@ -348,11 +345,56 @@ button.buyBtn:hover {
 }
 .description {
   display: -webkit-box;
-  -webkit-line-clamp: 5; /* Limit the text to 6 lines */
+  -webkit-line-clamp: 3; /* Limit the text to 6 lines */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis; /* Add ellipsis if text overflows */
 }
+.banner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-image: url("/media/shop/product_images/banner1.png");
+    height: 40vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.banner h4 {
+    color: #fff;
+    font-size: 16px;
+}
+
+.banner h2 {
+    color: #fff;
+    padding: 10px 0;
+}
+
+.banner h2 span {
+    color: #fac125;
+}
+
+.banner button {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 30px;
+    color: #000;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    transition: 0.2s;
+
+}
+ .banner button:hover{
+    background-color: #31817c;
+    color: #fff;
+    
+ }
 
 </style>
 
@@ -362,51 +404,23 @@ button.buyBtn:hover {
 
 {% block content %}
 
-<div class="fluid-container">
-    <div class="content slider-items w-100">
-        <div class="slider-button" onclick="moveSlider(-1)" style="font-size: 60px;"> &lt; </div>
-        <div class="slider-item active">
-            <h2>ShopEase.com</h2>
-            <!-- <p>Our Categories.</p> -->
-            <div style="display: flex;">
-                <div class="left" style="width: 50%;">
-                    <img src="/media/shop/users_images/default_user.png" alt="" style="height: 180px; width: auto;">
-                </div>
-                <div class="right" style="padding-top: 70px;">
-                    <h3>Welcome to <span class="red">S</span> hop <span class="red">E</span> ase.com</h3>
-                </div>
-            </div>
-        </div>
-        {% for category_data in data %}
-        <div class="slider-item">
-            <h2>ShopEase.com</h2>
-            <div style="display: flex;">
-                <div class="left" style="width: 30%;">
 
-                </div>
-                <div class="right" style="padding-top: 40px;">
-
-                    <button>
-                        <h1 class="slide-animation">Category - "{{ category_data.category_name }}"</h1>
-                    </button>
-                </div>
-            </div>
-            <!-- <p>This is the content for Slide 2.</p> -->
-
-        </div>
-        {% endfor %}
-        <div class="slider-button" onclick="moveSlider(1)" style="font-size: 60px;"> &gt; </div>
-    </div>
-</div>
 <!-- <div class="fluid-container"> -->
 
 
 <div class="fluid-container" style="display: flex;flex-direction: column;">
     {% for category_data in data %}
+    <section class="banner" class="section-m1">
+        <h4>{{ category_data.category_name }}</h4>
+        <h2>up to <span>70% off-</span> All {{ category_data.subcategory_name }}</h2>
+        <button>Explore More</button>
+    </section>
     <div class="slider">
        
         <div class="sliderContent" >
             <h2>{{ category_data.category_name }} - {{ category_data.subcategory_name }}</h2>
+
+
             <ul class="product-list">
                 {% for subcategory_product_batch in category_data.product_list %}
                 {% for product in subcategory_product_batch %}
