@@ -94,6 +94,7 @@ class Product(models.Model):
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+    # image = models.ImageField(upload_to='shop/category_images/', null=True, blank=True)
 
     def __str__(self):
         return self.name

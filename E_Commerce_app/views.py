@@ -46,10 +46,10 @@ def adminCatSub(request):
 
 def signUp(request):
     user_form = UserForm()
-    return render(request,'user_pages/signup.html', {'user_form': user_form})
+    return render(request,'auth_pages/signup.html', {'user_form': user_form})
 
 def signIn(request):
-    return render(request,'user_pages/signin.html' )
+    return render(request,'auth_pages/signin.html' )
 def check_email(request):
     email = request.GET.get('email', None)
     data = {
@@ -447,105 +447,111 @@ def alter_company(request):
 
 @login_required
 def productsHome(request):
-    query1 = """
-        SELECT
-            p.product_id AS product_id,
-            p.name AS product_name,
-            p.description AS description,
-            p.mrp_price AS mrp,
-            p.selling_price AS selling_price,
-            p.stock_quantity AS stock,
-            p.image AS product_image,
-            p.company_id AS company_id,
-            c.name AS company_name,
-            cat.category_id AS category_id,
-            cat.name AS category_name,
-            subcat.name AS subcategory_name,
-            JSON_ARRAYAGG(t.name) AS tags,
-            JSON_ARRAYAGG(COALESCE(pi.image, NULL)) AS additional_images,
-            subcat.subcategory_id AS subcat_id
+    if(request.method == "GET"):
+        query1 = """
+            SELECT
+                p.product_id AS product_id,
+                p.name AS product_name,
+                p.description AS description,
+                p.mrp_price AS mrp,
+                p.selling_price AS selling_price,
+                p.stock_quantity AS stock,
+                p.image AS product_image,
+                p.company_id AS company_id,
+                c.name AS company_name,
+                cat.category_id AS category_id,
+                cat.name AS category_name,
+                subcat.name AS subcategory_name,
+                JSON_ARRAYAGG(t.name) AS tags,
+                JSON_ARRAYAGG(COALESCE(pi.image, NULL)) AS additional_images,
+                subcat.subcategory_id AS subcat_id
 
-        FROM Product AS p
-        JOIN Company AS c ON p.company_id = c.company_id
-        JOIN Category AS cat ON p.category_id = cat.category_id
-        JOIN Subcategory AS subcat ON p.subcategory_id = subcat.subcategory_id
-        LEFT JOIN ProductTag AS pt ON p.product_id = pt.product_id
-        LEFT JOIN Tag AS t ON pt.tag_id = t.tag_id
-        LEFT JOIN ProductImage AS pi ON p.product_id = pi.product_id
-        GROUP BY subcat.subcategory_id, p.product_id
-        ORDER BY subcat.subcategory_id, p.product_id;
-    """
-    
-    results = retrieveData(query1)  # Assuming you have a function retrieveData for executing the query
+            FROM Product AS p
+            JOIN Company AS c ON p.company_id = c.company_id
+            JOIN Category AS cat ON p.category_id = cat.category_id
+            JOIN Subcategory AS subcat ON p.subcategory_id = subcat.subcategory_id
+            LEFT JOIN ProductTag AS pt ON p.product_id = pt.product_id
+            LEFT JOIN Tag AS t ON pt.tag_id = t.tag_id
+            LEFT JOIN ProductImage AS pi ON p.product_id = pi.product_id
+            GROUP BY subcat.subcategory_id, p.product_id
+            ORDER BY subcat.subcategory_id, p.product_id;
+        """
+        
+        results = retrieveData(query1)  # Assuming you have a function retrieveData for executing the query
 
-    json_data = []
+        json_data = []
 
-    current_subcategory_id = None
-    current_category_id = None
-    current_category_name = None
-    subcategory_product_batch = []  # List to store products for the current subcategory
-    subcategory_tags = set()  # Create a set to store unique tags for each subcategory
+        current_subcategory_id = None
+        current_category_id = None
+        current_category_name = None
+        subcategory_product_batch = []  # List to store products for the current subcategory
+        subcategory_tags = set()  # Create a set to store unique tags for each subcategory
 
-    for row in results:
-        product_json = {
-            "product_id": row[0],
-            "product_name": row[1],
-            "description": row[2],
-            "mrp": row[3],
-            "selling_price": row[4],
-            "stock": row[5],
-            "product_image": row[6],
-            "company_id": row[7],
-            "company_name": row[8],
-            "category_id": row[9],
-            "category_name": row[10],
-            "subcategory_id": row[14],
-            "subcategory_name": row[11],
-            "tags": json.loads(row[12]),  # Parse JSON array from MySQL
-            "additional_images": json.loads(row[13]) if row[13] else []  # Parse JSON array from MySQL or use an empty list
-        }
+        for row in results:
+            product_json = {
+                "product_id": row[0],
+                "product_name": row[1],
+                "description": row[2],
+                "mrp": int(row[3]),
+                "selling_price": int(row[4]),
+                "stock": int(row[5]),
+                "product_image": row[6],
+                "company_id": row[7],
+                "company_name": row[8],
+                "category_id": row[9],
+                "category_name": row[10],
+                "subcategory_id": row[14],
+                "subcategory_name": row[11],
+                "tags": json.loads(row[12]),  # Parse JSON array from MySQL
+                "additional_images": json.loads(row[13]) if row[13] else []  # Parse JSON array from MySQL or use an empty list
+            }
 
-        # Add unique tags for each product to the set
-        subcategory_tags.update(product_json["tags"])
 
-        if row[10] != current_category_name or row[11] != current_subcategory_id:
-            if subcategory_product_batch:
-                # Convert the set of unique tags to a list
-                subcategory_tags_list = list(subcategory_tags)
-                json_data.append({
-                    "category_id": current_category_id,  
-                    "category_name": current_category_name,
-                    "subcategory_name": current_subcategory_id,
-                    "tags": subcategory_tags_list,
-                    "product_list": subcategory_product_batch
-                })
-            current_category_id = row[9]
-            current_category_name = row[10]
-            current_subcategory_id = row[11]
-            subcategory_product_batch = [product_json]
-            subcategory_tags = set(product_json["tags"])  # Reset the set for the new subcategory
-        else:
-            subcategory_product_batch.append(product_json)
+            # Add unique tags for each product to the set
+            subcategory_tags.update(product_json["tags"])
 
-    if subcategory_product_batch:
-        # Convert the set of unique tags to a list for the last subcategory
-        subcategory_tags_list = list(subcategory_tags)
-        json_data.append({
-            "category_id": current_category_id,  
-            "category_name": current_category_name,
-            "subcategory_name": current_subcategory_id,
-            "tags": subcategory_tags_list,
-            "product_list": subcategory_product_batch
-        })
+            if row[10] != current_category_name or row[11] != current_subcategory_id:
+                if subcategory_product_batch:
+                    # Convert the set of unique tags to a list
+                    subcategory_tags_list = list(subcategory_tags)
+                    json_data.append({
+                        "category_id": current_category_id,  
+                        "category_name": current_category_name,
+                        "subcategory_name": current_subcategory_id,
+                        "tags": subcategory_tags_list,
+                        "product_list": subcategory_product_batch
+                    })
+                current_category_id = row[9]
+                current_category_name = row[10]
+                print(current_category_name)
+                current_subcategory_id = row[11]
+                subcategory_product_batch = [product_json]
+                subcategory_tags = set(product_json["tags"])  # Reset the set for the new subcategory
+            else:
+                subcategory_product_batch.append(product_json)
 
-    # Split product lists into batches of 4 products
-    for subcategory_data in json_data:
-        subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
-                                             range(0, len(subcategory_data["product_list"]), 4)]
+        if subcategory_product_batch:
+            # Convert the set of unique tags to a list for the last subcategory
+            subcategory_tags_list = list(subcategory_tags)
+            json_data.append({
+                "category_id": current_category_id,  
+                "category_name": current_category_name,
+                "subcategory_name": current_subcategory_id,
+                "tags": subcategory_tags_list,
+                "product_list": subcategory_product_batch
+            })
 
-    # Create a JsonResponse and send it as a response
-    response_data = JsonResponse(json_data, safe=False)
-    return response_data
+        # Split product lists into batches of 4 products
+        for subcategory_data in json_data:
+            subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
+                                                range(0, len(subcategory_data["product_list"]), 4)]
+
+        # Create a JsonResponse and send it as a response
+        
+        # response_data = JsonResponse(json_data, safe=False)
+        return render(request,'main_pages/product_home.html',{"data":json_data})
+
+    # return response_data
 
 
 
@@ -576,5 +582,5 @@ def user_login(request):
         else:
             messages.error(request, 'Invalid login attempt. Please check your username and password.')
 
-    return render(request, 'user_pages/signin.html')  # Replace with your actual template name
+    return render(request, 'auth_pages/signin.html')  # Replace with your actual template name
 

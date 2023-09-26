@@ -1,0 +1,534 @@
+{% extends 'main_pages/base.html' %}
+
+{% block styleCss %}
+<style>
+    .fluid-container {
+        /* background-color: red; */
+        /* height: 100vh; */
+        display: flex;
+        /* justify-content: space-around; */
+    }
+
+    body {
+        /* background: linear-gradient(to bottom , orange, white, green); */
+        background-color: rgba(201, 197, 191, 0.767);
+    }
+
+    .content {
+        width: 100%;
+        /* background-color: rgb(255, 55, 55); */
+        /* background: linear-gradient(to bottom, rgb(245, 0, 0), rgb(250, 250, 250), rgb(241, 244, 240)); */
+        background: linear-gradient(to bottom, orange, white, green);
+        /* background: linear-gradient(to bottom, rgb(0, 0, 0),rgb(10, 9, 9),black,rgb(238, 228, 228),white, rgb(240, 11, 69)); */
+        height: 30vh;
+        /* justify-content: space-around; */
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+        /* border: 5px solid red; */
+        border-radius: 10px;
+
+    }
+
+    .content2 {
+        width: 80%;
+        height: 30vh;
+        /* border-radius: 10px; */
+        margin-top: 30px;
+        background-color: white;
+
+    }
+
+    .slider-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        /* Set the width of the slider-container to 100% */
+    }
+
+    .slider-button {
+        cursor: pointer;
+        padding: 20px;
+        /* Remove padding */
+        background-color: transparent;
+        /* border: 5px solid #2e00fb; */
+        margin: 5px;
+        /* margin-top: 20px; */
+        height: 100%;
+        display: flex;
+        /* Use flexbox */
+        align-items: center;
+        /* Vertically center the content */
+        justify-content: center;
+        /* Horizontally center the content */
+    }
+
+    .slider-button:hover {
+        border: 2px solid blue;
+    }
+
+    .slider-content {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .slider-item {
+        display: none;
+        padding: 25px;
+        /* border: 1px solid #ccc; */
+        width: 100%;
+        /* Set the width of the slider-item to 100% */
+        height: 95%;
+    }
+
+    .slider-item h1 {
+        color: blue;
+        font-style: italic;
+        font-weight: bolder;
+        font-size: 45px;
+    }
+
+    .slider-item h2 {
+        font-family: 'Courier New', Courier, monospace;
+        color: white;
+        color: black;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .slider-item h3 {
+        color: rgb(234, 0, 0);
+        font-weight: 900;
+    }
+
+    .slider-item button {
+        background-color: transparent;
+        padding: 20px;
+        border: 0;
+    }
+
+    .slider-item.active {
+        display: block;
+    }
+
+    span.red {
+        color: rgb(255, 251, 0);
+        color: black;
+
+        font-size: 45px;
+        font-weight: bold;
+        font-style: italic;
+        /* background-color: aliceblue; */
+    }
+
+    .category-slider-item {
+        display: none;
+        padding: 25px;
+        width: 100%;
+        height: 95%;
+    }
+
+    .slide-animation {
+        animation: slide 2s ease infinite alternate;
+        color: red;
+    }
+
+    /* Define the keyframes animation */
+    @keyframes slide {
+
+        0%,
+        100% {
+            transform: translateY(0);
+            color: red;
+        }
+
+        50% {
+            transform: translateY(0);
+            color: blue;
+        }
+
+        25%,
+        75% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* Creates a grid with 4 columns */
+        gap: 10px;
+        /* Adjust the gap between grid items */
+    }
+
+    .grid-item {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .grid-item img {
+        width: 100%;
+        height: auto;
+    }
+
+    .slider {
+        width: 80%;
+        /* Adjust the width as needed */
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    .slider h2 {
+        font-weight: bold;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-style: italic;
+        color: brown;
+        /* color: black; */
+    }
+
+    .product-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .product {
+
+        /* Adjust the width of each product */
+        margin-right: 20px;
+        /* Spacing between products */
+    }
+
+    .product img {
+        width: 300px; /* Set a fixed width */
+        height: 300px; /* Set a fixed height */
+        border-radius: 20%;
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0.80;
+    
+    }
+
+
+    .product img:hover {
+        transform: scale(1.06);
+        opacity: 1;
+    }
+   
+
+    .product h3 {
+        padding-top: 20px;
+        text-align: center;
+        color: orangered;
+        /* color: black; */
+        font-size: 24px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bolder;
+    }
+
+    div.image {
+        width: 300px;
+    }
+
+    .prev-button {
+        font-size: 25px;
+        height: 15%;
+        background-color: transparent;
+        position: relative;
+        left: 0;
+
+        opacity: 0.2;
+        border: 0;
+        color: black;
+        font-weight: bold;
+        padding: 10px;
+
+
+    }
+
+    .prev-button:hover {
+        opacity: 1;
+        border: 0;
+        transition: ease-in 0.5;
+    }
+
+    .next-button {
+        font-size: 25px;
+        height: 15%;
+        background-color: transparent;
+        position: relative;
+        /* bottom: 55%; */
+        /* left: 93%; */
+        left: 82%;
+        padding: 10px;
+        border: 0;
+        opacity: 0.2;
+        color: black;
+        font-weight: bold;
+        
+    }
+    .next-button:hover {
+        opacity: 1;
+        border: 0;
+        transition: ease-in 0.5;
+    }
+    .badge {
+    background-color: #007bff; /* Blue background color */
+    color: #fff; /* White text color */
+    padding: 5px 10px; /* Padding around the text */
+    border-radius: 10px; /* Rounded corners */
+    text-align: center;
+    /* display:flex; */
+    /* justify-content: center; */
+  }
+  .price_badge{
+    font-size: 15px;
+    background-color: green;
+    padding: 6px 12px;
+  }
+  .badgeRed{
+    background-color: red;
+  }
+  .badgeGreen{
+    background-color: green;
+  }
+  .badgeBlue{
+    background-color: blue;
+  }
+  @keyframes flip {
+  0% {
+    transform: rotateY(0deg);
+    
+  }
+  50% {
+    /* transform: rotateY(180deg); */
+    font-size: 16px;
+    transform: scale(1.2);
+    font-weight: bold;
+    color: purple;
+    padding-left: 5px;
+  }
+  100% {
+    /* transform: rotateY(0deg); */
+  }
+}
+
+.sellPrice {
+  display: inline-block;
+  animation: flip 2s infinite; /* Apply the animation every 2 seconds infinitely */
+}
+
+/* Hide the flipped value initially */
+.sellPrice .flipped {
+  display: none;
+}
+button.buyBtn{
+    width: 100%;  
+    background-color: blue;
+    color: white; 
+    padding: 10px;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    transition: background 0.3s ease;
+    /* border */
+}
+button.buyBtn:hover {
+  background: blueviolet; /* Add your gradient colors here */
+}
+.two-line-heading {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit the text to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+}
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Limit the text to 6 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+}
+
+</style>
+
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="fluid-container">
+    <div class="content slider-items w-100">
+        <div class="slider-button" onclick="moveSlider(-1)" style="font-size: 60px;"> &lt; </div>
+        <div class="slider-item active">
+            <h2>ShopEase.com</h2>
+            <!-- <p>Our Categories.</p> -->
+            <div style="display: flex;">
+                <div class="left" style="width: 50%;">
+                    <img src="/media/shop/users_images/default_user.png" alt="" style="height: 180px; width: auto;">
+                </div>
+                <div class="right" style="padding-top: 70px;">
+                    <h3>Welcome to <span class="red">S</span> hop <span class="red">E</span> ase.com</h3>
+                </div>
+            </div>
+        </div>
+        {% for category_data in data %}
+        <div class="slider-item">
+            <h2>ShopEase.com</h2>
+            <div style="display: flex;">
+                <div class="left" style="width: 30%;">
+
+                </div>
+                <div class="right" style="padding-top: 40px;">
+
+                    <button>
+                        <h1 class="slide-animation">Category - "{{ category_data.category_name }}"</h1>
+                    </button>
+                </div>
+            </div>
+            <!-- <p>This is the content for Slide 2.</p> -->
+
+        </div>
+        {% endfor %}
+        <div class="slider-button" onclick="moveSlider(1)" style="font-size: 60px;"> &gt; </div>
+    </div>
+</div>
+<!-- <div class="fluid-container"> -->
+
+
+<div class="fluid-container" style="display: flex;flex-direction: column;">
+    {% for category_data in data %}
+    <div class="slider">
+       
+        <div class="sliderContent" >
+            <h2>{{ category_data.category_name }} - {{ category_data.subcategory_name }}</h2>
+            <ul class="product-list">
+                {% for subcategory_product_batch in category_data.product_list %}
+                {% for product in subcategory_product_batch %}
+                <li class="product" style="max-width: 20%;">
+                    <div class="image">
+                        <p style="text-align: center;"><span class="badge badgeGreen">In Stock</span></p>
+
+                        <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}">
+                    </div>
+                   
+                    <h3 class="two-line-heading">{{ product.product_name }}</h3>
+
+                    
+                    <p class="price" style="font-weight: bolder;font-style: italic;color: green;text-align: center;"><span class="badge price_badge badgeBlue">Price:- </span> <span class="mrpPrice" style="font-size: small; text-decoration:line-through;">&#8377;{{ product.mrp }}.00</span class="mrpPrice"> <span class="sellPrice" id="priceContainer">&#8377;<span id="priceValue">{{ product.selling_price }}</span>.00</span>
+                    </p>
+
+                    
+                    <p class="description">{{ product.description }}</p>
+
+                    <button class="buyBtn">Buy Now</button>
+                </li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+       
+        <div class="NavBtn" style="display: flex;">
+            <button class="prev-button"><< PREV</button>
+            <button class="next-button">NEXT >></button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+<script>
+
+
+    document.querySelectorAll('.slider').forEach((slider, index) => {
+        const products = slider.querySelectorAll('.product');
+        const prevButton = slider.querySelector('.prev-button');
+        const nextButton = slider.querySelector('.next-button');
+        const productWidth = products[0].offsetWidth;
+        let currentIndex = 0;
+
+        function slideToIndex(index) {
+            if (index < 0) index = 0;
+            if (index >= products.length) index = products.length - 1;
+            slider.querySelector('.product-list').style.transform = `translateX(-${index * productWidth}px)`;
+            currentIndex = index;
+        }
+
+        prevButton.addEventListener('click', () => {
+            slideToIndex(currentIndex - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            slideToIndex(currentIndex + 1);
+        });
+
+        // Optional: Add autoplay functionality
+        let autoPlayInterval;
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                slideToIndex(currentIndex + 1);
+            }, 3000); // Adjust the interval as needed (in milliseconds)
+        }
+
+        startAutoPlay();
+
+        // Function to restart the slider when it reaches the end
+        function restartSlider() {
+            currentIndex = 0;
+            slideToIndex(currentIndex);
+        }
+
+        // Check if the slider has reached the end and restart it
+        setInterval(() => {
+            if (currentIndex === products.length - 1) {
+                setTimeout(restartSlider, 2000); // Delay before resetting (adjust as needed)
+            }
+        }, 200); // Check every 200 milliseconds
+    });
+
+
+
+</script>
+
+
+<script>
+    let currentSlide = 1;
+    showSlide(currentSlide);
+
+    function moveSlider(direction) {
+        currentSlide += direction;
+
+        const totalSlides = document.querySelectorAll('.slider-item').length;
+
+        if (currentSlide < 1) currentSlide = totalSlides;
+        if (currentSlide > totalSlides) currentSlide = 1;
+
+        showSlide(currentSlide);
+    }
+
+
+    function showSlide(slideIndex) {
+        const sliderItems = document.querySelectorAll('.slider-item');
+        sliderItems.forEach(item => item.classList.remove('active'));
+        sliderItems[slideIndex - 1].classList.add('active');
+
+        // Update the slider content
+    }
+
+    // Automatically change the slider every 2 seconds
+    setInterval(function () {
+        moveSlider(1); // Change to the next slide
+    }, 2000); // 2000 milliseconds (2 seconds)
+</script>
+
+
+{% endblock %}
