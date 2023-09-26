@@ -31,8 +31,6 @@
             top: 0;
             left: 0;
         }
-
-       
     </style>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -120,9 +118,11 @@
         #navbar li a.active {
             color: #088178;
         }
-        .form-control{
+
+        .form-control {
             font-size: 14px;
         }
+
         .carousel-container {
             height: 600px;
             margin-left: 20%;
@@ -252,58 +252,58 @@
         }
 
         footer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            background-color: #E3E6F3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #E3E6F3;
 
-        }
+ }
 
-        footer .col {
-            display: flex;
-            flex-direction: column;
-            align-items: self-start;
-        }
+ footer .col {
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+ }
 
+ 
+ footer .col-1{
+    width: 40%;
+ }
 
-        footer .col-1 {
-            width: 40%;
-        }
+footer p{
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
 
-        footer p {
-            font-size: 13px;
-            margin: 0 0 8px 0;
-        }
+footer a {
+    font-size: 13px;
+    text-decoration: none;
+    color: #222;
+    margin-bottom: 10px;
+}
 
-        footer a {
-            font-size: 13px;
-            text-decoration: none;
-            color: #222;
-            margin-bottom: 10px;
-        }
+footer a:hover {
+    color: #088178;
+}
 
-        footer a:hover {
-            color: #088178;
-        }
+footer .follow {
+    margin-top: 20px;
+}
 
-        footer .follow {
-            margin-top: 20px;
-        }
+footer .follow i {
+    color: #465b52;
+    margin-right: 4px;
+    cursor: pointer;
+}
 
-        footer .follow i {
-            color: #465b52;
-            margin-right: 4px;
-            cursor: pointer;
-        }
+footer .follow i:hover {
+    color: #088178;
+}
 
-        footer .follow i:hover {
-            color: #088178;
-        }
-
-        footer .copyright {
-            width: 100%;
-            text-align: center;
-        }
+footer .copyright {
+    width: 100%;
+    text-align: center;
+}
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -319,14 +319,16 @@
     </div> -->
     <section id="header">
         <div class="image">
-            <a href="#"><img src="/media/shop/admin_images/Logo.png" class="logo" height="120px" width="130px" alt=""></a>
+            <a href="#"><img src="/media/shop/admin_images/Logo.png" class="logo" height="120px" width="130px"
+                    alt=""></a>
         </div>
         <div>
             <ul id="navbar">
                 <li><a href="">Home</a></li>
                 <li><a class="active" href="index.html">Shop</a></li>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search Products" aria-label="Search" style="width: 600px;height: 50px;">
+                    <input class="form-control me-2" type="search" placeholder="Search Products" aria-label="Search"
+                        style="width: 600px;height: 50px;">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <li><a href="about.html">About Us</a></li>
@@ -341,55 +343,55 @@
     {% block content %}
 
     {% endblock %}
-    
+
     <!-- <div class="footer"> -->
     <!-- </div> -->
     <footer class="section-p1">
         <div class="col col-1">
-          <img src="images/Logo.png" alt="" height="100px" width="100px">
-          <h4>Contact</h4>
-          <p><strong>Address: </strong>Lbscek,Povval, Muliyar, Kasaragod, Kerala 671542</p>
-          <p><strong>Phone: </strong>+91 7561853218/+91 9400831368</p>
-          <p><strong>Hours: </strong>10:00 - 18:00, mon-sat</p>
-          <div class="follow">
-            <h4>Follow us</h4>
-            <div class="icons">
-              <!-- Facebook -->
-              <i class="fab fa-facebook-f"></i>
-  
-              <!-- Twitter -->
-              <i class="fab fa-twitter"></i>
-  
-              <!-- Google -->
-              <i class="fab fa-google"></i>
-  
-              <!-- Instagram -->
-              <i class="fab fa-instagram"></i>
-            </div>   
-          </div>
+            <img src="images/Logo.png" alt="" height="100px" width="100px">
+            <h4>Contact</h4>
+            <p><strong>Address: </strong>Lbscek,Povval, Muliyar, Kasaragod, Kerala 671542</p>
+            <p><strong>Phone: </strong>+91 7561853218/+91 9400831368</p>
+            <p><strong>Hours: </strong>10:00 - 18:00, mon-sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icons">
+                    <!-- Facebook -->
+                    <i class="fab fa-facebook-f"></i>
+
+                    <!-- Twitter -->
+                    <i class="fab fa-twitter"></i>
+
+                    <!-- Google -->
+                    <i class="fab fa-google"></i>
+
+                    <!-- Instagram -->
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
         </div>
-  
+
         <div class="col">
-          <h4>About</h4>
-          <a href="about.html">About us</a>
+            <h4>About</h4>
+            <a href="about.html">About us</a>
         </div>
-  
+
         <div class="col">
-          <h4>My Account</h4>
-          <a href="#">Sign in</a>
-          <a href="cart.html">view cart</a>
+            <h4>My Account</h4>
+            <a href="#">Sign in</a>
+            <a href="cart.html">view cart</a>
         </div>
-  
+
         <div class="col">
-          <h4>Secured Payment Gateways</h4>
-          <img src="images/Payment-Gateway1.png" alt="">
+            <h4>Secured Payment Gateways</h4>
+            <img src="images/Payment-Gateway1.png" alt="">
         </div>
-  
+
         <div class="copyright">
-          <p>© DBMS Project 2023, Group-9, E-Commerce website</p>
+            <p>© DBMS Project 2023, Group-9, E-Commerce website</p>
         </div>
-  
-      </footer>
+
+    </footer>
 
     <!-- Your content goes here -->
 

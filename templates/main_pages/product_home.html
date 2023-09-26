@@ -2,6 +2,9 @@
 
 {% block styleCss %}
 <style>
+    html {
+        scroll-behavior: smooth;
+    }
     .fluid-container {
         /* background-color: red; */
         /* height: 100vh; */
@@ -231,7 +234,7 @@
         width: 300px;
     }
 
-    .prev-button {
+    .prev-button, .see-more {
         font-size: 25px;
         height: 15%;
         background-color: transparent;
@@ -247,12 +250,15 @@
 
     }
 
-    .prev-button:hover {
+    .prev-button:hover, .see-more:hover {
         opacity: 1;
         border: 0;
         transition: ease-in 0.5;
     }
-
+    .see-more{
+        font-size: 20px;
+        left:45%;
+    }
     .next-button {
         font-size: 25px;
         height: 15%;
@@ -260,7 +266,7 @@
         position: relative;
         /* bottom: 55%; */
         /* left: 93%; */
-        left: 82%;
+        left: 76%;
         padding: 10px;
         border: 0;
         opacity: 0.2;
@@ -273,6 +279,7 @@
         border: 0;
         transition: ease-in 0.5;
     }
+
     .badge {
     background-color: #007bff; /* Blue background color */
     color: #fff; /* White text color */
@@ -395,6 +402,7 @@ button.buyBtn:hover {
     color: #fff;
     
  }
+ 
 
 </style>
 
@@ -415,7 +423,7 @@ button.buyBtn:hover {
         <h2>up to <span>70% off-</span> All {{ category_data.subcategory_name }}</h2>
         <button>Explore More</button>
     </section>
-    <div class="slider">
+    <div class="slider" style="width: 90vw;">
        
         <div class="sliderContent" >
             <h2>{{ category_data.category_name }} - {{ category_data.subcategory_name }}</h2>
@@ -449,6 +457,7 @@ button.buyBtn:hover {
        
         <div class="NavBtn" style="display: flex;">
             <button class="prev-button"><< PREV</button>
+            <button class="see-more">See More</button>
             <button class="next-button">NEXT >></button>
         </div>
     </div>
