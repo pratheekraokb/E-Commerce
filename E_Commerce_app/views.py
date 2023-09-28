@@ -481,12 +481,13 @@ def productsHome(request):
 
         json_data = []
 
-        current_subcategory_id = None
+        current_subcategory_name = None
         current_category_id = None
         current_category_name = None
+        current_subcategory_id = None
         subcategory_product_batch = []  
         subcategory_tags = set() 
-
+     
         for row in results:
             product_json = {
                 "product_id": row[0],
@@ -505,28 +506,37 @@ def productsHome(request):
                 "tags": json.loads(row[12]), 
                 "additional_images": json.loads(row[13]) if row[13] else []  
             }
+            
+            
+            
 
 
-
+            
             subcategory_tags.update(product_json["tags"])
-
-            if row[10] != current_category_name or row[11] != current_subcategory_id:
+            if row[10] != current_category_name or row[11] != current_subcategory_name:
                 if subcategory_product_batch:
              
                     subcategory_tags_list = list(subcategory_tags)
                     json_data.append({
                         "category_id": current_category_id,  
                         "category_name": current_category_name,
-                        "subcategory_name": current_subcategory_id,
+                        "subcategory_name": current_subcategory_name,
+                        "subcategory_id": current_subcategory_id,
+                        
                         "tags": subcategory_tags_list,
-                        "product_list": subcategory_product_batch
+                        "product_list": subcategory_product_batch,
+                        
+                        
                     })
                 current_category_id = row[9]
                 current_category_name = row[10]
-                print(current_category_name)
-                current_subcategory_id = row[11]
+                # print(current_category_name)
+                current_subcategory_id = row[14]
+                current_subcategory_name = row[11]
                 subcategory_product_batch = [product_json]
                 subcategory_tags = set(product_json["tags"]) 
+                
+                
             else:
                 subcategory_product_batch.append(product_json)
 
@@ -536,9 +546,10 @@ def productsHome(request):
             json_data.append({
                 "category_id": current_category_id,  
                 "category_name": current_category_name,
-                "subcategory_name": current_subcategory_id,
+                "subcategory_name": current_subcategory_name,
+        
                 "tags": subcategory_tags_list,
-                "product_list": subcategory_product_batch
+                "product_list": subcategory_product_batch,
             })
 
         
@@ -546,7 +557,7 @@ def productsHome(request):
             subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
                                                 range(0, len(subcategory_data["product_list"]), 4)]
 
-     
+        print(json_data)
         return render(request,'main_pages/product_home.html',{"data":json_data})
 
    
@@ -615,7 +626,7 @@ def viewSubCategory(request, subcategory_id):
 
         json_data = []
 
-        current_subcategory_id = None
+        current_subcategory_name = None
         current_category_id = None
         current_category_name = None
         subcategory_product_batch = []  
@@ -644,21 +655,21 @@ def viewSubCategory(request, subcategory_id):
 
             subcategory_tags.update(product_json["tags"])
 
-            if row[10] != current_category_name or row[11] != current_subcategory_id:
+            if row[10] != current_category_name or row[11] != current_subcategory_name:
                 if subcategory_product_batch:
               
                     subcategory_tags_list = list(subcategory_tags)
                     json_data.append({
                         "category_id": current_category_id,  
                         "category_name": current_category_name,
-                        "subcategory_name": current_subcategory_id,
+                        "subcategory_name": current_subcategory_name,
                         "tags": subcategory_tags_list,
                         "product_list": subcategory_product_batch
                     })
                 current_category_id = row[9]
                 current_category_name = row[10]
                 print(current_category_name)
-                current_subcategory_id = row[11]
+                current_subcategory_name = row[11]
                 subcategory_product_batch = [product_json]
                 subcategory_tags = set(product_json["tags"])  
             else:
@@ -670,7 +681,7 @@ def viewSubCategory(request, subcategory_id):
             json_data.append({
                 "category_id": current_category_id,  
                 "category_name": current_category_name,
-                "subcategory_name": current_subcategory_id,
+                "subcategory_name": current_subcategory_name,
                 "tags": subcategory_tags_list,
                 "product_list": subcategory_product_batch
             })

@@ -63,6 +63,18 @@
         background: transparent;
         
     }
+
+    .productImages {
+        position: relative;
+    }
+    .productImages img {
+        display: none;
+        max-width: 100%;
+        height: auto;
+    }
+    .productImages img.active {
+        display: block;
+    }
     
     a.cart:hover{
         font-size: x-large;        
@@ -76,6 +88,8 @@
     .cart:hover svg {
         fill: rgb(0, 8, 255); /* Change the color to your desired color */
     }
+
+
 </style>
 
 <style>
@@ -104,8 +118,22 @@
                 <!-- <li> -->
                     <div class="pro-container" >
                         {% for product in product_list %}
-                        <div class="pro">
-                            <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}">
+                        <!-- <div class="pro" onmouseover="startImageSlider(this)"> -->
+                        <div class="pro product-card" onmouseover="startImageSlider(this)">
+                            
+                            <div class="productImages">
+                                <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}" class="active">
+                                <div class="additionalImages">
+                                    {% for additional_images in product.additional_images %}
+
+                                    {% if additional_images is not null %}
+                                    <img src="/media/{{additional_images}}" alt="">
+                                    <!-- <img src="/media/shop/additional_images/51DOADQtN0L._SX679_.jpg" alt="">
+                                    <img src="/media/shop/additional_images/51Sn5X2gfaL._SX522_.jpg" alt=""> -->
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                             <div class="des">
                                 <span>{{ product.company_name }}</span>
                                 <h5>{{ product.product_name|slice:":50" }}...</h5>
@@ -134,5 +162,45 @@
     </div>
 
 </div>
+<script>
+    function startImageSlider(card) {
+        const images = card.querySelectorAll(".productImages img");
+        let currentIndex = 0;
+        let lastDisplayedIndex = 0;
+        card.classList.remove("active");
+
+        function showNextImage() {
+            images[lastDisplayedIndex].classList.remove("active");
+            currentIndex = (currentIndex + 1) % images.length;
+            
+            images[currentIndex].classList.add("active");
+            lastDisplayedIndex = currentIndex;
+        }
+
+        // Start the image slider when the card is hovered
+        const intervalId = setInterval(showNextImage, 1000);
+
+        // Stop the image slider and reset the image when the card is no longer hovered
+        card.addEventListener("mouseout", () => {
+            clearInterval(intervalId);
+            resetImage(card, lastDisplayedIndex);
+        });
+    }
+
+    function resetImage(card, lastDisplayedIndex) {
+        // Set the last displayed image as active
+        const images = card.querySelectorAll(".productImages img");
+        images.forEach((img, index) => {
+            if (index === lastDisplayedIndex) {
+                
+                img.classList.add("active");
+            } else {
+                img.classList.remove("active");
+            }
+        });
+    }
+</script>
+
+
 
 {% endblock %}

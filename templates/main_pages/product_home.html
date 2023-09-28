@@ -402,6 +402,13 @@ button.buyBtn:hover {
     color: #fff;
     
  }
+ .see-more a{
+    text-decoration: none;
+    color: transparent;
+    background-color: transparent;    
+    /* opacity: 0.2; */
+    color: black;
+ }
  
 
 </style>
@@ -421,7 +428,10 @@ button.buyBtn:hover {
     <section class="banner" class="section-m1">
         <h4>{{ category_data.category_name }}</h4>
         <h2>up to <span>70% off-</span> All {{ category_data.subcategory_name }}</h2>
-        <button>Explore More</button>
+        {% comment %} <button>Explore More</button> {% endcomment %}
+        <a href="/subcategory/{{ category_data.subcategory_id }}">
+            <button>Explore More</button>
+        </a>
     </section>
     <div class="slider" style="width: 90vw;">
        
@@ -457,7 +467,9 @@ button.buyBtn:hover {
        
         <div class="NavBtn" style="display: flex;">
             <button class="prev-button"><< PREV</button>
-            <button class="see-more">See More</button>
+            
+            <button class="see-more"><a href="/subcategory/{{ category_data.subcategory_id }}">See More</a></button>
+            
             <button class="next-button">NEXT >></button>
         </div>
     </div>
