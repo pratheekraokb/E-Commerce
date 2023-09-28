@@ -10,6 +10,8 @@ urlpatterns = [
     path('signIn', views.signIn, name='signIn'),
     path('signUp', views.signUp, name='signUp'),
 
+    path('subcategory/<int:subcategory_id>', views.viewSubCategory, name="viewSubCategory"),
+
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),
     path('adminSector/company', views.adminCompany, name="adminCompany"),
