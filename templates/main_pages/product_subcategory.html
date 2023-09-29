@@ -31,7 +31,7 @@
         scrollbar-color: transparent transparent;
         box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
         border-radius: 5px;
-
+        color: black;
         
     }
     .left h2{
@@ -159,6 +159,7 @@
         <div class="left_heading">
             <h3>PRICE</h3>
             <!-- <hr/> -->
+            <!-- <input type="range" name="" id="" min="1" max="100000" > -->
             <div class="priceBox" style="display: flex;align-items: center;justify-content: center;">
                 <select name="min-price" id="minPriceSelector">
                     <option value="1" selected>&#x20B9; 1</option>
@@ -191,8 +192,23 @@
                     <label for="descendingOrder">Descending Order of Price</label>
                 </div>
             </div>
+            <hr/>
+            <h3>COMPANIES</h3>
+            <div class="company-checkboxes" style="padding-left: 5%; padding-top: 6px; font-size: 12px;font-weight: 600;">
+
+                {% for category_data in data %}
+
+                    {% for company_name in category_data.company %}
+                        <!-- <h1>{{company_list}}</h1> -->
+                        <input type="checkbox" id="company1" class="company-filter" value="{{company_name}}">
+                        <label for="company1">{{company_name}}</label><br>
+                    {% endfor %}
+                {% endfor %}
+
+            </div>
+            <hr/>
         </div>
-        lorem100
+   
     </div>
     <!-- product_subcategory.html -->
     <div class="right">
@@ -253,39 +269,57 @@ const maxPriceSelector = document.getElementById("maxPriceSelector");
 const productCards = document.querySelectorAll(".pro.product-card");
 
 // Add event listeners to select elements
-minPriceSelector.addEventListener("change", filterProducts);
-maxPriceSelector.addEventListener("change", filterProducts);
+minPriceSelector.addEventListener("change", filterProductsByCompanyAndPrice);
+maxPriceSelector.addEventListener("change", filterProductsByCompanyAndPrice);
 
-// Function to filter products based on selected price range
-function filterProducts() {
+// Function to filter products based on selected companies and price
+function filterProductsByCompanyAndPrice() {
+    const selectedCompanies = Array.from(companyCheckboxes)
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.value);
+
     const minPrice = parseInt(minPriceSelector.value, 10);
     const maxPrice = parseInt(maxPriceSelector.value, 10);
 
+    let productsFound = false; // Initialize a flag to track if any products are found
+
     productCards.forEach((card) => {
+        const productCompany = card.querySelector(".des span").textContent;
         const productPrice = parseInt(card.getAttribute("data-price"), 10);
 
-        if (minPrice === 1 && maxPrice === 100001) {
-            card.style.display = "block"; // Show all products
-        } else if (productPrice >= minPrice && productPrice <= maxPrice) {
+        // Check if the product meets both company and price criteria
+        if (
+            (selectedCompanies.length === 0 || selectedCompanies.includes(productCompany)) &&
+            (minPrice === 1 && maxPrice === 100001 || (productPrice >= minPrice && productPrice <= maxPrice))
+        ) {
             card.style.display = "block"; // Show the product card
+            productsFound = true; // Set the flag to true
         } else {
             card.style.display = "none"; // Hide the product card
         }
     });
+
+    // Show an alert if no products are found
+    if (!productsFound) {
+        alert("No products found matching the selected criteria.");
+        window.location.reload();
+    }
 }
+// Filter by company
+const companyCheckboxes = document.querySelectorAll(".company-filter");
 
-filterProducts();
+// Add event listeners to company checkboxes
+companyCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", filterProductsByCompanyAndPrice);
+});
 
+// Function to sort products based on price
 function sortProducts(order) {
-
     const rightContainer = document.querySelector(".right");
-
     const categoryContainers = rightContainer.querySelectorAll(".category-container");
 
     categoryContainers.forEach((container) => {
-  
         const productCards = container.querySelectorAll(".pro.product-card");
-
         const productArray = Array.from(productCards);
 
         // Sort the product cards based on data-price attribute
@@ -310,9 +344,6 @@ function sortProducts(order) {
     });
 }
 
-
-
-
 // Add event listeners for sorting when radio buttons are clicked
 document.getElementById("ascendingOrder").addEventListener("click", function () {
     sortProducts("asc");
@@ -322,47 +353,48 @@ document.getElementById("descendingOrder").addEventListener("click", function ()
     sortProducts("desc");
 });
 
+// Function to start the image slider when the card is hovered
+function startImageSlider(card) {
+    const images = card.querySelectorAll(".productImages img");
+    let currentIndex = 0;
+    let lastDisplayedIndex = 0;
+    card.classList.remove("active");
 
-</script>
-<script>
-    function startImageSlider(card) {
-        const images = card.querySelectorAll(".productImages img");
-        let currentIndex = 0;
-        let lastDisplayedIndex = 0;
-        card.classList.remove("active");
+    function showNextImage() {
+        images[lastDisplayedIndex].classList.remove("active");
+        currentIndex = (currentIndex + 1) % images.length;
 
-        function showNextImage() {
-            images[lastDisplayedIndex].classList.remove("active");
-            currentIndex = (currentIndex + 1) % images.length;
-            
-            images[currentIndex].classList.add("active");
-            lastDisplayedIndex = currentIndex;
+        images[currentIndex].classList.add("active");
+        lastDisplayedIndex = currentIndex;
+    }
+
+    // Start the image slider when the card is hovered
+    const intervalId = setInterval(showNextImage, 1000);
+
+    // Stop the image slider and reset the image when the card is no longer hovered
+    card.addEventListener("mouseout", () => {
+        clearInterval(intervalId);
+        resetImage(card, lastDisplayedIndex);
+    });
+}
+
+// Function to reset the image when the card is no longer hovered
+function resetImage(card, lastDisplayedIndex) {
+    // Set the last displayed image as active
+    const images = card.querySelectorAll(".productImages img");
+    images.forEach((img, index) => {
+        if (index === lastDisplayedIndex) {
+            img.classList.add("active");
+        } else {
+            img.classList.remove("active");
         }
+    });
+}
 
-        // Start the image slider when the card is hovered
-        const intervalId = setInterval(showNextImage, 1000);
+// Call the initial filtering function
+filterProductsByCompanyAndPrice();
 
-        // Stop the image slider and reset the image when the card is no longer hovered
-        card.addEventListener("mouseout", () => {
-            clearInterval(intervalId);
-            resetImage(card, lastDisplayedIndex);
-        });
-    }
-
-    function resetImage(card, lastDisplayedIndex) {
-        // Set the last displayed image as active
-        const images = card.querySelectorAll(".productImages img");
-        images.forEach((img, index) => {
-            if (index === lastDisplayedIndex) {
-                
-                img.classList.add("active");
-            } else {
-                img.classList.remove("active");
-            }
-        });
-    }
 </script>
-
 
 
 {% endblock %}

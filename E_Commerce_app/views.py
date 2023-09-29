@@ -487,7 +487,7 @@ def productsHome(request):
         current_subcategory_id = None
         subcategory_product_batch = []  
         subcategory_tags = set() 
-     
+        companyArray = set()
         for row in results:
             product_json = {
                 "product_id": row[0],
@@ -506,6 +506,7 @@ def productsHome(request):
                 "tags": json.loads(row[12]), 
                 "additional_images": json.loads(row[13]) if row[13] else []  
             }
+            companyArray.add(row[8])
             
             
             
@@ -541,7 +542,7 @@ def productsHome(request):
                 subcategory_product_batch.append(product_json)
 
         if subcategory_product_batch:
-            
+            companyArray = list(companyArray)
             subcategory_tags_list = list(subcategory_tags)
             json_data.append({
                 "category_id": current_category_id,  
@@ -549,6 +550,7 @@ def productsHome(request):
                 "subcategory_name": current_subcategory_name,
                 "subcategory_id": current_subcategory_id,
                 "tags": subcategory_tags_list,
+                "company": companyArray,
                 "product_list": subcategory_product_batch,
             })
 
@@ -631,6 +633,7 @@ def viewSubCategory(request, subcategory_id):
         current_category_name = None
         subcategory_product_batch = []  
         subcategory_tags = set()  
+        companyArray = set()
 
         for row in results:
             product_json = {
@@ -651,20 +654,21 @@ def viewSubCategory(request, subcategory_id):
                 "additional_images": json.loads(row[13]) if row[13] else []  
             }
 
-
+            companyArray.add(row[8])
 
             subcategory_tags.update(product_json["tags"])
 
             if row[10] != current_category_name or row[11] != current_subcategory_name:
                 if subcategory_product_batch:
-              
+                    companyArray = list(companyArray)
                     subcategory_tags_list = list(subcategory_tags)
                     json_data.append({
                         "category_id": current_category_id,  
                         "category_name": current_category_name,
                         "subcategory_name": current_subcategory_name,
                         "tags": subcategory_tags_list,
-                        "product_list": subcategory_product_batch
+                        "product_list": subcategory_product_batch,
+                        "company": companyArray,
                     })
                 current_category_id = row[9]
                 current_category_name = row[10]
@@ -683,7 +687,8 @@ def viewSubCategory(request, subcategory_id):
                 "category_name": current_category_name,
                 "subcategory_name": current_subcategory_name,
                 "tags": subcategory_tags_list,
-                "product_list": subcategory_product_batch
+                "product_list": subcategory_product_batch,
+                "company": companyArray,
             })
 
 
