@@ -547,7 +547,7 @@ def productsHome(request):
                 "category_id": current_category_id,  
                 "category_name": current_category_name,
                 "subcategory_name": current_subcategory_name,
-        
+                "subcategory_id": current_subcategory_id,
                 "tags": subcategory_tags_list,
                 "product_list": subcategory_product_batch,
             })

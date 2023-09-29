@@ -6,47 +6,96 @@
         padding: 0;
         margin: 0;
     }
+    body{
+        background-color: #e2e3e4;
+    }
 
     .fluid-container {
         max-width: 100vw;
         min-height: 100vh;
         display: flex;
-
+        justify-content: center;
+        margin-top:10px;
+        
     }
+    /* border: 2px solid; */
 
     .left {
         width: 17%;
-        /* background-color: black; */
+        padding: 5px;
         color: wheat;
-        /* height: 200vh; */
+        background-color: white;
+        margin-right: 10px;
         overflow-y: scroll;
         scrollbar-width: thin;
-        border-right: 2px solid gray;
-        /* Hide the scroll bar pipe (thin style) */
         scrollbar-color: transparent transparent;
-        /* Hide the scrollbar color */
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
+        border-radius: 5px;
+
+        
+    }
+    .left h2{
+        font-size: 20px;
+        /* text-align: center; */
+        padding-left: 10px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bold;
+    }
+    .left h3{
+        font-size: 12px;
+        font-weight: 600;
+        color: black;
+        padding-left: 10px;
     }
 
     .left::-webkit-scrollbar {
         width: 0.1rem;
-        /* Adjust the width to your preference */
     }
 
     .left::-webkit-scrollbar-thumb {
         background: transparent;
         /* Hide the scrollbar thumb */
     }
-
-    .right {
-        width: 83%;
-        /* background-color: rgb(12, 190, 131); */
+    select, select option {
+        font-family: 'Times New Roman', Times, serif;
     }
+    select {
+        width: 40%;
+        padding: 10px;
+        border: 2px solid black;
+        color: black;
+        font-weight: bold;
+    }
+    
+    .priceSort{
+        /* text-align: center; */
+        padding: 15%;
+        color: rgb(97, 94, 94);
+        font-weight: 600;
+        font-size: 12px;
+        padding-top: 15px;
+    }
+   
+    .right {
+        width: 76%;
+        background-color: white;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .pro.product-card {
+        width: calc(33.33% - 10px);
+        margin: 0;
+    }
+
+
     .description {
     display: -webkit-box;
-    -webkit-line-clamp: 5; /* Limit the text to 6 lines */
+    -webkit-line-clamp: 5; 
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis if text overflows */
+    text-overflow: ellipsis; 
     }
     .pro{
         max-height: 60vh; 
@@ -88,7 +137,7 @@
     .cart:hover svg {
         fill: rgb(0, 8, 255); /* Change the color to your desired color */
     }
-
+   
 
 </style>
 
@@ -103,65 +152,178 @@
 
 <div class="fluid-container">
     <div class="left">
-        left data
-        <!-- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos deserunt ipsum excepturi velit. Saepe, ducimus. Veniam itaque cupiditate repellendus, magnam, numquam fuga facere, velit alias nisi quas tempore veritatis nostrum at quibusdam. Omnis eos dolorem facere. Officia quae nostrum eligendi odit illo, eveniet sapiente similique cupiditate quaerat dolor. Reiciendis quisquam aliquam nemo libero vel laudantium quis suscipit molestiae a alias ea deleniti architecto, maxime id enim quasi omnis qui quas, veniam, soluta iusto harum consequuntur sunt rem! Culpa, sint numquam quam omnis aut nam temporibus suscipit maiores natus earum ratione eius ex eligendi et, vel at? Perspiciatis doloremque, nobis laborum voluptate nemo optio tenetur cum. Explicabo sit voluptatum ipsam praesentium cupiditate maxime, minus, nam sed eum rem voluptates esse illo eos, minima enim eaque quos necessitatibus quas laudantium. Odit ratione explicabo accusamus eligendi quasi. Eligendi sapiente at voluptatibus saepe dolores voluptatem voluptas, doloremque voluptatum aliquam eaque blanditiis adipisci cupiditate earum nam et. Iste inventore exercitationem tempora. Quae maxime dolorum tempora veniam doloribus numquam, incidunt pariatur debitis asperiores, natus ut dolorem sit iste eum, sint temporibus fuga architecto quas dolor. Quibusdam sint sapiente ratione distinctio voluptate, cumque ex nostrum dolorem, unde natus, mollitia quo nam dicta veritatis! Nam neque porro unde praesentium accusantium voluptate dolores quaerat odit, maiores commodi vitae possimus harum hic cupiditate veritatis non? Est, deleniti enim deserunt minus non, nam excepturi vero nisi harum animi necessitatibus. Minus vitae recusandae vero, praesentium fugiat labore ea ipsa non, corporis neque officia a tenetur assumenda. Nam molestias, necessitatibus dolore eligendi eum ratione quod. Nemo veniam est amet alias! At, minus doloribus. Consequatur aliquid voluptate id nesciunt aut minima numquam sit laborum nisi fugit tenetur aperiam dolore, reiciendis vero doloribus voluptatem deserunt quos quisquam dignissimos. Quasi culpa rem perspiciatis. Rem repellendus et ab laborum odio at eos, ratione vitae tempora labore aliquam aspernatur ipsam nostrum aliquid fugiat architecto quaerat sequi veniam? Quo labore provident dolorem? Reiciendis recusandae, veritatis at adipisci aliquam nesciunt in ratione ipsum. Ut nisi dolor optio molestiae nesciunt consectetur, sed quaerat vel perspiciatis natus doloribus dolorum tempore, fugit officiis deleniti minima officia blanditiis sint iusto? Voluptatum consectetur error amet iste necessitatibus. Reprehenderit voluptate dolor aperiam unde qui quis odit deserunt, harum officia animi. Quasi, harum perspiciatis. Debitis aliquam saepe minima deleniti nihil tenetur quia odio assumenda eius deserunt aspernatur, possimus voluptate quasi vitae corrupti eligendi maiores. Saepe dolores rerum laudantium fugit sed doloremque, assumenda, placeat, quaerat nobis rem aliquid autem. Atque unde omnis eligendi sapiente illo? Natus nesciunt porro perspiciatis magnam quia impedit soluta voluptatum tempora qui similique tempore deleniti animi quis, maiores, officia sed illum libero corrupti, at laborum voluptatem quae eum. Consequatur eum excepturi optio assumenda aliquid deserunt non, odit omnis doloribus expedita sunt ipsa, ab totam vitae autem, rem blanditiis beatae quibusdam quaerat. Explicabo officia rerum adipisci laudantium qui unde veritatis fugiat atque quos vel. Voluptates magni amet reprehenderit dolore nam incidunt quis odio ipsum asperiores id. Accusantium modi delectus nobis reiciendis atque? Ullam accusamus nobis eligendi? Dolores minima beatae molestias illum a tempora harum architecto iusto, dolorum porro est ipsa qui magnam delectus. Optio beatae cumque voluptatum culpa, numquam, architecto nam praesentium repellendus possimus accusamus cum ea amet commodi ipsam quod fugit ad quasi eos! Ratione, error earum, sint labore porro voluptas dolore sed sit totam iure numquam saepe voluptatum quibusdam officia nulla illo? Exercitationem nemo ex quos natus rerum? Minima placeat iste distinctio maxime sequi ullam quibusdam, ex, dolore ad at provident architecto numquam magni odio neque non. Corrupti facere ratione molestiae harum dolores maiores quisquam odit voluptatum non. Molestias ratione tenetur rem. Autem mollitia, error, cum corrupti porro exercitationem similique reiciendis amet, harum saepe sint veniam eius magni adipisci hic totam corporis. Similique temporibus, quisquam, explicabo fuga aliquam facilis cupiditate officia cum maiores mollitia quidem, distinctio vel voluptates enim incidunt perspiciatis voluptatem! Consectetur quae aliquam qui, nostrum quos aut ex odio alias, atque distinctio illum culpa repellendus, debitis nihil quod fugit vel voluptatem officia fugiat unde cupiditate inventore. Quasi dolores nihil aspernatur quaerat libero sunt, earum tempora corporis, optio commodi nesciunt fuga natus facilis nostrum molestiae vitae praesentium atque dicta ipsam similique! Fuga, exercitationem fugiat eos officia cupiditate repudiandae recusandae. Quae distinctio enim molestiae illo placeat, sapiente accusantium architecto accusamus cupiditate, delectus nisi eos repudiandae sed voluptate deserunt fuga nulla quis dignissimos facere tenetur necessitatibus suscipit consectetur eum non. Inventore sequi perferendis doloribus molestiae explicabo. Numquam nemo dolore mollitia non dolorem! Atque nostrum nobis unde placeat fuga quibusdam adipisci dolor, ducimus beatae aliquid natus possimus cupiditate laboriosam ad optio maiores vitae perferendis repellendus! Explicabo, aliquam! Quibusdam aperiam, cum sunt earum nesciunt eligendi magnam sit deleniti veniam dolor asperiores illum tempora quae perferendis beatae. Cupiditate non eaque repudiandae minus quod rem in nobis cum ducimus pariatur, dolore magni ut odio voluptatum molestiae? Dolorum corrupti voluptatem sapiente placeat commodi. Harum delectus soluta eaque pariatur dolor error magnam? Enim culpa et debitis quo quos itaque totam! Aspernatur dignissimos, rem nulla facilis repellat placeat saepe officiis, amet in fugiat cum quasi. Eos pariatur consectetur cum quas illo praesentium eius, ex qui. Aliquam ipsam reprehenderit sapiente, accusantium corporis libero non velit sit cum, perspiciatis distinctio incidunt facilis necessitatibus! Voluptates exercitationem numquam iste reiciendis suscipit mollitia veritatis eos vitae! Non cum eveniet nam voluptas! Modi magni accusamus, eveniet illo dolor velit debitis sint nulla laudantium ab animi tempore! Molestias facilis natus ipsum, ea, labore quibusdam maiores quaerat quia est necessitatibus ipsa ut odit laudantium modi, assumenda eligendi dicta culpa soluta facere pariatur nulla reprehenderit. Veritatis aperiam minima atque, soluta officia eos voluptatibus esse expedita! Nostrum porro velit ducimus quasi. Adipisci nemo quod repellendus nobis neque. Facere quam ab quibusdam. Eum porro eveniet harum quisquam. Et aperiam optio quia molestiae dolor mollitia ducimus beatae? Quia nihil quas rerum sequi obcaecati? Eveniet fugit voluptates inventore maxime temporibus blanditiis cupiditate? Non asperiores porro reiciendis quis ex nisi ab itaque. Voluptatibus ipsa libero facere dolores perferendis, dolorum, cum inventore fugiat nemo odio quae assumenda, quasi minima quo tenetur fuga placeat eius ad! Consequuntur accusantium impedit pariatur id earum alias! Exercitationem quod commodi consequuntur! -->
+        <div class="left_heading">
+            <h2>Filters</h2>
+            <hr/>
+        </div>
+        <div class="left_heading">
+            <h3>PRICE</h3>
+            <!-- <hr/> -->
+            <div class="priceBox" style="display: flex;align-items: center;justify-content: center;">
+                <select name="min-price" id="minPriceSelector">
+                    <option value="1" selected>&#x20B9; 1</option>
+                    <option value="250">&#x20B9; 250</option>
+                    <option value="1000">&#x20B9; 1000</option>
+                    <option value="2000">&#x20B9; 2000</option>
+                    <option value="5000">&#x20B9; 5000</option>
+                    <option value="10000">&#x20B9; 10,000</option>
+                    <option value="30000">&#x20B9; 30,000</option>
+                </select>
+                <span style="padding-left: 5px;padding-right: 6px; color: black; font-size: small;"> to</span>
+                <select name="max-price" id="maxPriceSelector">
+                    <option value="1000">&#x20B9; 1000</option>
+                    <option value="2000">&#x20B9; 2000</option>
+                    <option value="5000">&#x20B9; 5000</option>
+                    <option value="10000">&#x20B9; 10,000</option>
+                    <option value="30000">&#x20B9; 30,000</option>
+                    <option value="50000">&#x20B9; 50,000</option>
+                    <option value="100000">&#x20B9; 1 Lakh</option>
+                    <option value="100001" selected>&#x20B9; 1 Lakh+</option>
+                </select>
+            </div>
+            <div class="priceSort">
+                <div class="option1">
+                    <input type="radio" name="priceSortType" id="ascendingOrder">
+                    <label for="ascendingOrder">Ascending Order of Price</label>
+                </div>
+                <div class="option2">
+                    <input type="radio" name="priceSortType" id="descendingOrder">
+                    <label for="descendingOrder">Descending Order of Price</label>
+                </div>
+            </div>
+        </div>
+        lorem100
     </div>
     <!-- product_subcategory.html -->
-
     <div class="right">
-  
+        {% for category_data in data %}
         <section id="product1" class="section-p1">
-            {% for category_data in data %}
-            <h2>{{ category_data.category_name }} - {{ category_data.subcategory_name }}</h2>
-            <!-- <ul class="product-list"> -->
-                {% for product_list in category_data.product_list %}
-                <!-- <li> -->
-                    <div class="pro-container" >
-                        {% for product in product_list %}
-                        <!-- <div class="pro" onmouseover="startImageSlider(this)"> -->
-                        <div class="pro product-card" onmouseover="startImageSlider(this)">
-                            
-                            <div class="productImages">
-                                <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}" class="active">
-                                <div class="additionalImages">
-                                    {% for additional_images in product.additional_images %}
+            <div class="category-container" data-category-id="{{ category_data.category_id }}">
+                <h2>{{ category_data.category_name }} - {{ category_data.subcategory_name }}</h2>
+                <div class="pro-container">
+                    {% for product_list in category_data.product_list %}
+                    {% for product in product_list %}
+                    <div class="pro product-card" onmouseover="startImageSlider(this)" data-price="{{ product.selling_price }}">
+                        <div class="productImages">
+                            <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}" class="active">
+                            <div class="additionalImages">
+                                {% for additional_images in product.additional_images %}
 
-                                    {% if additional_images is not null %}
-                                    <img src="/media/{{additional_images}}" alt="">
-                                    <!-- <img src="/media/shop/additional_images/51DOADQtN0L._SX679_.jpg" alt="">
-                                    <img src="/media/shop/additional_images/51Sn5X2gfaL._SX522_.jpg" alt=""> -->
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
+                                {% if additional_images is not null %}
+                                <img src="/media/{{additional_images}}" alt="">
+                                <!-- <img src="/media/shop/additional_images/51DOADQtN0L._SX679_.jpg" alt="">
+                                <img src="/media/shop/additional_images/51Sn5X2gfaL._SX522_.jpg" alt=""> -->
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            <div class="des">
-                                <span>{{ product.company_name }}</span>
-                                <h5>{{ product.product_name|slice:":50" }}...</h5>
-                               
-                                <h4>&#x20B9; {{ product.selling_price }}.00</h4>
-                                <p class="description">{{ product.description }}...</p>
-
-                                <!-- <p>{{ product.tags }}</p> -->
-                            </div>
-                            <div>
-                                
-                            </div>
-                            <a href="#" class="cart" style="position:sticky;left:100%; background-color: transparent;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                </svg>
-                            </a>
                         </div>
-                        {% endfor %}
-                    </div>
-                <!-- </li> -->
-                {% endfor %}
-            <!-- </ul> -->
-            {% endfor %}
-        </section>
-    </div>
+                        <div class="des">
+                            <span>{{ product.company_name }}</span>
+                            <h5>{{ product.product_name|slice:":50" }}...</h5>
+                           
+                            <h4>&#x20B9; {{ product.selling_price }}.00</h4>
+                            <p class="description">{{ product.description }}...</p>
 
+                            <!-- <p>{{ product.tags }}</p> -->
+                        </div>
+                        <div>
+                            
+                        </div>
+                        <a href="#" class="cart" style="position:sticky;left:100%; background-color: transparent;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+ 
 </div>
+<script>
+    // Get references to the select elements
+const minPriceSelector = document.getElementById("minPriceSelector");
+const maxPriceSelector = document.getElementById("maxPriceSelector");
+
+// Get references to all product cards
+const productCards = document.querySelectorAll(".pro.product-card");
+
+// Add event listeners to select elements
+minPriceSelector.addEventListener("change", filterProducts);
+maxPriceSelector.addEventListener("change", filterProducts);
+
+// Function to filter products based on selected price range
+function filterProducts() {
+    const minPrice = parseInt(minPriceSelector.value, 10);
+    const maxPrice = parseInt(maxPriceSelector.value, 10);
+
+    productCards.forEach((card) => {
+        const productPrice = parseInt(card.getAttribute("data-price"), 10);
+
+        if (minPrice === 1 && maxPrice === 100001) {
+            card.style.display = "block"; // Show all products
+        } else if (productPrice >= minPrice && productPrice <= maxPrice) {
+            card.style.display = "block"; // Show the product card
+        } else {
+            card.style.display = "none"; // Hide the product card
+        }
+    });
+}
+
+filterProducts();
+
+function sortProducts(order) {
+
+    const rightContainer = document.querySelector(".right");
+
+    const categoryContainers = rightContainer.querySelectorAll(".category-container");
+
+    categoryContainers.forEach((container) => {
+  
+        const productCards = container.querySelectorAll(".pro.product-card");
+
+        const productArray = Array.from(productCards);
+
+        // Sort the product cards based on data-price attribute
+        productArray.sort((a, b) => {
+            const priceA = parseFloat(a.getAttribute("data-price"));
+            const priceB = parseFloat(b.getAttribute("data-price"));
+
+            if (order === "asc") {
+                return priceA - priceB; // Ascending order
+            } else {
+                return priceB - priceA; // Descending order
+            }
+        });
+
+        // Clear the current sub-category container
+        container.querySelector(".pro-container").innerHTML = "";
+
+        // Append the sorted product cards back to the sub-category container
+        productArray.forEach((productCard) => {
+            container.querySelector(".pro-container").appendChild(productCard);
+        });
+    });
+}
+
+
+
+
+// Add event listeners for sorting when radio buttons are clicked
+document.getElementById("ascendingOrder").addEventListener("click", function () {
+    sortProducts("asc");
+});
+
+document.getElementById("descendingOrder").addEventListener("click", function () {
+    sortProducts("desc");
+});
+
+
+</script>
 <script>
     function startImageSlider(card) {
         const images = card.querySelectorAll(".productImages img");
