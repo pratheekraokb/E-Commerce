@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/alter_company', views.alter_company, name='alter-company'),
 
     # path('home', views.usersHome, name='usersHome'),
+    path('ml/<str:title>/<str:description>/', views.MLPredict, name='MLPredict'),
 
     path('login', views.user_login, name='user_login'),
     path('logout/', views.user_logout, name='user_logout'),  # Add this line for logout

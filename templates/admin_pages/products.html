@@ -352,7 +352,81 @@ margin-bottom: 6px;
         </div>
     </div>
 </div>
+<script>
+    const productTitleInput = document.getElementById('productTitle');
+const productDescriptionInput = document.getElementById('productDescription'); // Assuming you have an input field for description
 
+// Add an event listener to the input fields to trigger requests as the title or description changes
+productTitleInput.addEventListener('input', handleInputChange);
+productDescriptionInput.addEventListener('input', handleInputChange);
+
+function handleInputChange() {
+    const title = productTitleInput.value;
+    const description = productDescriptionInput.value;
+
+    if (title && description) {
+        // If both title and description are provided, send a request with both as parameters
+        fetch(`http://127.0.0.1:8000/ml/${title}/${description}/`)
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data as needed
+                // receivedCategoryId = document.getElementById(data.categoryId);
+                const receivedCategoryId = data.category_id; // Replace 'data.category_id' with the actual variable name
+                console.log(receivedCategoryId)
+                // Get the category select element
+                const categorySelect = document.getElementById('categorySelect');
+
+                // Iterate through the options and select the one with the matching value
+                for (let i = 0; i < categorySelect.options.length; i++) {
+                    const option = categorySelect.options[i];
+                    // print(option)
+                    if (option.value == receivedCategoryId) {
+                        option.selected = true; // Set the 'selected' property to true for the matching option
+                        break; // Exit the loop once a match is found
+                    }
+                }
+              
+            })
+            .catch(error => console.error('Error fetching ML data:', error));
+    } else if (title) {
+        // title = String(title)
+        // If only title is provided, send a request with just the title as a parameter
+        fetch(`http://127.0.0.1:8000/ml/${String(title)}/${String(title)}/`)
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data as needed
+                receivedCategoryId = data.category_id; // Replace 'data.category_id' with the actual variable name
+                
+                // console.log(receivedCategoryId)
+                console.log(receivedCategoryId)
+                // Get the category select element
+                const categorySelect = document.getElementById('categorySelect');
+
+       
+                for (let i = 0; i < categorySelect.options.length; i++) {
+                    const option = categorySelect.options[i];
+
+                    console.log(option.value);
+                    if (option.value == receivedCategoryId) {
+                        option.selected = true; 
+                        const changeEvent = new Event('change', {
+                            bubbles: true, 
+                            cancelable: true, 
+                        });
+
+                        
+                        categorySelect.dispatchEvent(changeEvent);
+                        break; 
+                    }
+                }
+
+            })
+            .catch(error => console.error('Error fetching ML data:', error));
+    }
+}
+
+
+</script>
 
 <script>
     const additionalImagesInput = document.getElementById('additionalImages');
@@ -527,6 +601,7 @@ margin-bottom: 6px;
                     const option = document.createElement('option');
                     option.value = categoryId;
                     option.textContent = data[categoryId];
+                    option.id = data[categoryId];
                     categorySelect.appendChild(option);
                 }
 

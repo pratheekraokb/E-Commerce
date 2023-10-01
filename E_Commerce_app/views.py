@@ -704,3 +704,93 @@ def viewSubCategory(request, subcategory_id):
 
 
     return HttpResponse("hai")
+
+
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from django.http import HttpResponse
+
+
+def MLPredict(request, title, description):
+    try:
+        if request.method == "GET":
+            query = """
+                SELECT P.name, P.description, C.name
+                FROM Product P, Category C
+                WHERE P.category_id = C.category_id;
+            """
+            data = retrieveData(query)
+
+            nltk.download('stopwords')
+            stop_words = set(stopwords.words('english'))
+
+            # Create a TF-IDF vectorizer
+            vectorizer = TfidfVectorizer(stop_words='english')
+
+            # Create a DataFrame from the retrieved data
+            df = pd.DataFrame(data, columns=['Name', 'Description', 'Category'])
+
+            # Extract the relevant columns
+            products = [(row['Name'], row['Description']) for index, row in df.iterrows()]
+            categories = df['Category'].tolist()
+
+            # Print categories for debugging
+            print(categories)
+
+            # Create TF-IDF features
+            X = vectorizer.fit_transform([name + " " + desc for name, desc in products])
+
+            # Encode category labels
+            label_encoder = LabelEncoder()
+            y = label_encoder.fit_transform(categories)
+
+            # Split the data into training and testing sets
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            # Train a Multinomial Naive Bayes classifier
+            classifier = MultinomialNB()
+            classifier.fit(X_train, y_train)
+
+            # Predict the category for the new product
+            new_product = (title, description)
+            new_product_features = vectorizer.transform([new_product[0] + " " + new_product[1]])
+            predicted_category_id = classifier.predict(new_product_features)
+            predicted_category = label_encoder.inverse_transform(predicted_category_id)
+
+            # Calculate the model accuracy on the test set
+            y_pred = classifier.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            accuracy = accuracy * 100
+
+            result_category_name = predicted_category[0]
+            query = f"""
+                SELECT category_id
+                FROM Category
+                WHERE name='{result_category_name}';
+            """
+            category_id = retrieveData(query)
+            try:
+                category_id = category_id[0][0]
+
+            except Exception:
+                category_id = None
+
+     
+            result = {
+                "category_id":category_id,
+                "subcategory_id": category_id
+            }
+            
+
+            return JsonResponse(result)
+        else:
+            raise Exception("Wrong Request Method: Only GET requests are allowed.")
+    except Exception as e:
+        return HttpResponse(f"Error: {str(e)}")

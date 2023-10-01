@@ -7,8 +7,10 @@ class ProductForm(forms.Form):
     product_name = forms.CharField(
         max_length=255,
         widget=forms.TextInput(attrs={
+            'id' : "productTitle",
             'class': 'form-control',
             'placeholder': 'eg:- Asus TUFF Lap',
+            'name': 'productTitle',
         })
     )
     mrp = forms.DecimalField(
@@ -62,7 +64,9 @@ class ProductForm(forms.Form):
             'class': 'form-control',
             'rows': 13,
             'cols': 100,
-            'placeholder': 'Enter your Product Description here'
+            'placeholder': 'Enter your Product Description here',
+            'name': 'productDesc',
+            'id': 'productDescription',
         })
     )
     textInput = forms.CharField(
