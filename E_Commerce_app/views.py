@@ -94,16 +94,16 @@ def create_user(request):
             
             if(profile_image is None):
                 profile_image = default_user_image
-                print("default user")
+   
                 
                 if(int(is_admin) == 1):
                     profile_image = default_admin_image
-                    print("default admin")
+              
                 
                     
             else:
                 profile_image = profile_image
-                print("custom")
+         
             # if is_admin:
             #     profile_image = profile_image or default_admin_image
   
@@ -239,7 +239,7 @@ def create_product(request):
                 product_image = ProductImage(product=new_product, image=image)
                 product_image.save()
            
-            print("bye1")
+            
             return JsonResponse({'message': 'Product updated successfully'}, status=200)
 
 def update_product(request, product_id):
@@ -372,7 +372,7 @@ def create_company(request):
         company_name = request.POST.get('company_name')
         company_location = request.POST.get('company_location')
         company_phone = request.POST.get('company_phone')
-        print(company_name,company_location,company_phone)
+        
         
         # Check if a company with the same name already exists
         existing_company = Company.objects.filter(name=company_name).first()
@@ -559,7 +559,7 @@ def productsHome(request):
             subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
                                                 range(0, len(subcategory_data["product_list"]), 4)]
 
-        print(json_data)
+  
         return render(request,'main_pages/product_home.html',{"data":json_data})
 
    
@@ -741,8 +741,7 @@ def MLPredict(request, title, description):
             products = [(row['Name'], row['Description']) for index, row in df.iterrows()]
             categories = df['Category'].tolist()
 
-            # Print categories for debugging
-            print(categories)
+     
 
             # Create TF-IDF features
             X = vectorizer.fit_transform([name + " " + desc for name, desc in products])
@@ -794,3 +793,44 @@ def MLPredict(request, title, description):
             raise Exception("Wrong Request Method: Only GET requests are allowed.")
     except Exception as e:
         return HttpResponse(f"Error: {str(e)}")
+    
+
+
+def product_display(request, product_num):
+    product_query = f"""
+        SELECT P.product_id, P.name, P.description, P.mrp_price, P.selling_price, P.stock_quantity, P.image, C.name as category_name, CO.name as company_name, S.name as subcategory_name
+        FROM Product as P, Category as C, Company as CO, Subcategory as S
+        WHERE product_id = {product_num} AND P.category_id = C.category_id and P.company_id = CO.company_id and P.subcategory_id = S.subcategory_id;
+
+    """
+    result = retrieveData(product_query)
+    prod_id = result[0][0]
+    prod_name = result[0][1]
+    prod_desc = result[0][2]
+    prod_mrp = result[0][3]
+    prod_sell_price = result[0][4]
+    prod_stock = result[0][5]
+    prod_main_img = result[0][6]
+    prod_category = result[0][7]
+    prod_company = result[0][8]
+    prod_subcategory = result[0][9]
+    
+    percent_off = (100 * prod_sell_price)/prod_mrp
+
+    jsonDataToSend = {
+        "product_data": {
+            "id": prod_id,
+            "prod_name" : prod_name,
+            "desc" : prod_desc,
+            "mrp" : prod_mrp,
+            "sell_price" : prod_sell_price,
+            "stock" : prod_stock,
+            "main_img" : prod_main_img,
+            "category": prod_category,
+            "company" : prod_company,
+            "subcategory" : prod_subcategory,
+            "offer_percent" : int(100 - percent_off),
+        }
+    
+    }
+    return render(request,'main_pages/product_display.html', {"product_display": jsonDataToSend})

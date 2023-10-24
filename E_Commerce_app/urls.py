@@ -33,6 +33,9 @@ urlpatterns = [
     path('api/create_subcategory', views.create_subcategory, name='create-subcategory'),
     path('api/create_company', views.create_company, name='create-company'),
 
+
+    
+
     # GET
     path('api/get_categories', views.get_categories, name='get_categories'),
     path('api/get_subcategory/<int:category_id>', views.get_subcategories, name='get_subcategories_api'),
@@ -48,5 +51,6 @@ urlpatterns = [
     # path('add_product/', views.add_product, name='add_product'),
 
     
+    path('product/<int:product_num>', views.product_display, name="product_display"),
     # Add more URLs as needed
 ]
