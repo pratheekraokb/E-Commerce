@@ -336,28 +336,55 @@
         </div>
     </section>
     
-    <!-- <h3 class="pdt-rt">Product Rating:⭐⭐⭐⭐</h3>
-    <h1 class="pdt_txt">More Products From #Company</h1>
-
-    MoreProducts -->
     <section id="comment-section" class="section-p1" style="width: 100%;">
         <p style="font-weight: bolder;color: black; font-size: 20px;">50 Comments</p>
 
         <div class="commentsAdd" style="display: flex; justify-content: space-between;">
-            <img src="/media/shop/users_images/default_user.png" alt="" height="50px" style="border-radius: 100%;">
-            <!-- <input type="text" style="width: 95%;"> -->
-            <textarea name="" id="" cols="30" rows="6" style="background-color: #e2e3e4; border-radius: 5px; border: 2px solid black; width: 95%; padding: 8px; color: black; font-weight: 550; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></textarea>
+            <img src="{{ user_data.profile.url }}" alt="" height="50px" style="border-radius: 100%;">
+            <textarea id="commentText" cols="30" rows="6" style="background-color: #e2e3e4; border-radius: 5px; border: 2px solid black; width: 95%; padding: 8px; color: black; font-weight: 550; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></textarea>
         </div>
         <br/>
         <div class="cmntSubmission" style="width: 100%; display:flex; justify-content: right;">
             <button>Cancel</button>
-            <button style="background-color: blue; color:white;">Comment</button>
+            <button id="commentButton" style="background-color: blue; color:white;">Comment</button>
         </div>
-        
     </section>
 
 
 </div>
+
+<script>
+    document.getElementById("commentButton").addEventListener("click", () => {
+        const commentText = document.getElementById("commentText").value;
+        if (commentText) {
+            const commentData = {
+                text: commentText,
+                product_id: 1,
+                user_id: 2,
+                
+            };
+
+            // Make a POST request to the API endpoint
+            fetch("http://127.0.0.1:8000/api/add_comment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(commentData),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    // Comment added successfully, clear the comment text field
+                    document.getElementById("commentText").value = "";
+                }
+            })
+            .catch(error => {
+                console.error("Error adding comment:", error);
+                alert("Something went wrong! Try again later.")
+            });
+        }
+    });
+</script>
 
 <script>
     var button = document.getElementById("+button");

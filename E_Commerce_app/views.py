@@ -22,11 +22,24 @@ from django.contrib.auth.decorators import login_required
 
 from django.db import connection
 
+from datetime import datetime
+
 def retrieveData(query):
     with connection.cursor() as cursor:
         cursor.execute(query)
         results = cursor.fetchall()
     return results
+
+def executeQuery(query):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            # You can commit the changes here if needed: connection.commit()
+            return cursor.fetchall()
+    except Exception as e:
+        # Handle other general exceptions
+        print(f"Error: {e}")
+        return None
 
 # Create your views here.
 def adminHome(request):
@@ -795,8 +808,11 @@ def MLPredict(request, title, description):
         return HttpResponse(f"Error: {str(e)}")
     
 
-
+@login_required
 def product_display(request, product_num):
+
+    user = request.user
+
     product_query = f"""
         SELECT P.product_id, P.name, P.description, P.mrp_price, P.selling_price, P.stock_quantity, P.image, C.name as category_name, CO.name as company_name, S.name as subcategory_name
         FROM Product as P, Category as C, Company as CO, Subcategory as S
@@ -843,5 +859,61 @@ def product_display(request, product_num):
     result = retrieveData(addi_img_query)
     for img in result:
         img_array.append(img[0])
-    print(img_array)
-    return render(request,'main_pages/product_display.html', {"product_display": jsonDataToSend, "additional_images": img_array})
+    # print(img_array)
+
+    userData = {
+        "userid": user.user_id,
+        "username": user.username,
+        "email": user.email,
+        "profile": user.profile_image,
+    }
+    print(userData)
+
+    
+    return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array})
+
+
+def add_comment(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body) 
+            
+
+            text = data.get('text', '')
+            product_id = data.get('product_id', None)
+            user_id = data.get('user_id', None)
+            parent_cmnt_id = data.get('parent_cmnt_id', None)
+            current_timestamp = datetime.now()
+            formatted_timestamp = current_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+            
+            # print(text,product_id, user_id, parent_cmnt_id, current_timestamp)
+            # print("text",text)
+            # print("product id",product_id)
+            # print("user id", user_id)
+            # print("parent cmnt id",parent_cmnt_id)
+            # print("timestamp", formatted_timestamp)
+       
+
+            if text and product_id is not None and user_id is not None and parent_cmnt_id is None:
+                insert_query = f"""
+                    INSERT INTO Comment(text,product_id,user_id,timestamp)
+                    VALUES ("{text}",{product_id},{user_id},"{formatted_timestamp}");
+                """
+                # print("hai")
+                executeQuery(insert_query)
+                return JsonResponse({'message': 'Comment saved successfully'})
+            elif text and product_id is not None and user_id is not None and parent_cmnt_id is not None:
+                insert_query = f"""
+                    INSERT INTO Comment(text,product_id,user_id,timestamp, parent_comment_id)
+                    VALUES ("{text}",{product_id},{user_id},"{formatted_timestamp}",{parent_cmnt_id});
+                """
+                # print("hai")
+                executeQuery(insert_query)
+                return JsonResponse({'message': 'Comment saved successfully'})
+            else:
+                return JsonResponse({'error': 'Invalid data provided'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': 'An error occurred while saving the comment'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+        

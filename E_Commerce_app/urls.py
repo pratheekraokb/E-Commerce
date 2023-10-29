@@ -34,7 +34,9 @@ urlpatterns = [
     path('api/create_company', views.create_company, name='create-company'),
 
 
-    
+    # Comment
+
+    path('api/add_comment', views.add_comment, name='add-comment'),
 
     # GET
     path('api/get_categories', views.get_categories, name='get_categories'),
