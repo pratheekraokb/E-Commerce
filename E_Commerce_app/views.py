@@ -833,4 +833,15 @@ def product_display(request, product_num):
         }
     
     }
-    return render(request,'main_pages/product_display.html', {"product_display": jsonDataToSend})
+
+    addi_img_query = f"""
+        SELECT image 
+        FROM ProductImage
+        WHERE product_id = {product_num};
+    """
+    img_array = []
+    result = retrieveData(addi_img_query)
+    for img in result:
+        img_array.append(img[0])
+    print(img_array)
+    return render(request,'main_pages/product_display.html', {"product_display": jsonDataToSend, "additional_images": img_array})
