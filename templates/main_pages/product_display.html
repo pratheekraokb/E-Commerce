@@ -261,6 +261,14 @@
         color: whitesmoke;
     }
 
+    div.commentRetrieval p{
+        font-family:Arial, Helvetica, sans-serif;
+        color: black;
+    }
+    div.commentRetrieval img{
+        margin-right: 5px;
+    }
+
     
 </style>
 <style>
@@ -269,12 +277,14 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
 
 <div class="mainDiv" style="max-width:100vw;">
 
 
     <section id="pro-details" class="section-p1" style="width: 100%;">
         <div class="single-img" style="width: 25%;">
+            <!-- <h1></h1> -->
 
             <div class="image-zoom-container" id="imageZoomContainer" style="width: 100%;">
                 <img src="/media/{{ product_display.product_data.main_img }}" id="main" alt="" width="400px">
@@ -337,7 +347,7 @@
     </section>
     
     <section id="comment-section" class="section-p1" style="width: 100%;">
-        <p style="font-weight: bolder;color: black; font-size: 20px;">50 Comments</p>
+        <p style="font-weight: bolder;color: black; font-size: 20px;">Comments</p>
 
         <div class="commentsAdd" style="display: flex; justify-content: space-between;">
             <img src="{{ user_data.profile.url }}" alt="" height="50px" style="border-radius: 100%;">
@@ -348,8 +358,55 @@
             <button>Cancel</button>
             <button id="commentButton" style="background-color: blue; color:white;">Comment</button>
         </div>
+
+        <section>
+            {% for comment in retrieve_comments %}
+            <div class="commentRetrieval" style="background-color: transparent; padding-left: 10px;">
+                <div class="row" style="display: flex;">
+                    <img src="/media/{{ comment.profile_image }}" alt="{{ comment.user_data.user_name }}" height="50px" style="border-radius: 100%;">
+                    <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp }}</p>
+                </div>
+                <div>
+                    <p style="padding-left: 3%; color: black; font-weight: 550;">{{ comment.text }} Cmnt ID = {{ comment.comment_id }}
+                        <br/>
+                        <button style="border: 1px; background-color: transparent;"><i class="fas fa-reply"></i></button>
+                    </p>
+
+                </div>
+
+                {% if comment.replies %}
+                <div class="replies">
+                    {% for reply in comment.replies %}
+                    <div class="reply" style="padding-left: 90px;">
+                        <div style="display: flex;">
+                            <img src="/media/{{ reply.profile_image }}" alt="{{ reply.user_data.user_name }}" height="50px" style="border-radius: 100%;">
+                            <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp }}</p>
+                        </div>
+                        <p style="padding-left: 3%; color: black; font-style: italic;">{{ reply.text }} Cmnt ID = {{ reply.comment_id }}</p>
+
+                        {% if reply.replies %}
+                        <div class="replies" >
+                            {% for reply_to_reply in reply.replies %}
+                            <div class="reply" style="padding-left: 90px;">
+                                <div style="display: flex;">
+                                    <img src="/media/{{ reply_to_reply.profile_image }}" alt="{{ reply_to_reply.user_data.user_name }}" height="50px" style="border-radius: 100%;">
+                                    <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp }}</p>
+                                </div>
+                                <p style="padding-left: 3%;">{{ reply_to_reply.text }} Cmnt ID = {{ reply_to_reply.comment_id }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
     </section>
 
+    
 
 </div>
 
@@ -359,10 +416,11 @@
         if (commentText) {
             const commentData = {
                 text: commentText,
-                product_id: 1,
-                user_id: 2,
+                product_id: {{ product_display.product_data.id}},
+                user_id: {{ user_data.userid }},
                 
             };
+            console.log(commentData)
 
             // Make a POST request to the API endpoint
             fetch("http://127.0.0.1:8000/api/add_comment", {

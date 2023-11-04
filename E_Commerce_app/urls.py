@@ -37,7 +37,7 @@ urlpatterns = [
     # Comment
 
     path('api/add_comment', views.add_comment, name='add-comment'),
-
+    # path('api/retrieve_comment/<int:product_id>', views.retrieve_comment, name='retrieve-comment'),
     # GET
     path('api/get_categories', views.get_categories, name='get_categories'),
     path('api/get_subcategory/<int:category_id>', views.get_subcategories, name='get_subcategories_api'),

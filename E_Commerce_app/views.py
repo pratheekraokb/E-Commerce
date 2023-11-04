@@ -867,10 +867,12 @@ def product_display(request, product_num):
         "email": user.email,
         "profile": user.profile_image,
     }
-    print(userData)
+    
+    all_comments = retrieve_comments_recursive(prod_id)
+    print(all_comments)
 
     
-    return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array})
+    return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array, "retrieve_comments": all_comments})
 
 
 def add_comment(request):
@@ -885,13 +887,7 @@ def add_comment(request):
             parent_cmnt_id = data.get('parent_cmnt_id', None)
             current_timestamp = datetime.now()
             formatted_timestamp = current_timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-            
-            # print(text,product_id, user_id, parent_cmnt_id, current_timestamp)
-            # print("text",text)
-            # print("product id",product_id)
-            # print("user id", user_id)
-            # print("parent cmnt id",parent_cmnt_id)
-            # print("timestamp", formatted_timestamp)
+
        
 
             if text and product_id is not None and user_id is not None and parent_cmnt_id is None:
@@ -917,3 +913,32 @@ def add_comment(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
         
+def retrieve_comments_recursive(product_id, parent_comment_id=None):
+    query1 = f"""
+        SELECT C.comment_id, C.text, C.timestamp, C.parent_comment_id, C.user_id, U.username, U.profile_image
+        FROM Comment as C
+        JOIN User as U ON U.user_id = C.user_id
+        WHERE C.product_id = {product_id} and C.parent_comment_id {'IS NULL' if parent_comment_id is None else f'= {parent_comment_id}'};
+    """
+
+    data = retrieveData(query1)
+    comments = []
+
+    for row in data:
+        comment_id, text, timestamp, _, user_id, user_name, profile_image = row
+
+        comment = {
+            "comment_id": comment_id,
+            "text": text,
+            "timestamp": str(timestamp),
+            "user_id": user_id,
+            "user_name": user_name,
+            "profile_image": profile_image,
+            "replies": retrieve_comments_recursive(product_id, comment_id)
+        }
+
+        comments.append(comment)
+
+    return comments
+
+# To retrieve all comments for a product, call the function with product_id and no parent_comment_id.
