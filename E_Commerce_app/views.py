@@ -590,7 +590,7 @@ def user_login(request):
         
         # Authenticate the user using the provided credentials
         user = authenticate(request, username=username, password=password)
-        print("User:", user)
+  
         
         if user is not None:
             login(request, user)  # Log in the user
@@ -869,7 +869,7 @@ def product_display(request, product_num):
     }
     
     all_comments = retrieve_comments_recursive(prod_id)
-    print(all_comments)
+
 
     
     return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array, "retrieve_comments": all_comments})
@@ -915,17 +915,21 @@ def add_comment(request):
         
 def retrieve_comments_recursive(product_id, parent_comment_id=None):
     query1 = f"""
-        SELECT C.comment_id, C.text, C.timestamp, C.parent_comment_id, C.user_id, U.username, U.profile_image
+        SELECT C.comment_id, C.text, C.timestamp, C.parent_comment_id, C.user_id, U.username AS user_name, U.profile_image, PC.user_id AS parent_user_id, PU.username AS parent_username
         FROM Comment as C
         JOIN User as U ON U.user_id = C.user_id
+        LEFT JOIN Comment as PC ON PC.comment_id = C.parent_comment_id
+        LEFT JOIN User as PU ON PU.user_id = PC.user_id
         WHERE C.product_id = {product_id} and C.parent_comment_id {'IS NULL' if parent_comment_id is None else f'= {parent_comment_id}'};
     """
+
+
 
     data = retrieveData(query1)
     comments = []
 
     for row in data:
-        comment_id, text, timestamp, _, user_id, user_name, profile_image = row
+        comment_id, text, timestamp, parent_comment_id, user_id, user_name, profile_image, parent_user_id, parent_username = row
 
         comment = {
             "comment_id": comment_id,
@@ -934,6 +938,8 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
             "user_id": user_id,
             "user_name": user_name,
             "profile_image": profile_image,
+            "parent_user_id": parent_user_id,
+            "parent_username": parent_username,
             "replies": retrieve_comments_recursive(product_id, comment_id)
         }
 

@@ -269,6 +269,15 @@
         margin-right: 5px;
     }
 
+    div.btnsReply button {
+        background-color: black;
+        color: gold;
+        font-weight: bolder;
+    }
+    div.btnsReply button:hover{
+        cursor: pointer;
+    }
+
     
 </style>
 <style>
@@ -367,9 +376,9 @@
                     <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp|slice:"19" }}</p>
                 </div>
                 <div>
-                    <p style="padding-left: 3%; color: black; font-weight: 550;">{{ comment.text }} Cmnt ID = {{ comment.comment_id }}
+                    <p style="padding-left: 3%; color: black; font-weight: 550;">{{ comment.text }}
                         <br/>
-                        <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                        <button style="border: 1px; background-color: transparent;" class="showReplyButton" id="{{ comment.user_name }}_{{ comment.comment_id }}">
                             <!-- parent id is the comment id -->
                             <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
                         </button>
@@ -383,12 +392,17 @@
                     <div class="reply" style="padding-left: 90px;">
                         <div style="display: flex;">
                             <img src="/media/{{ reply.profile_image }}" alt="{{ reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
-                            <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp }}</p>
+                            <div>
+                                <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp }}</p>
+                                <span style="background-color: blueviolet; color: aliceblue; border-radius: 15px; padding: 5px; font-weight: bold; font-size: small;">&nbsp;Replied to @{{reply.parent_username}} &nbsp;</span>
+                            </div>
+                            
                         </div>
                         <div>
-                            <p style="padding-left: 3%; color: black; font-style: italic;">{{ reply.text }} Cmnt ID = {{ reply.comment_id }}
+                            <p style="padding-left: 3%; color: black; font-style: italic;">{{ reply.text }} 
                                 <br/>
-                                <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                                <br/>
+                                <button style="border: 1px; background-color: transparent;" class="showReplyButton" id="{{ reply.user_name }}_{{ reply.comment_id }}">
                                     <!-- parent id is the comment id -->
                                     <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
                                 </button>
@@ -401,13 +415,16 @@
                             <div class="reply" style="padding-left: 90px;">
                                 <div style="display: flex;">
                                     <img src="/media/{{ reply_to_reply.profile_image }}" alt="{{ reply_to_reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
-                                    <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp }}</p>
+                                    <div>
+                                        <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp }}</p>
+                                        <span style="background-color: blueviolet; color: aliceblue; border-radius: 15px; padding: 5px; font-weight: bold; font-size: small;">&nbsp; Replied to @{{reply.parent_username}} &nbsp;</span>
+                                    </div>
                                 </div>
-                                <p style="padding-left: 3%;">{{ reply_to_reply.text }} Cmnt ID = {{ reply_to_reply.comment_id }}
+                                <p style="padding-left: 3%;">{{ reply_to_reply.text }} 
                                     <br/>
-                                <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                                <button style="border: 1px; background-color: transparent;">
                                     <!-- parent id is the comment id -->
-                                    <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
+                                    <!-- <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b> -->
                                 </button>
                             </p>
                             </div>
@@ -421,17 +438,105 @@
             </div>
             {% endfor %}
         </section>
+        <div class="replyDiv" style="position: fixed; bottom: 0; right: 0; background-color: transparent; border-radius: 5px; padding: 5px; display: none; flex-direction: column;">
+           
+                <h1 style="color: black; font-size: 22px; font-family: 'Times New Roman', Times, serif;">Reply to @<span style="font-size: 20px; color: black;font-style: italic; font-weight: bolder;" id="setUsername"></span></h1>
+                <span id="parent_id_span" hidden>hai</span>
+                <textarea rows="10" cols="60" style="padding: 5px;" id="replyTextareaId">Default text goes here</textarea>
+                <div class="btnsReply" style="width: 100%; height: 50px; display: flex; padding-top: 5px;">
+                    <button type="submit" id="submitReplyButton" style="width: 50%;">Submit</button>
+                    <button type="reset" style="width: 50%;">Clear</button>
+                </div>
+           
+        </div>
+        
+        
+        
         
     </section>
 
     
-
+    
 </div>
 
+<script>
+    document.querySelectorAll(".showReplyButton").forEach(function (button) {
+        button.addEventListener("click", function () {
+            var replyDiv = document.querySelector(".replyDiv");
+    
+            if (window.getComputedStyle(replyDiv).display === "none") {
+                var data_retrieved = this.id;
+                console.log(data_retrieved)
+                var parts = data_retrieved.split('_');
+                parent_username = parts[0];
+                parent_id = parts[1];
+                
 
+                replyDiv.style.display = "block";
+                document.getElementById('setUsername').innerText = parent_username;
+                document.getElementById('parent_id_span').innerText = parent_id;
+    
+                // Clear and update the textarea
+                var replyTextarea = document.getElementById("replyTextareaId");
+                replyTextarea.value = ''; // Clear the textarea
+                replyTextarea.setAttribute('data-parent-id', parent_id); // Set parent_id as a data attribute
+                console.log(parent_id)
+
+            } else {
+                replyDiv.style.display = "none";
+            }
+        });
+    });
+    
+    document.getElementById("submitReplyButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        var commentText = document.getElementById("replyTextareaId").value;
+        console.log("hai ", commentText)
+        var parent_id = document.getElementById("replyTextareaId").getAttribute("data-parent-id");
+        console.log(parent_id, commentText)
+        
+    
+        if (commentText) {
+            var commentData = {
+                text: commentText,
+                product_id: '{{ product_display.product_data.id }}', // Update with actual data
+                user_id: '{{ user_data.userid }}', // Update with actual data
+                parent_cmnt_id: parent_id,
+            };
+            console.log("about to make api call", commentData)
+            // Make a POST request to the API endpoint
+            fetch("http://127.0.0.1:8000/api/add_comment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(commentData),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    // Comment added successfully, clear the comment text field
+                    document.getElementById("replyTextareaId").value = "";
+                    console.log("success")
+                }
+            })
+            .catch(error => {
+                console.error("Error adding comment:", error);
+                alert("Something went wrong! Try again later.");
+            });
+            
+        }
+    });
+    
+
+</script>
 
 <script>
+   
+
     
+    
+
+
 
     document.getElementById("commentButton").addEventListener("click", () => {
         const commentText = document.getElementById("commentText").value;
