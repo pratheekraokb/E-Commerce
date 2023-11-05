@@ -445,8 +445,8 @@ button.buyBtn:hover {
                 <li class="product" style="max-width: 20%;">
                     <div class="image">
                         <p style="text-align: center;"><span class="badge badgeGreen">In Stock</span></p>
-
-                        <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}">
+                        
+                        <a href="product/{{ product.product_id }}"><img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}"></a>
                     </div>
                    
                     <h3 class="two-line-heading">{{ product.product_name }}</h3>
@@ -458,7 +458,7 @@ button.buyBtn:hover {
                     
                     <p class="description">{{ product.description }}</p>
 
-                    <button class="buyBtn">Buy Now</button>
+                    <a href="product/{{ product.product_id }}"><button class="buyBtn">Buy Now</button></a>
                 </li>
                 {% endfor %}
                 {% endfor %}

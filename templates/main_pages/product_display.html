@@ -350,7 +350,7 @@
         <p style="font-weight: bolder;color: black; font-size: 20px;">Comments</p>
 
         <div class="commentsAdd" style="display: flex; justify-content: space-between;">
-            <img src="{{ user_data.profile.url }}" alt="" height="50px" style="border-radius: 100%;">
+            <img src="{{ user_data.profile.url }}" alt="" height="50px" width="50px" style="border-radius: 100%;" >
             <textarea id="commentText" cols="30" rows="6" style="background-color: #e2e3e4; border-radius: 5px; border: 2px solid black; width: 95%; padding: 8px; color: black; font-weight: 550; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></textarea>
         </div>
         <br/>
@@ -363,13 +363,16 @@
             {% for comment in retrieve_comments %}
             <div class="commentRetrieval" style="background-color: transparent; padding-left: 10px;">
                 <div class="row" style="display: flex;">
-                    <img src="/media/{{ comment.profile_image }}" alt="{{ comment.user_data.user_name }}" height="50px" style="border-radius: 100%;">
-                    <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp }}</p>
+                    <img src="/media/{{ comment.profile_image }}" alt="{{ comment.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
+                    <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp|slice:"19" }}</p>
                 </div>
                 <div>
                     <p style="padding-left: 3%; color: black; font-weight: 550;">{{ comment.text }} Cmnt ID = {{ comment.comment_id }}
                         <br/>
-                        <button style="border: 1px; background-color: transparent;"><i class="fas fa-reply"></i></button>
+                        <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                            <!-- parent id is the comment id -->
+                            <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
+                        </button>
                     </p>
 
                 </div>
@@ -379,20 +382,34 @@
                     {% for reply in comment.replies %}
                     <div class="reply" style="padding-left: 90px;">
                         <div style="display: flex;">
-                            <img src="/media/{{ reply.profile_image }}" alt="{{ reply.user_data.user_name }}" height="50px" style="border-radius: 100%;">
+                            <img src="/media/{{ reply.profile_image }}" alt="{{ reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
                             <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp }}</p>
                         </div>
-                        <p style="padding-left: 3%; color: black; font-style: italic;">{{ reply.text }} Cmnt ID = {{ reply.comment_id }}</p>
+                        <div>
+                            <p style="padding-left: 3%; color: black; font-style: italic;">{{ reply.text }} Cmnt ID = {{ reply.comment_id }}
+                                <br/>
+                                <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                                    <!-- parent id is the comment id -->
+                                    <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
+                                </button>
+                            </p>
+                        </div>
 
                         {% if reply.replies %}
                         <div class="replies" >
                             {% for reply_to_reply in reply.replies %}
                             <div class="reply" style="padding-left: 90px;">
                                 <div style="display: flex;">
-                                    <img src="/media/{{ reply_to_reply.profile_image }}" alt="{{ reply_to_reply.user_data.user_name }}" height="50px" style="border-radius: 100%;">
+                                    <img src="/media/{{ reply_to_reply.profile_image }}" alt="{{ reply_to_reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
                                     <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp }}</p>
                                 </div>
-                                <p style="padding-left: 3%;">{{ reply_to_reply.text }} Cmnt ID = {{ reply_to_reply.comment_id }}</p>
+                                <p style="padding-left: 3%;">{{ reply_to_reply.text }} Cmnt ID = {{ reply_to_reply.comment_id }}
+                                    <br/>
+                                <button style="border: 1px; background-color: transparent;" id="{{ comment.comment_id }}">
+                                    <!-- parent id is the comment id -->
+                                    <b style="color: #0052cc;">reply <i class="fas fa-reply"></i></b>
+                                </button>
+                            </p>
                             </div>
                             {% endfor %}
                         </div>
@@ -404,13 +421,18 @@
             </div>
             {% endfor %}
         </section>
+        
     </section>
 
     
 
 </div>
 
+
+
 <script>
+    
+
     document.getElementById("commentButton").addEventListener("click", () => {
         const commentText = document.getElementById("commentText").value;
         if (commentText) {
