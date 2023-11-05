@@ -81,6 +81,7 @@
         background-color: white;
         display: flex;
         flex-wrap: wrap;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
         justify-content: space-between;
     }
 
@@ -151,7 +152,7 @@
 
 
 <div class="fluid-container">
-    <div class="left">
+    <div class="left" style="background-color:transparent;">
         <div class="left_heading">
             <h2>Filters</h2>
             <hr/>
@@ -211,7 +212,7 @@
    
     </div>
     <!-- product_subcategory.html -->
-    <div class="right">
+    <div class="right" style="background-color:transparent;">
         {% for category_data in data %}
         <section id="product1" class="section-p1">
             <div class="category-container" data-category-id="{{ category_data.category_id }}">
@@ -219,20 +220,23 @@
                 <div class="pro-container">
                     {% for product_list in category_data.product_list %}
                     {% for product in product_list %}
+                    
                     <div class="pro product-card" onmouseover="startImageSlider(this)" data-price="{{ product.selling_price }}">
-                        <div class="productImages">
-                            <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}" class="active">
-                            <div class="additionalImages">
-                                {% for additional_images in product.additional_images %}
+                        <a href="/product/{{product.product_id}}">
+                            <div class="productImages">
+                                <img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}" class="active">
+                                <div class="additionalImages">
+                                    {% for additional_images in product.additional_images %}
 
-                                {% if additional_images is not null %}
-                                <img src="/media/{{additional_images}}" alt="">
-                                <!-- <img src="/media/shop/additional_images/51DOADQtN0L._SX679_.jpg" alt="">
-                                <img src="/media/shop/additional_images/51Sn5X2gfaL._SX522_.jpg" alt=""> -->
-                                {% endif %}
-                                {% endfor %}
+                                    {% if additional_images is not null %}
+                                    <img src="/media/{{additional_images}}" alt="">
+                                    <!-- <img src="/media/shop/additional_images/51DOADQtN0L._SX679_.jpg" alt="">
+                                    <img src="/media/shop/additional_images/51Sn5X2gfaL._SX522_.jpg" alt=""> -->
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
+                        </a>
                         <div class="des">
                             <span>{{ product.company_name }}</span>
                             <h5>{{ product.product_name|slice:":50" }}...</h5>
@@ -245,7 +249,7 @@
                         <div>
                             
                         </div>
-                        <a href="#" class="cart" style="position:sticky;left:100%; background-color: transparent;">
+                        <a href="/product/{{product.product_id}}" class="cart" style="position:sticky;left:100%; background-color: transparent;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
                                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                             </svg>
