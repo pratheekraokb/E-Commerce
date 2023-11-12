@@ -30,7 +30,7 @@
         </tr>
     </table>
     <div style="display: flex; justify-content: center; width: 100%;">
-        <button style="padding: 10px; background-color: black; color: white; font-weight: bold;">Save</button>
+        <button style="padding: 10px; background-color: black; color: white; font-weight: bold;" id="saveButton">Save</button>
     </div>
     <br/>
     <div style="display: flex; justify-content:space-around;">
@@ -57,19 +57,18 @@
 
 </div>
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
         var cartData = localStorage.getItem("cart");
         var cart = JSON.parse(cartData);
-    
+
         // Get the table element
         var table = document.querySelector("table");
-    
+
         // Populate the table with cart data
         if (cart && cart.length > 0) {
             var subTotal = 0; // Initialize subtotal variable
-    
+
             for (var i = 0; i < cart.length; i++) {
                 var row = table.insertRow(-1);
                 var slNoCell = row.insertCell(0);
@@ -78,25 +77,42 @@
                 var priceCell = row.insertCell(3);
                 var quantityCell = row.insertCell(4);
                 var totalCell = row.insertCell(5);
-    
+
                 slNoCell.textContent = i + 1;
                 imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
                 productNameCell.textContent = cart[i].productName;
                 priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
-                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
-    
+                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
+
                 // Calculate total for each item and update subtotal
                 var totalAmount = cart[i].sell_price * cart[i].quantity;
                 subTotal += totalAmount;
-    
+
                 totalCell.textContent = "₹ " + totalAmount + ".00";
             }
-    
+
             // Update the Sub Total and Total in the HTML
             document.getElementById("subTotAmnt").textContent = "₹ " + subTotal + ".00";
             document.getElementById("totalAmnt").textContent = "₹ " + subTotal + ".00";
         }
+
+        // Add event listener to the "Save" button using its ID
+        document.getElementById("saveButton").addEventListener("click", function () {
+            // Update quantities in the cart based on input values
+            for (var i = 0; i < cart.length; i++) {
+                cart[i].quantity = parseInt(table.rows[i + 1].cells[4].querySelector("input").value);
+                cart[i].total_amount = cart[i].sell_price * cart[i].quantity;
+            }
+
+            // Save the updated cart back to localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("Changes saved!");
+            window.location.reload();
+        });
     });
-    </script>
+</script>
+
+ 
+
     
 {% endblock %}
