@@ -340,8 +340,9 @@
                         id="counterInput">
                     <span class="up" onClick='increaseCount(event, this)' id="+button">+</span>
                 </div>
-
+                
                 <div style="width: 78%;margin-left:20%;">
+                    <p id="totalAmount" style="font-weight:bold">Total Amount: ₹{{ product_display.product_data.sell_price }}</p>
                     <button>Add To Cart</button>
                 </div>
             </div>
@@ -460,6 +461,15 @@
 </div>
 
 <script>
+
+    function updateTotalAmount(quantity) {
+        var sellPrice = {{ product_display.product_data.sell_price }};
+        var totalAmount = quantity * sellPrice;
+        document.getElementById("totalAmount").innerText = "Total Amount: ₹" + totalAmount;
+    }
+
+
+
     document.querySelectorAll(".showReplyButton").forEach(function (button) {
         button.addEventListener("click", function () {
             var replyDiv = document.querySelector(".replyDiv");
@@ -584,6 +594,7 @@
             input.value = value;
             button.style.backgroundColor = "none";
             button.style.color = "blue";
+            updateTotalAmount(value);
         }
         else {
 
@@ -604,6 +615,7 @@
 
             button.style.backgroundColor = "transparent";
             button.style.color = "blue";
+            updateTotalAmount(value);
         }
     }
 
