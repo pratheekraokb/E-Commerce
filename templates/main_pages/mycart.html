@@ -29,35 +29,47 @@
             <th style="width: 10%;">Total</th>
         </tr>
     </table>
-
-    <div class="coupon">
-        <p>Enter your Coupon code if you have any.</p>
-        <input type="text">
-        <button>Apply Coupon</button>
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <button style="padding: 10px; background-color: black; color: white; font-weight: bold;">Save</button>
     </div>
+    <br/>
+    <div style="display: flex; justify-content:space-around;">
+        <div class="coupon" style="width: 30%; padding-left: 10px;">
+            <div style="width: 100%; background-color: orangered; color: white;padding: 10px; padding-left: 15px; height: 40px; font-weight: bold;">COUPEN</div>
+            <p style="padding: 10px; font-weight: 700;">Enter your Coupon code if you have any.</p>
+            <input type="text" style="padding: 10px;" placeholder="Coupon Code">
+            <button style="padding: 10px; background-color: black; color: white; font-weight: bolder;">Apply Coupon</button>
+        </div>
 
-    <div class="Total">
-        <p>Grand Total</p>
-        <p>Sub Total</p>
-        <p>Shipping</p>
-        <p>Coupon Percentage (-)</p>
-        <hr>
-        <p>Total</p>
-        <button>Proceed to Checkout</button>
+        <div class="grand-total" style="width: 30%; padding-left: 10px;">
+            <div style="width: 100%; background-color: orangered; color: white;padding: 10px; padding-left: 15px; height: 40px; font-weight: bold;">GRAND TOTAL</div>
+            <p style="font-weight: 700;">Sub Total :- <span id="subTotAmnt"></span></p>
+            <p style="font-weight: 700;">Coupon Discount :- </p>
+            <hr>
+            <p style="font-weight: 700;">Total :- <span id="totalAmnt"></span> </p>
+            <button style="padding: 10px; background-color: black; color: white; font-weight: bolder;">Proceed to Checkout</button>
+        </div>
+
+        
     </div>
+    <br>
+
+
 </div>
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
         var cartData = localStorage.getItem("cart");
         var cart = JSON.parse(cartData);
-
+    
         // Get the table element
         var table = document.querySelector("table");
-
+    
         // Populate the table with cart data
         if (cart && cart.length > 0) {
+            var subTotal = 0; // Initialize subtotal variable
+    
             for (var i = 0; i < cart.length; i++) {
                 var row = table.insertRow(-1);
                 var slNoCell = row.insertCell(0);
@@ -66,15 +78,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 var priceCell = row.insertCell(3);
                 var quantityCell = row.insertCell(4);
                 var totalCell = row.insertCell(5);
-
+    
                 slNoCell.textContent = i + 1;
                 imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
                 productNameCell.textContent = cart[i].productName;
-                priceCell.textContent = "₹ "+cart[i].sell_price + ".00";
+                priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
                 quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
-                totalCell.textContent = "₹ "+ cart[i].total_amount + ".00";
+    
+                // Calculate total for each item and update subtotal
+                var totalAmount = cart[i].sell_price * cart[i].quantity;
+                subTotal += totalAmount;
+    
+                totalCell.textContent = "₹ " + totalAmount + ".00";
             }
+    
+            // Update the Sub Total and Total in the HTML
+            document.getElementById("subTotAmnt").textContent = "₹ " + subTotal + ".00";
+            document.getElementById("totalAmnt").textContent = "₹ " + subTotal + ".00";
         }
     });
-</script>
+    </script>
+    
 {% endblock %}
