@@ -54,5 +54,6 @@ urlpatterns = [
 
     
     path('product/<int:product_num>', views.product_display, name="product_display"),
+    path('mycart/', views.mycart_page, name='mycart_page'),
     # Add more URLs as needed
 ]

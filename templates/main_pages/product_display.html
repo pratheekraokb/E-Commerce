@@ -461,11 +461,48 @@
 </div>
 
 <script>
+    document.querySelector(".buy button").addEventListener("click", addToCart);
+    function addToCart() {
+        // Retrieve product details
+        var productId = {{ product_display.product_data.id }};
+        var userId = {{ user_data.userid }};
+        var quantity = parseInt(document.getElementById("counterInput").value);
+        var sellPrice = {{ product_display.product_data.sell_price }};
+        var totalAmount = quantity * sellPrice;
+        var productImage = "/media/{{ product_display.product_data.main_img }}"; // Change this to the actual path
+        var productName = "{{ product_display.product_data.prod_name }}";
+
+        // Check if the product is already in the cart
+        var cart = JSON.parse(localStorage.getItem("cart")) || [];
+        var existingProductIndex = cart.findIndex(item => item.product_id === productId);
+
+        if (existingProductIndex !== -1) {
+            // Product is already in the cart, update quantity
+            cart[existingProductIndex].quantity += quantity;
+            cart[existingProductIndex].total_amount += totalAmount;
+        } else {
+            // Product is not in the cart, add it
+            cart.push({
+                product_id: productId,
+                user_id: userId,
+                productImage: productImage,
+                quantity: quantity,
+                sell_price: sellPrice,
+                total_amount: totalAmount,
+                productName: productName,
+            });
+            console.log(cart);
+        }   
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert("Product added to the cart!");
+    }
+</script>
+<script>
 
     function updateTotalAmount(quantity) {
         var sellPrice = {{ product_display.product_data.sell_price }};
         var totalAmount = quantity * sellPrice;
-        document.getElementById("totalAmount").innerText = "Total Amount: ₹" + totalAmount;
+        document.getElementById("totalAmount").innerText = "Total Amount: ₹ " + totalAmount+".00";
     }
 
 

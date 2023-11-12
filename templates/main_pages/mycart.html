@@ -1,0 +1,80 @@
+{% extends 'main_pages/base.html' %}
+
+{% block styleCss %}
+<style>
+
+.mycart-container{
+    width: 90vw;
+    /* background-color: aqua */
+}
+
+</style>
+
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid mycart-container">
+    <h1 style="font-size: 30px; font-weight: bold;">Shopping Cart</h1>
+
+    <table style="width: 100%; text-align: center;">
+        <tr style="height: 90px;background-color: orangered;color: white; font-weight: bolder;">
+            <th style="width: 5%;">Sl No</th>
+            <th style="width: 20%;">Image</th>
+            <th style="width: 45%;">Product Name</th>
+            <th style="width: 10%;">Price</th>
+            <th style="width: 10%;">Quantity</th>
+            <th style="width: 10%;">Total</th>
+        </tr>
+    </table>
+
+    <div class="coupon">
+        <p>Enter your Coupon code if you have any.</p>
+        <input type="text">
+        <button>Apply Coupon</button>
+    </div>
+
+    <div class="Total">
+        <p>Grand Total</p>
+        <p>Sub Total</p>
+        <p>Shipping</p>
+        <p>Coupon Percentage (-)</p>
+        <hr>
+        <p>Total</p>
+        <button>Proceed to Checkout</button>
+    </div>
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+        // Fetch cart data from localStorage
+        var cartData = localStorage.getItem("cart");
+        var cart = JSON.parse(cartData);
+
+        // Get the table element
+        var table = document.querySelector("table");
+
+        // Populate the table with cart data
+        if (cart && cart.length > 0) {
+            for (var i = 0; i < cart.length; i++) {
+                var row = table.insertRow(-1);
+                var slNoCell = row.insertCell(0);
+                var imageCell = row.insertCell(1);
+                var productNameCell = row.insertCell(2);
+                var priceCell = row.insertCell(3);
+                var quantityCell = row.insertCell(4);
+                var totalCell = row.insertCell(5);
+
+                slNoCell.textContent = i + 1;
+                imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
+                productNameCell.textContent = cart[i].productName;
+                priceCell.textContent = "₹ "+cart[i].sell_price + ".00";
+                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
+                totalCell.textContent = "₹ "+ cart[i].total_amount + ".00";
+            }
+        }
+    });
+</script>
+{% endblock %}

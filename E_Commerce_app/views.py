@@ -948,3 +948,6 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
     return comments
 
 # To retrieve all comments for a product, call the function with product_id and no parent_comment_id.
+
+def mycart_page(request):
+    return render(request, 'main_pages/mycart.html')
