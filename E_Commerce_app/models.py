@@ -10,6 +10,9 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils import timezone
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
@@ -197,6 +200,14 @@ class OrderItem(models.Model):
         return self.product.selling_price * self.quantity
     class Meta:
         db_table = 'OrderItem'
+
+@receiver(post_save, sender=OrderItem)
+def update_stock(sender, instance, **kwargs):
+    # Update the stock_quantity of the corresponding product
+    product = instance.product
+    product.stock_quantity -= instance.quantity
+    product.save()
+
 
 class OrderTracking(models.Model):
     tracking_id = models.AutoField(primary_key=True)

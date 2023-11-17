@@ -145,6 +145,8 @@
 
 <!-- Inside the script tag at the end of your template -->
 <script>
+    var productsPurchaseDetails = []; // Initialize an array to store product purchase details
+    
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
         var cartData = localStorage.getItem("cart");
@@ -153,7 +155,7 @@
         // Get the table element
         var table = document.querySelector("table");
 
-        // Populate the table with cart data
+        // Populate the table with cart data and create the productsPurchaseDetails array
         if (cart && cart.length > 0) {
             var subTotal = 0; // Initialize subtotal variable
 
@@ -170,13 +172,23 @@
                 imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
                 productNameCell.textContent = cart[i].productName;
                 priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
-                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
+                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" readonly min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
 
                 // Calculate total for each item and update subtotal
                 var totalAmount = cart[i].sell_price * cart[i].quantity;
                 subTotal += totalAmount;
 
                 totalCell.textContent = "₹ " + totalAmount + ".00";
+
+                // Add product details to the array
+                var productDetails = {
+                    "productId": cart[i].product_id,
+                    // "productName": cart[i].productName,
+                    "quantity": cart[i].quantity,
+                    "subtotal": totalAmount
+                };
+
+                productsPurchaseDetails.push(productDetails);
             }
 
             // Update the Sub Total and Total in the HTML
@@ -185,20 +197,15 @@
 
             // Set the total amount value in the input field
             document.getElementById("TotalAmmount").value = subTotal;
+            console.log(productsPurchaseDetails)
+
+            // Store productsPurchaseDetails in local storage
+            // localStorage.setItem("productsPurchaseDetails", JSON.stringify(productsPurchaseDetails));
         }
-
-        // Add event listener to the "Save" button using its ID
-
     });
-</script>
 
-
-
-<!-- Inside the script tag at the end of your template -->
-
-<script>
     document.addEventListener("DOMContentLoaded", function () {
-        
+
         // ... (existing code)
 
         document.getElementById("submitButton").addEventListener("click", function () {
@@ -233,7 +240,7 @@
                         // Handle the response from the server
                         localStorage.clear();
                         if (data.msgcode == 1) {
-                            
+
                             alert(data.msg);
                         }
                         // Optionally, you can redirect the user or perform other actions based on the response.
