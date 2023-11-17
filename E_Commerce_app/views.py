@@ -976,37 +976,52 @@ def billing(request):
 
     return render(request, 'main_pages/billing.html', {"user_data": userData})
 
+
 @csrf_exempt
 def submit_order(request):
     if request.method == 'POST':
-        data = request.POST
-
-      
-        total_amount = data.get('TotalAmmount')
-        total_amount = int(total_amount)
-
-        transaction_id = data.get('TransactionId')
-        address = data.get('Address')
-        status = "Order Created"
-        userId = data.get('userId')
-
-        current_datetime = datetime.now()
-        print(address)
-        print(transaction_id,total_amount)
-        print(status, userId, current_datetime)
-
-        query1 = f"""
-            INSERT INTO `Order` (order_date, total_amount, status, transaction_id, user_id, address)
-            VALUES ('{current_datetime}', {total_amount}, '{status}', '{transaction_id}', {userId}, '{address}');
-        """
-
         try:
-            executeQuery(query1)
+            # Get the JSON data from the request
+            data = json.loads(request.body)
 
-            return JsonResponse({'message': 'Order submitted successfully'})
-        except Exception:
-            return JsonResponse({'message': 'Something went wrong!'})
-	
+            # Extract the required fields
+            transaction_id = data.get('TransactionId')
+            address = data.get('Address')
+            total_amount = data.get('TotalAmmount')
+            status = data.get('Status')
+            user_id = data.get('userId')
+
+            user_id = int(user_id)
+            total_amount = int(total_amount)
+
+            # Perform your desired actions with the data (e.g., save to the database)
+
+            # Example: Save data to the database
+            current_datetime = datetime.now()
+            print(address)
+            print(transaction_id, total_amount)
+            print(status, user_id, current_datetime)
+
+            # Uncomment and modify the database insertion code as needed
+            query = f"""
+                INSERT INTO `Order` (order_date, total_amount, status, transaction_id, user_id, address)
+                VALUES ('{current_datetime}', {total_amount}, '{status}', '{transaction_id}', {user_id}, '{address}');
+            """
+
+            
+            try:
+                executeQuery(query)
+                return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
+            except Exception:
+                return JsonResponse({'status': 'error', 'message': 'Something went wrong!'})
+
+    
+            # return JsonResponse({'status': 'success', 'message': 'Order submitted successfully'})
+
+        except json.JSONDecodeError:
+            # Handle JSON decoding error
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'})
 
     else:
-        return JsonResponse({'message': 'Invalid request method'})
+        # Handle other HTTP methods if needed
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

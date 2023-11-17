@@ -6,7 +6,8 @@
         width: 90vw;
         /* background-color: aqua */
     }
-    label{
+
+    label {
         font-weight: bold;
         color: brown;
     }
@@ -56,23 +57,30 @@
         <div style="width: 100%; display: flex;">
             <div class="form" style="width: 70%; padding: 10px;">
                 <h1 style="font-size: 30px; font-weight: bold; padding:10px;">Step 2:- Enter Shipment Details </h1>
-                <form method="POST" action="/api/submit_order/">
+                <form method="POST" action="">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="FirstNameLabel">First name</label>
-                            <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First name"
-                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.firstName }}">
+                            <input type="text" class="form-control" id="FirstName" name="FirstName"
+                                placeholder="First name" readonly
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                value="{{ user_data.firstName }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="LastNameLabel">Last name</label>
-                            <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Last name"
-                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.lastName }}">
+                            <input type="text" class="form-control" id="LastName" name="LastName"
+                                placeholder="Last name" readonly
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                value="{{ user_data.lastName }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="PhoneLabel">Phone Number:- </label>
-                            <input type="number" class="form-control" id="PhoneNumber" name="PhoneNumber" placeholder="Phone Number (+91)" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.phoneNumber }}">
+                            <input type="number" class="form-control" id="PhoneNumber" name="PhoneNumber"
+                                placeholder="Phone Number (+91)" readonly required
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                value="{{ user_data.phoneNumber }}">
                         </div>
-                        
+
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
@@ -81,35 +89,47 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend2">@</span>
                                 </div>
-                                <input type="text" class="form-control" id="Username" placeholder="Username" name="Username"
-                                    aria-describedby="inputGroupPrepend2" required readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.username }}">
+                                <input type="text" class="form-control" id="Username" placeholder="Username"
+                                    name="Username" aria-describedby="inputGroupPrepend2" required readonly
+                                    style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                    value="{{ user_data.username }}">
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6 mb-3">
                             <label for="EmailLabel">E-Mail ID:- </label>
-                            <input type="email" class="form-control" id="EmailId" placeholder="E-Mail ID" name="EmailId" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.email }}">
-                        </div> 
-                        <span id="userId" name="userId"></span>
-                        <input type="number" value="{{user_data.userid}}" id="userId" name="userId" hidden >
+                            <input type="email" class="form-control" id="EmailId" placeholder="E-Mail ID" name="EmailId"
+                                readonly required
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                value="{{ user_data.email }}">
+                        </div>
+
+                        <input type="number" value="{{user_data.userid}}" id="userId" name="userId" hidden>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="TotalAmmountLabel">Total Ammount:- </label>
-                            <input type="text" class="form-control" id="TotalAmmount" name="TotalAmmount" placeholder="Total Ammount in RS" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
-                        </div> 
-                       
+                            <input type="text" class="form-control" id="TotalAmmount" name="TotalAmmount"
+                                placeholder="Total Ammount in RS" readonly required
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="TransactionLabel">Transaction ID:- </label>
-                            <input type="text" class="form-control" id="TransactionId" name="TransactionId" placeholder="Transaction ID" required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                            <input type="text" class="form-control" id="TransactionId" name="TransactionId"
+                                placeholder="Transaction ID" required
+                                style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
+                                required>
                         </div>
                     </div>
                     <div class="form-row" style="padding: 10px;">
                         <label for="addressLabel">Address:-</label>
-                        <textarea name="Address" id="Address" cols="100" rows="5" style="padding: 15px;color: blue; font-weight: 800;"></textarea>
+                        <textarea name="Address" id="Address" cols="100" rows="5"
+                            style="padding: 15px;color: blue; font-weight: 800;"></textarea>
                     </div>
-                    
-                    <button style="padding: 10px; font-weight: bold; width: 200px; height: 50px; background-color: black; color: white;" type="submit">Submit</button>
+
+                    <button id="submitButton" type="submit"
+                        style="padding: 10px; font-weight: bold; width: 200px; height: 50px; background-color: black; color: white;">Submit</button>
                 </form>
             </div>
             <div class="qrCode">
@@ -168,24 +188,66 @@
         }
 
         // Add event listener to the "Save" button using its ID
-        document.getElementById("saveButton").addEventListener("click", function () {
-            // Update quantities in the cart based on input values
-            for (var i = 0; i < cart.length; i++) {
-                cart[i].quantity = parseInt(table.rows[i + 1].cells[4].querySelector("input").value);
-                cart[i].total_amount = cart[i].sell_price * cart[i].quantity;
-            }
 
-            // Save the updated cart back to localStorage
-            localStorage.setItem("cart", JSON.stringify(cart));
-            alert("Changes saved!");
-            window.location.reload();
-        });
     });
 </script>
 
 
 
+<!-- Inside the script tag at the end of your template -->
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        // ... (existing code)
+
+        document.getElementById("submitButton").addEventListener("click", function () {
+            // Gather data from the form
+            var transactionId = document.getElementById('TransactionId').value;
+            var address = document.getElementById('Address').value;
+
+            // Check if the required fields are not empty
+            if (transactionId.trim() !== '' && address.trim() !== '') {
+                var formData = {
+                    "TransactionId": transactionId,
+                    "Address": address,
+                    "TotalAmmount": document.getElementById('TotalAmmount').value,
+                    "Status": "Order Created",
+                    "userId": document.getElementById("userId").value,
+                    // ... (add other form fields)
+                };
+                formData = JSON.stringify(formData);
+
+                console.log(formData);
+
+                // Make a POST request to the API endpoint
+                fetch("/api/submit_order/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the response from the server
+                        localStorage.clear();
+                        if (data.msgcode == 1) {
+                            
+                            alert(data.msg);
+                        }
+                        // Optionally, you can redirect the user or perform other actions based on the response.
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            } else {
+                alert("Address and TransactionId are required!");
+            }
+        });
+    });
+
+</script>
 
 
 {% endblock %}
