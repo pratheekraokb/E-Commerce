@@ -271,3 +271,13 @@ class ProductImage(models.Model):
     class Meta:
         db_table = 'ProductImage'
 
+
+class CouponCode(models.Model):
+    coupen_code = models.CharField(max_length=50, unique=True, primary_key=True)
+    percent_discount = models.IntegerField()
+
+    def __str__(self):
+        return self.coupen_code
+    
+    class Meta:
+        db_table = 'CouponCode'

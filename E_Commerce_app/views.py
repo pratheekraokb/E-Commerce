@@ -950,6 +950,7 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
         }
 
         comments.append(comment)
+        print(comment)
 
     return comments
 

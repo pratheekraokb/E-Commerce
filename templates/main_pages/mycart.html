@@ -44,7 +44,7 @@
         <div class="grand-total" style="width: 30%; padding-left: 10px;">
             <div style="width: 100%; background-color: orangered; color: white;padding: 10px; padding-left: 15px; height: 40px; font-weight: bold;">GRAND TOTAL</div>
             <p style="font-weight: 700;">Sub Total :- <span id="subTotAmnt"></span></p>
-            <p style="font-weight: 700;">Coupon Discount :- </p>
+            <p style="font-weight: 700;">Coupon Discount :- <span id="discountAmnt"></span></p>
             <hr>
             <p style="font-weight: 700;">Total :- <span id="totalAmnt"></span> </p>
             <a href="/billing/"><button style="padding: 10px; background-color: black; color: white; font-weight: bolder;">Proceed to Checkout</button></a>
@@ -108,6 +108,37 @@
             localStorage.setItem("cart", JSON.stringify(cart));
             alert("Changes saved!");
             window.location.reload();
+        });
+
+        document.querySelector(".coupon button").addEventListener("click", function () {
+            // Get the entered coupon code
+            var enteredCouponCode = document.querySelector(".coupon input").value;
+
+            // Check if the entered coupon code is in the table
+            var couponTable = {
+                "DBMS25": 0.25,
+                "RAJIN100": 0.01,
+            };
+
+            if (enteredCouponCode in couponTable) {
+                // Apply the coupon discount
+                var couponDiscount = couponTable[enteredCouponCode];
+                var subTotal = parseFloat(document.getElementById("subTotAmnt").textContent.slice(2)); // Extract the subTotal amount
+                var discountAmount = (couponDiscount * subTotal).toFixed(2);
+                var totalAmount = (subTotal - discountAmount).toFixed(2);
+                {% comment %} console.log(discountAmount) {% endcomment %}
+                
+
+                // Update the HTML with the discount and total amounts
+                {% comment %} document.querySelector(".grand-total p:nth-child(2)").innerHTML = "Coupon Discount :- ₹ " + discountAmount; {% endcomment %}
+                document.getElementById("totalAmnt").textContent = "₹ " + totalAmount;
+                document.getElementById("discountAmnt").textContent = "₹ " + discountAmount;;
+
+                alert("Coupon applied successfully!");
+            } else {
+                // Display an error message for an invalid coupon code
+                alert("Invalid coupon code. Please try again.");
+            }
         });
     });
 </script>

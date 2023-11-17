@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     CustomUser, Product, Category, Subcategory, Tag, ProductTag, Company,
-    Cart, CartItem, Order, OrderItem, OrderTracking, Address, Comment, ProductImage
+    Cart, CartItem, Order, OrderItem, OrderTracking, Address, Comment, ProductImage, CouponCode
 )
 
 # Register your models here.
