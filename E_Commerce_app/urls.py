@@ -33,7 +33,7 @@ urlpatterns = [
     path('api/create_subcategory', views.create_subcategory, name='create-subcategory'),
     path('api/create_company', views.create_company, name='create-company'),
 
-
+    path('api/submit_order/', views.submit_order, name='submit_order'),
     # Comment
 
     path('api/add_comment', views.add_comment, name='add-comment'),

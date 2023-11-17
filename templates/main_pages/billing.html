@@ -53,51 +53,60 @@
     </div>
     <br>
     <div class="Step2" style="min-height: 100vh;">
-        <h1 style="font-size: 30px; font-weight: bold; padding:10px;">Step 2:- Enter Shipment Details </h1>
         <div style="width: 100%; display: flex;">
             <div class="form" style="width: 70%; padding: 10px;">
-                <form>
+                <h1 style="font-size: 30px; font-weight: bold; padding:10px;">Step 2:- Enter Shipment Details </h1>
+                <form method="POST" action="/api/submit_order/">
                     <div class="form-row">
                         <div class="col-md-4 mb-4">
                             <label for="FirstNameLabel">First name</label>
-                            <input type="text" class="form-control" id="FirstName" placeholder="First name"
-                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="">
+                            <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First name"
+                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.firstName }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="LastNameLabel">Last name</label>
-                            <input type="text" class="form-control" id="LastName" placeholder="Last name"
-                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="">
+                            <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Last name"
+                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.lastName }}">
                         </div>
                         <div class="col-md-4 mb-3">
+                            <label for="PhoneLabel">Phone Number:- </label>
+                            <input type="number" class="form-control" id="PhoneNumber" name="PhoneNumber" placeholder="Phone Number (+91)" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.phoneNumber }}">
+                        </div>
+                        
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
                             <label for="UsernameLabel">Username</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend2">@</span>
                                 </div>
-                                <input type="text" class="form-control" id="Username" placeholder="Username"
-                                    aria-describedby="inputGroupPrepend2" required readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                                <input type="text" class="form-control" id="Username" placeholder="Username" name="Username"
+                                    aria-describedby="inputGroupPrepend2" required readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.username }}">
                             </div>
                         </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="EmailLabel">E-Mail ID:- </label>
+                            <input type="email" class="form-control" id="EmailId" placeholder="E-Mail ID" name="EmailId" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="{{ user_data.email }}">
+                        </div> 
+                        <span id="userId" name="userId"></span>
+                        <input type="number" value="{{user_data.userid}}" id="userId" name="userId" hidden >
                     </div>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <label for="PhoneLabel">Phone Number:- </label>
-                            <input type="number" class="form-control" id="PhoneNumber" placeholder="Phone Number (+91)" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
-                        </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="TotalAmmountLabel">Total Ammount:- </label>
-                            <input type="number" class="form-control" id="TotalAmmount" placeholder="Total Ammount in RS" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="TransactionLabel">Transaction ID:- </label>
-                            <input type="text" class="form-control" id="TransactionId" placeholder="Transaction ID" required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
-                        </div>
-    
+                            <input type="text" class="form-control" id="TotalAmmount" name="TotalAmmount" placeholder="Total Ammount in RS" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div> 
                        
+                        <div class="col-md-6 mb-3">
+                            <label for="TransactionLabel">Transaction ID:- </label>
+                            <input type="text" class="form-control" id="TransactionId" name="TransactionId" placeholder="Transaction ID" required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div>
                     </div>
                     <div class="form-row" style="padding: 10px;">
                         <label for="addressLabel">Address:-</label>
-                        <textarea name="" id="" cols="100" rows="5" style="padding: 15px;color: blue; font-weight: 800;"></textarea>
+                        <textarea name="Address" id="Address" cols="100" rows="5" style="padding: 15px;color: blue; font-weight: 800;"></textarea>
                     </div>
                     
                     <button style="padding: 10px; font-weight: bold; width: 200px; height: 50px; background-color: black; color: white;" type="submit">Submit</button>
@@ -105,7 +114,7 @@
             </div>
             <div class="qrCode">
 
-                <img src="/media/shop/additional_images/2.webp" alt="">
+                <img src="/media/shop/admin_images/paytm.png" width="100%" alt="qrcodePayment" style="padding: 10px;">
             </div>
         </div>
 
@@ -113,6 +122,8 @@
 
 
 </div>
+
+<!-- Inside the script tag at the end of your template -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
@@ -127,33 +138,33 @@
             var subTotal = 0; // Initialize subtotal variable
 
             for (var i = 0; i < cart.length; i++) {
-                // Check if the quantity is greater than 0 before displaying the product
-                if (cart[i].quantity > 0) {
-                    var row = table.insertRow(-1);
-                    var slNoCell = row.insertCell(0);
-                    var imageCell = row.insertCell(1);
-                    var productNameCell = row.insertCell(2);
-                    var priceCell = row.insertCell(3);
-                    var quantityCell = row.insertCell(4);
-                    var totalCell = row.insertCell(5);
+                var row = table.insertRow(-1);
+                var slNoCell = row.insertCell(0);
+                var imageCell = row.insertCell(1);
+                var productNameCell = row.insertCell(2);
+                var priceCell = row.insertCell(3);
+                var quantityCell = row.insertCell(4);
+                var totalCell = row.insertCell(5);
 
-                    slNoCell.textContent = i + 1;
-                    imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
-                    productNameCell.textContent = cart[i].productName;
-                    priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
-                    quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;" readonly>`;
+                slNoCell.textContent = i + 1;
+                imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
+                productNameCell.textContent = cart[i].productName;
+                priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
+                quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;">`;
 
-                    // Calculate total for each item and update subtotal
-                    var totalAmount = cart[i].sell_price * cart[i].quantity;
-                    subTotal += totalAmount;
+                // Calculate total for each item and update subtotal
+                var totalAmount = cart[i].sell_price * cart[i].quantity;
+                subTotal += totalAmount;
 
-                    totalCell.textContent = "₹ " + totalAmount + ".00";
-                }
+                totalCell.textContent = "₹ " + totalAmount + ".00";
             }
 
             // Update the Sub Total and Total in the HTML
             document.getElementById("subTotAmnt").textContent = "₹ " + subTotal + ".00";
             document.getElementById("totalAmnt").textContent = "₹ " + subTotal + ".00";
+
+            // Set the total amount value in the input field
+            document.getElementById("TotalAmmount").value = subTotal;
         }
 
         // Add event listener to the "Save" button using its ID
@@ -171,6 +182,7 @@
         });
     });
 </script>
+
 
 
 

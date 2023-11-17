@@ -173,6 +173,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=255)
     transaction_id = models.CharField(max_length=255, unique=True)
+    address = models.CharField(max_length=255, default="")
     def __str__(self):
         return f"Order {self.order_id} - User: {self.user.username}"
     def update_status(self, new_status):

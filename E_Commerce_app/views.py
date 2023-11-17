@@ -19,8 +19,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from .models import Order, OrderItem
 from django.db import connection
+
+from django.db import IntegrityError
+from django.http import JsonResponse
+from datetime import datetime
 
 from datetime import datetime
 
@@ -957,7 +963,7 @@ def billing(request):
     user = request.user
 
     userData = {
-        "userid": user.user_id,
+        "userid": int(user.user_id),
         "username": user.username,
         "email": user.email,
         "profile": user.profile_image,
@@ -966,6 +972,41 @@ def billing(request):
         "phoneNumber": user.phone_number,
     }
 
-    print(userData)
+
 
     return render(request, 'main_pages/billing.html', {"user_data": userData})
+
+@csrf_exempt
+def submit_order(request):
+    if request.method == 'POST':
+        data = request.POST
+
+      
+        total_amount = data.get('TotalAmmount')
+        total_amount = int(total_amount)
+
+        transaction_id = data.get('TransactionId')
+        address = data.get('Address')
+        status = "Order Created"
+        userId = data.get('userId')
+
+        current_datetime = datetime.now()
+        print(address)
+        print(transaction_id,total_amount)
+        print(status, userId, current_datetime)
+
+        query1 = f"""
+            INSERT INTO `Order` (order_date, total_amount, status, transaction_id, user_id, address)
+            VALUES ('{current_datetime}', {total_amount}, '{status}', '{transaction_id}', {userId}, '{address}');
+        """
+
+        try:
+            executeQuery(query1)
+
+            return JsonResponse({'message': 'Order submitted successfully'})
+        except Exception:
+            return JsonResponse({'message': 'Something went wrong!'})
+	
+
+    else:
+        return JsonResponse({'message': 'Invalid request method'})
