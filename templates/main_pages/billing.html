@@ -185,10 +185,12 @@
                     "productId": cart[i].product_id,
                     // "productName": cart[i].productName,
                     "quantity": cart[i].quantity,
-                    "subtotal": totalAmount
+                    "subtotal": totalAmount,
+                    "purchaseDetails": productsPurchaseDetails
                 };
 
                 productsPurchaseDetails.push(productDetails);
+                console.log(productDetails)
             }
 
             // Update the Sub Total and Total in the HTML

@@ -994,13 +994,17 @@ def submit_order(request):
             user_id = int(user_id)
             total_amount = int(total_amount)
 
+            purchased_items = data.get('purchaseDetails')
+
             # Perform your desired actions with the data (e.g., save to the database)
 
             # Example: Save data to the database
             current_datetime = datetime.now()
-            print(address)
-            print(transaction_id, total_amount)
-            print(status, user_id, current_datetime)
+            # print(address)
+            # print(transaction_id, total_amount)
+            # print(status, user_id, current_datetime)
+
+            print(purchased_items)
 
             # Uncomment and modify the database insertion code as needed
             query = f"""
