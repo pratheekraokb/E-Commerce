@@ -951,3 +951,21 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
 
 def mycart_page(request):
     return render(request, 'main_pages/mycart.html')
+
+@login_required
+def billing(request):
+    user = request.user
+
+    userData = {
+        "userid": user.user_id,
+        "username": user.username,
+        "email": user.email,
+        "profile": user.profile_image,
+        "firstName": user.first_name,
+        "lastName": user.last_name,
+        "phoneNumber": user.phone_number,
+    }
+
+    print(userData)
+
+    return render(request, 'main_pages/billing.html', {"user_data": userData})

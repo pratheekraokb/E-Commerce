@@ -187,6 +187,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    order_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"OrderItem {self.order_item_id} - Product: {self.product.name}"

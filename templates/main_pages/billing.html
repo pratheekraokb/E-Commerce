@@ -1,0 +1,179 @@
+{% extends 'main_pages/base.html' %}
+
+{% block styleCss %}
+<style>
+    .mycart-container {
+        width: 90vw;
+        /* background-color: aqua */
+    }
+    label{
+        font-weight: bold;
+        color: brown;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid mycart-container">
+    <div class="Step1" style="min-height: 100vh;">
+        <h1 style="font-size: 30px; font-weight: bold; padding:10px;">Step 1:- Products In Cart to be Checkout</h1>
+
+        <table style="width: 100%; text-align: center;">
+            <tr style="height: 90px;background-color: orangered;color: white; font-weight: bolder;">
+                <th style="width: 5%;">Sl No</th>
+                <th style="width: 20%;">Image</th>
+                <th style="width: 45%;">Product Name</th>
+                <th style="width: 10%;">Price</th>
+                <th style="width: 10%;">Quantity</th>
+                <th style="width: 10%;">Total</th>
+            </tr>
+        </table>
+
+        <br />
+        <div style="display: flex; justify-content:space-around;">
+
+
+            <div class="grand-total" style="width: 30%; padding-left: 10px;">
+                <div
+                    style="width: 100%; background-color: orangered; color: white;padding: 10px; padding-left: 15px; height: 40px; font-weight: bold;">
+                    GRAND TOTAL</div>
+                <p style="font-weight: 700;">Sub Total :- <span id="subTotAmnt"></span></p>
+                <p style="font-weight: 700;">Coupon Discount :- </p>
+                <hr>
+                <p style="font-weight: 700;">Total :- <span id="totalAmnt"></span> </p>
+
+            </div>
+
+
+        </div>
+    </div>
+    <br>
+    <div class="Step2" style="min-height: 100vh;">
+        <h1 style="font-size: 30px; font-weight: bold; padding:10px;">Step 2:- Enter Shipment Details </h1>
+        <div style="width: 100%; display: flex;">
+            <div class="form" style="width: 70%; padding: 10px;">
+                <form>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-4">
+                            <label for="FirstNameLabel">First name</label>
+                            <input type="text" class="form-control" id="FirstName" placeholder="First name"
+                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="LastNameLabel">Last name</label>
+                            <input type="text" class="form-control" id="LastName" placeholder="Last name"
+                                readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;" value="">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="UsernameLabel">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend2">@</span>
+                                </div>
+                                <input type="text" class="form-control" id="Username" placeholder="Username"
+                                    aria-describedby="inputGroupPrepend2" required readonly style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="PhoneLabel">Phone Number:- </label>
+                            <input type="number" class="form-control" id="PhoneNumber" placeholder="Phone Number (+91)" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="TotalAmmountLabel">Total Ammount:- </label>
+                            <input type="number" class="form-control" id="TotalAmmount" placeholder="Total Ammount in RS" readonly required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="TransactionLabel">Transaction ID:- </label>
+                            <input type="text" class="form-control" id="TransactionId" placeholder="Transaction ID" required style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
+                        </div>
+    
+                       
+                    </div>
+                    <div class="form-row" style="padding: 10px;">
+                        <label for="addressLabel">Address:-</label>
+                        <textarea name="" id="" cols="100" rows="5" style="padding: 15px;color: blue; font-weight: 800;"></textarea>
+                    </div>
+                    
+                    <button style="padding: 10px; font-weight: bold; width: 200px; height: 50px; background-color: black; color: white;" type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="qrCode">
+
+                <img src="/media/shop/additional_images/2.webp" alt="">
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch cart data from localStorage
+        var cartData = localStorage.getItem("cart");
+        var cart = JSON.parse(cartData);
+
+        // Get the table element
+        var table = document.querySelector("table");
+
+        // Populate the table with cart data
+        if (cart && cart.length > 0) {
+            var subTotal = 0; // Initialize subtotal variable
+
+            for (var i = 0; i < cart.length; i++) {
+                // Check if the quantity is greater than 0 before displaying the product
+                if (cart[i].quantity > 0) {
+                    var row = table.insertRow(-1);
+                    var slNoCell = row.insertCell(0);
+                    var imageCell = row.insertCell(1);
+                    var productNameCell = row.insertCell(2);
+                    var priceCell = row.insertCell(3);
+                    var quantityCell = row.insertCell(4);
+                    var totalCell = row.insertCell(5);
+
+                    slNoCell.textContent = i + 1;
+                    imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
+                    productNameCell.textContent = cart[i].productName;
+                    priceCell.textContent = "₹ " + cart[i].sell_price + ".00";
+                    quantityCell.innerHTML = `<input type="number" value="${cart[i].quantity}" min="0" style="width:60px; text-align:center;font-weight:bold;padding:6px;border-radius:15px;" readonly>`;
+
+                    // Calculate total for each item and update subtotal
+                    var totalAmount = cart[i].sell_price * cart[i].quantity;
+                    subTotal += totalAmount;
+
+                    totalCell.textContent = "₹ " + totalAmount + ".00";
+                }
+            }
+
+            // Update the Sub Total and Total in the HTML
+            document.getElementById("subTotAmnt").textContent = "₹ " + subTotal + ".00";
+            document.getElementById("totalAmnt").textContent = "₹ " + subTotal + ".00";
+        }
+
+        // Add event listener to the "Save" button using its ID
+        document.getElementById("saveButton").addEventListener("click", function () {
+            // Update quantities in the cart based on input values
+            for (var i = 0; i < cart.length; i++) {
+                cart[i].quantity = parseInt(table.rows[i + 1].cells[4].querySelector("input").value);
+                cart[i].total_amount = cart[i].sell_price * cart[i].quantity;
+            }
+
+            // Save the updated cart back to localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("Changes saved!");
+            window.location.reload();
+        });
+    });
+</script>
+
+
+
+
+
+{% endblock %}

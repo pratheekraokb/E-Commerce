@@ -55,5 +55,6 @@ urlpatterns = [
     
     path('product/<int:product_num>', views.product_display, name="product_display"),
     path('mycart/', views.mycart_page, name='mycart_page'),
+    path('billing/', views.billing, name='billing'),
     # Add more URLs as needed
 ]
