@@ -148,6 +148,18 @@
 
 {% endblock %}
 
+
+{% block navbar %}
+
+<li style="display: flex; flex-direction: column;" class="" id="userListItem">
+    <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
+        <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
+        <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
+    </button>    
+</li>
+{% endblock %}
+
+
 {% block content %}
 
 

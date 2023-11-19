@@ -728,8 +728,19 @@ def viewSubCategory(request, subcategory_id):
 
         # return HttpResponse(json_data)
         # return render(request,'main_pages/product_subcategory.html',{"jsondata":json_data})
-        print(json_data)
-        return render(request, 'main_pages/product_subcategory.html', {'data': json_data})
+        # print(json_data)
+        user = request.user
+
+        userData = {
+            "userid": int(user.user_id),
+            "username": user.username,
+            "email": user.email,
+            "profile": user.profile_image,
+            # "firstName": user.first_name,
+            # "lastName": user.last_name,
+            # "phoneNumber": user.phone_number,
+        }
+        return render(request, 'main_pages/product_subcategory.html', {'data': json_data, "user_data":userData})
 
 
     return HttpResponse("hai")
@@ -965,9 +976,20 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
     return comments
 
 # To retrieve all comments for a product, call the function with product_id and no parent_comment_id.
-
+@login_required
 def mycart_page(request):
-    return render(request, 'main_pages/mycart.html')
+    user = request.user
+
+    userData = {
+        "userid": int(user.user_id),
+        "username": user.username,
+        "email": user.email,
+         "profile": user.profile_image,
+        # "firstName": user.first_name,
+        # "lastName": user.last_name,
+        # "phoneNumber": user.phone_number,
+    }
+    return render(request, 'main_pages/mycart.html', {"user_data": userData})
 
 @login_required
 def billing(request):

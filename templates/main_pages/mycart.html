@@ -1,5 +1,6 @@
 {% extends 'main_pages/base.html' %}
 
+
 {% block styleCss %}
 <style>
 
@@ -13,8 +14,18 @@
 
 {% endblock %}
 
+{% block navbar %}
+
+<li style="display: flex; flex-direction: column;" class="" id="userListItem">
+    <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
+        <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
+        <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
+    </button>    
+</li>
+{% endblock %}
 
 {% block content %}
+
 
 <div class="container-fluid mycart-container">
     <h1 style="font-size: 30px; font-weight: bold;">Shopping Cart</h1>
@@ -29,15 +40,18 @@
             <th style="width: 10%;">Total</th>
         </tr>
     </table>
-    <div style="display: flex; justify-content: center; width: 100%;">
+    <br/>
+    <div style="display: flex; justify-content: center; width: 100%; padding-right:15px;">
         <button style="padding: 10px; background-color: black; color: white; font-weight: bold;" id="saveButton">Save</button>
+        <br/>
+        <button style="margin-left:15px; width:150px; 10px; background-color: red; color: white; font-weight: bold;" id="clearButton" onclick="clearCartFunc()">Clear Cart</button>
     </div>
     <br/>
     <div style="display: flex; justify-content:space-around;">
         <div class="coupon" style="width: 30%; padding-left: 10px;">
             <div style="width: 100%; background-color: orangered; color: white;padding: 10px; padding-left: 15px; height: 40px; font-weight: bold;">COUPEN</div>
             <p style="padding: 10px; font-weight: 700;">Enter your Coupon code if you have any.</p>
-            <input type="text" style="padding: 10px;" placeholder="Coupon Code">
+            <input type="text" style="padding: 10px; font-weight:bolder; color:blue;font-style:italic;" placeholder="Coupon Code">
             <button style="padding: 10px; background-color: black; color: white; font-weight: bolder;">Apply Coupon</button>
         </div>
 
@@ -57,6 +71,10 @@
 
 </div>
 <script>
+    function clearCartFunc(){
+        localStorage.clear();
+        location.href = "";
+    }
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
         var cartData = localStorage.getItem("cart");
@@ -147,3 +165,4 @@
 
     
 {% endblock %}
+
