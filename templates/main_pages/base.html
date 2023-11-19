@@ -394,7 +394,7 @@ div.modalProfile{
         </div>
         <div class="modalProfile" id="profileDiv" style="display: none;">
             <br>
-            <button>Visit Profile</button>
+            <button onclick="profileFunc()">Visit Profile</button>
             <br>
             <button onclick="logoutFunc()">Logout</button>
         </div>
@@ -462,6 +462,10 @@ div.modalProfile{
     <script>
         function logoutFunc(){
             location.href = "/logout"
+        }
+
+        function profileFunc(){
+            location.href = "/profile/"
         }
         function toggleProfile() {
                 var profileDiv = document.getElementById("profileDiv");

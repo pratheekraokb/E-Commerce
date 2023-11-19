@@ -1,0 +1,89 @@
+{% extends 'profile_pages/base.html' %}
+
+{% block styleCSS %}
+
+.row{
+display: flex;
+padding:15px;
+padding-left:7%;
+
+}
+.row h2{
+color:gold;
+font-style:italic;
+padding-left:25px;
+font-size:28px;
+}
+h2.label{
+color:white;
+<!-- font-style:none; -->
+}
+
+{% endblock %}
+
+{% block profileImage %}
+<img src="/media/{{ user_data.profile }}" alt="">
+{% endblock %}
+
+{% block name %}
+{{ user_data.name }}
+{% endblock %}
+
+{% block username %}
+{{ user_data.username }}
+{% endblock %}
+
+{% comment %} Main Content Here {% endcomment %}
+{% block content %}
+<br>
+<h1 style="text-align: center;color:white;">Personal Details</h1>
+<br />
+
+<br/>
+<br/>
+
+    <div style="color: white; display: flex;">
+        <div class="row">
+            <h2 class="label">First Name:- </h2>
+            <h2>{{ user_data.firstname }}</h2>
+        </div>
+    
+        <div class="row" style="display: flex;">
+            <h2 class="label">Last Name:- </h2>
+            <h2>{{ user_data.lastname }}</h2>
+        </div>
+    
+        <div class="row">
+            <h2 class="label">Complete Name:- </h2>
+            <h2>{{ user_data.name }}</h2>
+        </div>
+    </div>
+    
+    
+    <div style="color: white; display: flex;">
+    
+        <div class="row" style="display: flex;">
+            <h2 class="label">Phone Number:- </h2>
+            <h2>{{ user_data.phone_number }}</h2>
+        </div>
+        
+        <div class="row">
+            <h2 class="label">E-Mail ID:- </h2>
+            <h2>{{ user_data.email }}</h2>
+        </div>
+    </div>
+    
+    <div style="color: white; display: flex;">
+        <div class="row">
+            <h2 class="label">Last Login:- </h2>
+            <h2>{{user_data.last_login}}</h2>
+        </div>
+    
+        <div class="row">
+            <h2 class="label">Date of Birth:- </h2>
+            <h2>{{ user_data.date_of_birth }}</h2>
+        </div>
+    
+    </div>
+    
+{% endblock %}

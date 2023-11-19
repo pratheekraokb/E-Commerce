@@ -432,12 +432,7 @@ button.buyBtn:hover {
 
 {% block content %}
 
-<div class="modalProfile" id="profileDiv" style="display: none;">
-    <br>
-    <button>Visit Profile</button>
-    <br>
-    <button onclick="logoutFunc()">Logout</button>
-</div>
+
 <!-- <div class="fluid-container"> -->
 
     
@@ -501,17 +496,7 @@ button.buyBtn:hover {
 
 
 <script>
-   function logoutFunc(){
-        location.href = "/logout"
-   }
-   function toggleProfile() {
-        var profileDiv = document.getElementById("profileDiv");
-        if (profileDiv.style.display === "none") {
-            profileDiv.style.display = "flex";
-        } else {
-            profileDiv.style.display = "none";
-        }
-    }
+   
 
     document.querySelectorAll('.slider').forEach((slider, index) => {
         const products = slider.querySelectorAll('.product');

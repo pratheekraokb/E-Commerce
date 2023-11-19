@@ -1,0 +1,26 @@
+{% extends 'profile_pages/base.html' %}
+
+{% block styleCSS %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block profileImage %}
+    <img src="/media/{{ user_data.profile }}" alt="">
+{% endblock %}
+
+{% block name %} 
+    {{ user_data.name }}
+{% endblock  %}
+
+{% block username %} 
+    {{ user_data.username  }}
+{% endblock %}
+
+{% comment %} Main Content Here {% endcomment %}
+{% block content %}
+    <div style="text-align:center;margin:0,auto; justify-content:center; height:100%; color:white;">
+        <h1 style="padding-top:12%;">Hello <span style="color:skyblue;font-style:italic;">{{user_data.name}}</span> , Welcome to ShopEase.com</h1>
+    </div>
+{% endblock %}

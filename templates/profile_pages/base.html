@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+
+            background-color: brown;
+        }
+        div.container{
+            height: 100vh;
+            max-width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 5%;
+        }
+        .profilePage{
+            /* width: 80vh; */
+            margin-top: 5%;
+            height: 100%;
+            width: 90%;
+            
+
+            
+            /* padding: 10px; */
+        }
+
+        .profileHeader{
+            height: 40%;
+            background-color: black;
+            color: whitesmoke;
+            /* border-radius: 15px; */
+            display: flex;
+            /* justify-content: space-between; */
+            /* flex-direction: column; */
+        }
+
+        .profileHeader img{
+            border-radius: 50%;
+            padding: 15px;
+            width: 20%;
+        }
+
+        .headerContent{
+            /* background-color: aqua; */
+            width: 80%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto; 
+            
+        }
+        .headerContent h1{
+            letter-spacing: 0.15em;
+            font-size: 45px;
+            font-family:'Times New Roman', Times, serif;
+        }
+        .headerContent h3{
+            position: absolute;
+            top: 8%;
+            left: 80%;
+        }
+        
+        .profileMiddle{
+            height: 10%;
+            /* background-color: rgb(29, 29, 29); */
+            background-color: black;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px; /* Adjust the gap between buttons as needed */
+            place-items: center;
+        
+        }
+
+        .profileMiddle button{
+            height: 70%;
+            width: 80%;
+            background-color: black;
+            color: bisque;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid white;
+            
+        }
+        .profileMiddle button:hover{
+            cursor: pointer;
+            color: gold;
+            text-decoration: underline;
+        }
+        .profileContent{
+            min-height: 40%;
+            /* background-color: brown; */
+            background-color: rgb(65, 64, 64);
+        }
+
+        {% block styleCSS %}
+
+        {% endblock %}
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profilePage">
+            <div class="profileHeader">
+                
+                {% block profileImage %}
+                {% endblock %}
+                <div class="headerContent">
+                    <h1>{% block name %} {% endblock  %}</h1>
+                    <h3><span style="font-size: 35px; color: gold;">@ &nbsp;<span><span class="usernameSpan" style="font-size: 24px; font-style: italic; color: white;">{% block username %} {% endblock %}<span></h3>
+              
+                </div>
+            </div>
+            <div class="profileMiddle">
+                <button class="profileHome" onclick="link('/profile/')">Profile Home</button>
+                <button onclick="link('/profile/personalDetails/')">Personal Details</button>
+                <button onclick="link('')">Order History</button>
+                <button onclick="link('')">Order Stats</button>
+                <button onclick="link('')">Favourite Products</button>
+            </div>
+            <div class="profileContent">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+        function link(linkText){
+            location.href = linkText;
+        }
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+    integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+</body>
+</html>

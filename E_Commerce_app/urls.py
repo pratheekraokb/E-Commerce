@@ -13,6 +13,8 @@ urlpatterns = [
     path('subcategory/<int:subcategory_id>', views.viewSubCategory, name="viewSubCategory"),
 
     path('about/', views.aboutus, name="aboutus"),
+    path('profile/', views.profile, name="profile"),
+    path('profile/personalDetails/', views.profilePersonal, name="profilePersonal"),
 
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),

@@ -626,6 +626,43 @@ def user_login(request):
 def aboutus(request):
     return render(request, "main_pages/about.html")
 
+
+@login_required
+def profile(request):
+    user = request.user
+
+    name = user.first_name + " " + user.last_name
+    userData = {
+        "userid": int(user.user_id),
+        "username": user.username,
+        "email": user.email,
+        "profile": user.profile_image,
+        "name": name,
+        # "phoneNumber": user.phone_number,
+    }
+    return render(request,'profile_pages/profile-home.html',{"user_data": userData})
+
+@login_required
+def profilePersonal(request):
+    user = request.user
+
+    name = user.first_name + " " + user.last_name
+    userData = {
+        "userid": int(user.user_id),
+        "username": user.username,
+        "email": user.email,
+        "profile": user.profile_image,
+        "firstname": user.first_name,
+        "lastname": user.last_name,
+        "name": name,
+        "last_login": user.last_login,
+        "phone_number": user.phone_number,
+        "date_of_birth": user.date_of_birth,
+
+        # "phoneNumber": user.phone_number,
+    }
+    return render(request,'profile_pages/profile-personal.html', {"user_data": userData} )
+
 def viewSubCategory(request, subcategory_id):
     if request.method == "GET":
         query = f"""
