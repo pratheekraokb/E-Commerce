@@ -223,13 +223,12 @@
                     "TotalAmmount": document.getElementById('TotalAmmount').value,
                     "Status": "Order Created",
                     "userId": document.getElementById("userId").value,
-                    // ... (add other form fields)
+                   
                 };
                 formData = JSON.stringify(formData);
 
                 console.log(formData);
 
-                // Make a POST request to the API endpoint
                 fetch("/api/submit_order/", {
                     method: "POST",
                     headers: {
@@ -245,7 +244,7 @@
 
                             alert(data.msg);
                         }
-                        // Optionally, you can redirect the user or perform other actions based on the response.
+                        
                     })
                     .catch(error => {
                         console.error("Error:", error);

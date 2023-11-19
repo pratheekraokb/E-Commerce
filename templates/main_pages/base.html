@@ -305,6 +305,45 @@ footer .copyright {
     width: 100%;
     text-align: center;
 }
+
+div.modalProfile{
+    /* min-height: 50px;  */
+    height: auto;
+    /* height: max-content; */
+    width: 310px; 
+    /* background-color: black; */
+    /* z-index: 1; */
+    position: relative;
+    /* bottom: 0; */
+    left: 81%;
+    /* right: 0%; */
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 5px;
+    position: fixed; 
+    top: 22%; 
+    left: 90%; 
+    transform: translate(-50%, -50%);
+ }
+ .modalProfile button{
+    height: 80px;
+    width: 40%;
+    font-weight: bold;
+    /* background-color: black; */
+    /* color: white; */
+
+    /* padding: 10px; */
+    /* margin: 5px; */
+ }
+
+ .modalProfile button:hover{
+    background-color: black;
+    color: gold;
+    transition: 2s;
+ }
+
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -339,7 +378,12 @@ footer .copyright {
                     <path
                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                 </svg> My Cart</a></li>
-                <li><a href="/logout/">Logout</a></li>
+                <!-- <li><a href="/logout/">Logout</a></li> -->
+
+                {% block navbar %}
+
+                {% endblock %}
+
                 <!-- <li style="display: flex;">
                     <button style="background-color: transparent; border: none;">
                         <img src="/media/shop/users_images/default_user.png" height="55px" style="border-radius: 50%;" alt="">
@@ -348,7 +392,19 @@ footer .copyright {
                 </li> -->
             </ul>
         </div>
+        <div class="modalProfile" id="profileDiv" style="display: none;">
+            <br>
+            <button>Visit Profile</button>
+            <br>
+            <button onclick="logoutFunc()">Logout</button>
+        </div>
     </section>
+    <!-- <div class="modalProfile">
+        <br>
+        <button >Visit Profile</button>
+        <br>
+        <button >Logout</button>
+    </div> -->
     {% block content %}
 
     {% endblock %}
@@ -402,8 +458,20 @@ footer .copyright {
 
     </footer> {% endcomment %}
 
-    <!-- Your content goes here -->
 
+    <script>
+        function logoutFunc(){
+            location.href = "/logout"
+        }
+        function toggleProfile() {
+                var profileDiv = document.getElementById("profileDiv");
+                if (profileDiv.style.display === "none") {
+                    profileDiv.style.display = "flex";
+                } else {
+                    profileDiv.style.display = "none";
+                }
+            }
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.js"
         integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>

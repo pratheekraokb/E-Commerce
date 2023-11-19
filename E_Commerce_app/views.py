@@ -578,8 +578,18 @@ def productsHome(request):
             subcategory_data["product_list"] = [subcategory_data["product_list"][i:i + 4] for i in
                                                 range(0, len(subcategory_data["product_list"]), 4)]
 
-  
-        return render(request,'main_pages/product_home.html',{"data":json_data})
+        user = request.user
+
+        userData = {
+            "userid": int(user.user_id),
+            "username": user.username,
+            "email": user.email,
+            "profile": user.profile_image,
+            # "firstName": user.first_name,
+            # "lastName": user.last_name,
+            # "phoneNumber": user.phone_number,
+        }
+        return render(request,'main_pages/product_home.html',{"data":json_data,"user_data":userData})
 
    
 

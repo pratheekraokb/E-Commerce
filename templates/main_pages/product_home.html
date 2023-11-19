@@ -419,13 +419,30 @@ button.buyBtn:hover {
 
 {% endblock %}
 
+{% block navbar %}
+
+<li style="display: flex; flex-direction: column;" class="" id="userListItem">
+    <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
+        <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
+        <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
+    </button>    
+</li>
+{% endblock %}
+
+
 {% block content %}
 
-
+<div class="modalProfile" id="profileDiv" style="display: none;">
+    <br>
+    <button>Visit Profile</button>
+    <br>
+    <button onclick="logoutFunc()">Logout</button>
+</div>
 <!-- <div class="fluid-container"> -->
 
-
+    
 <div class="fluid-container" style="display: flex;flex-direction: column;">
+    
     {% for category_data in data %}
     <section class="banner" class="section-m1">
         <h4>{{ category_data.category_name }}</h4>
@@ -484,6 +501,17 @@ button.buyBtn:hover {
 
 
 <script>
+   function logoutFunc(){
+        location.href = "/logout"
+   }
+   function toggleProfile() {
+        var profileDiv = document.getElementById("profileDiv");
+        if (profileDiv.style.display === "none") {
+            profileDiv.style.display = "flex";
+        } else {
+            profileDiv.style.display = "none";
+        }
+    }
 
     document.querySelectorAll('.slider').forEach((slider, index) => {
         const products = slider.querySelectorAll('.product');
