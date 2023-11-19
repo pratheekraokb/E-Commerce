@@ -1,0 +1,90 @@
+{% extends 'main_pages/base.html' %}
+
+
+{% block styleCss %}
+<style>
+    .about {
+       font-size: 60px;
+       color: #088178;
+       margin-left: 50px;
+       margin-top: 80px;
+       font-weight: bold;
+       font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    
+    .content {
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 50px;
+    }
+    .content p {
+        font-size: 20px;
+        font-weight: bold;
+        font-style: oblique;
+        
+    }
+    span {
+        font-size: 22px;
+        font-weight:bolder;
+        font-style: normal;
+        color: rgb(49, 103, 99);
+    }
+</style>
+
+
+{% endblock %}
+
+{% block navbar %}
+
+<li style="display: flex; flex-direction: column;" class="" id="userListItem">
+    <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
+        <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
+        <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
+    </button>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="about">
+    About US
+</h1>
+<div class="content">
+    <p class="p1">
+        Hello,
+    </p>
+    <p class="p2">
+        Welcome to our ecommerce website! We're thrilled to have you here.
+    </p>
+    <p class="p3">
+        Our platform was meticulously crafted by our dedicated team - <span>Asish, Pratheek, Noushad,</span> and <span>
+            Rajin </span>. Each of them brought their unique skills and perspectives to build a user-friendly, secure,
+        and efficient shopping experience for you.
+    </p>
+    <p class="p4">
+        We offer a wide range of products, all carefully selected to meet your needs and preferences. Our goal is to
+        provide you with high-quality items at competitive prices, all in the comfort of your own home.
+    </p>
+    <p class="p5">
+        We're continually working on improving and expanding our services, so we encourage you to explore our site and
+        discover what we have to offer. If you have any questions or need assistance, our customer service team is
+        always ready to help.
+    </p>
+    <p class="p6">
+        Thank you for choosing us for your online shopping needs. We look forward to serving you!
+    </p>
+    <p class="p7">
+        Best Regards,<br>
+        Team ShopEase
+    </p>
+</div>
+
+
+<script>
+
+</script>
+
+
+
+
+{% endblock %}

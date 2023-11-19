@@ -12,6 +12,8 @@ urlpatterns = [
 
     path('subcategory/<int:subcategory_id>', views.viewSubCategory, name="viewSubCategory"),
 
+    path('about/', views.aboutus, name="aboutus"),
+
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),
     path('adminSector/company', views.adminCompany, name="adminCompany"),

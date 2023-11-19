@@ -623,6 +623,9 @@ def user_login(request):
     return render(request, 'auth_pages/signin.html')  # Replace with your actual template name
 
 
+def aboutus(request):
+    return render(request, "main_pages/about.html")
+
 def viewSubCategory(request, subcategory_id):
     if request.method == "GET":
         query = f"""
