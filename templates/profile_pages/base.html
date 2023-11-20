@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ShopEase</title>
     <style>
         *{
             padding: 0;
@@ -110,6 +110,7 @@
 
         
     </style>
+    <link rel="shortcut icon" href="/media/shop/icons/favicon.png" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -127,9 +128,11 @@
             <div class="profileMiddle">
                 <button class="profileHome" onclick="link('/profile/')">Profile Home</button>
                 <button onclick="link('/profile/personalDetails/')">Personal Details</button>
-                <button onclick="link('')">Order History</button>
-                <button onclick="link('')">Order Stats</button>
-                <button onclick="link('')">Favourite Products</button>
+                {% comment %} <button onclick="link('')">Order History</button> {% endcomment %}
+                {% comment %} <button onclick="link('')">Order Stats</button> {% endcomment %}
+                <button onclick="link('/mycart/')">View My Cart</button>
+                <button onclick="link('/')">Explore Shopping</button>
+                <button onclick="link('/logout/')">Logout</button>
             </div>
             <div class="profileContent">
                 {% block content %}
@@ -144,6 +147,8 @@
         function link(linkText){
             location.href = linkText;
         }
+
+        
 
     </script>
 

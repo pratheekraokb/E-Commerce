@@ -223,6 +223,7 @@
             // Gather data from the form
             var transactionId = document.getElementById('TransactionId').value;
             var address = document.getElementById('Address').value;
+            localStorage.clear();
 
             // Check if the required fields are not empty
             if (transactionId.trim() !== '' && address.trim() !== '') {

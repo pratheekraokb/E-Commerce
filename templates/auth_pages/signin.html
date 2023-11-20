@@ -101,41 +101,7 @@ form{
         
     </div>
 </div>
-<!-- <script>
-    const csrfToken = "{{ csrf_token }}";
-    document.addEventListener("DOMContentLoaded", function () {
-        const loginForm = document.getElementById("loginForm");
-        
-        loginForm.addEventListener("submit", function (event) {
-            event.preventDefault(); // Prevent the default form submission
-            
-            // Serialize the form data (you can use a library like FormData for more complex forms)
-            const formData = new FormData(loginForm);
-            
-            // Create a POST request
-            fetch("{% url 'user_login' %}", {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRFToken": csrfToken // Replace csrf_token with the actual token value (if not provided by Django)
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from the server
-                if (data.success) {
-                    // Redirect to a success page or do something else
-                } else {
-                    // Handle login failure
-                   
-                }
-            })
-            .catch(error => {
-                // Handle network or other errors
-            });
-        });
-    });
-</script> -->
+
 
 {% endblock %}
 

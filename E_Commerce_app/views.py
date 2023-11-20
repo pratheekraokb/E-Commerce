@@ -1031,6 +1031,26 @@ def mycart_page(request):
     }
     return render(request, 'main_pages/mycart.html', {"user_data": userData})
 
+
+def SendSMS(phone_number_to_send, body_Msg):
+    account_sid = "AC6c882f43f1cda8b2248bf7f2a525d7c2"
+    auth_token = "2c19df37274ee7e6e7510edbbe52eb68"
+
+    twilio_phone_number = "+12566900192"
+
+    recipient_phone_number = phone_number_to_send
+
+    message_body = body_Msg
+
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+        body=message_body,
+        from_=twilio_phone_number,
+        to=recipient_phone_number
+    )
+ 
+
 @login_required
 def billing(request):
     user = request.user
@@ -1049,6 +1069,7 @@ def billing(request):
 
     return render(request, 'main_pages/billing.html', {"user_data": userData})
 
+from twilio.rest import Client
 
 @csrf_exempt
 def submit_order(request):
@@ -1056,7 +1077,7 @@ def submit_order(request):
         try:
             # Get the JSON data from the request
             data = json.loads(request.body)
-
+            user = request.user
             # Extract the required fields
             transaction_id = data.get('TransactionId')
             address = data.get('Address')
@@ -1085,10 +1106,48 @@ def submit_order(request):
                 VALUES ('{current_datetime}', {total_amount}, '{status}', '{transaction_id}', {user_id}, '{address}');
             """
 
+
+            phoneNumber = user.phone_number
+            email = user.email
+            username = user.username
+            name = user.first_name + " " + user.last_name
+
+            name = name.upper()
+            msg = f"""
+                Thank you for shopping with ShopEase. This is your order confirmation.
+
+                Order Details:
+                1. Name: {name}
+                2. Username: {username}
+                3. E-Mail: {email}
+                4. Contact Number: {phoneNumber}
+
+                
+                5. Order Transaction Id: {transaction_id}
+                6. Shipment Address:
+                {address}
+                7. Total Amount: {total_amount}.00 RS (INR)
+
+                    Your satisfaction is our priority. If you have any questions or need assistance, feel free to reach out.
+
+                    We appreciate your business and look forward to serving you again!
+
+                Best regards,
+                The ShopEase Team
+            """
+            
+
             
             try:
                 executeQuery(query)
+                # SendSMS(phoneNumber, msg)
+                try:
+                    SendSMS(phoneNumber, msg)
+                except:
+                    pass
+                # return render(request, 'main_pages/mycart.html')
                 return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
+                
             except Exception:
                 return JsonResponse({'status': 'error', 'message': 'Something went wrong!'})
 
@@ -1102,3 +1161,5 @@ def submit_order(request):
     else:
         # Handle other HTTP methods if needed
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
+

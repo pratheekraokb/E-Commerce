@@ -9,6 +9,7 @@
     {% block head %}
     {% endblock %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/media/shop/icons/favicon.png" type="image/x-icon">
     
     <style>
         /* Common styles for both divs */
@@ -143,6 +144,9 @@
                     onclick="setActiveButton('btnCompany')">Add/Alter <br>Company/Organisation</button></a>
             <a href="/adminSector/catSubcat"><button class="admOpt" id="btnCategory"
                     onclick="setActiveButton('btnCategory')">Add/Alter <br>Category & Sub-Category</button></a>
+
+            <a href="/logout/"><button class="admOpt" id="btnLogout"
+                    onclick="setActiveButton('btnLogout')">Logout</button></a>
         </div>
         <div class="rightdiv">
             <div class="breadcrumb">
