@@ -145,7 +145,7 @@
         #product1 .pro-container {
             display: flex;
             /* justify-content: space-between; */
-            justify-content:space-evenly;
+            justify-content: space-evenly;
             padding-top: 20px;
             flex-wrap: wrap;
 
@@ -253,97 +253,115 @@
         }
 
         footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    background-color: #E3E6F3;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background-color: #E3E6F3;
 
- }
+        }
 
- footer .col {
-    display: flex;
-    flex-direction: column;
-    align-items: self-start;
- }
+        footer .col {
+            display: flex;
+            flex-direction: column;
+            align-items: self-start;
+        }
 
- 
- footer .col-1{
-    width: 40%;
- }
 
-footer p{
-    font-size: 13px;
-    margin: 0 0 8px 0;
-}
+        footer .col-1 {
+            width: 40%;
+        }
 
-footer a {
-    font-size: 13px;
-    text-decoration: none;
-    color: #222;
-    margin-bottom: 10px;
-}
+        footer p {
+            font-size: 13px;
+            margin: 0 0 8px 0;
+        }
 
-footer a:hover {
-    color: #088178;
-}
+        footer a {
+            font-size: 13px;
+            text-decoration: none;
+            color: #222;
+            margin-bottom: 10px;
+        }
 
-footer .follow {
-    margin-top: 20px;
-}
+        footer a:hover {
+            color: #088178;
+        }
 
-footer .follow i {
-    color: #465b52;
-    margin-right: 4px;
-    cursor: pointer;
-}
+        footer .follow {
+            margin-top: 20px;
+        }
 
-footer .follow i:hover {
-    color: #088178;
-}
+        footer .follow i {
+            color: #465b52;
+            margin-right: 4px;
+            cursor: pointer;
+        }
 
-footer .copyright {
-    width: 100%;
-    text-align: center;
-}
+        footer .follow i:hover {
+            color: #088178;
+        }
 
-div.modalProfile{
-    /* min-height: 50px;  */
-    height: auto;
-    /* height: max-content; */
-    width: 310px; 
-    /* background-color: black; */
-    /* z-index: 1; */
-    position: relative;
-    /* bottom: 0; */
-    left: 81%;
-    /* right: 0%; */
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 5px;
-    position: fixed; 
-    top: 22%; 
-    left: 90%; 
-    transform: translate(-50%, -50%);
- }
- .modalProfile button{
-    height: 80px;
-    width: 40%;
-    font-weight: bold;
-    /* background-color: black; */
-    /* color: white; */
+        footer .copyright {
+            width: 100%;
+            text-align: center;
+        }
 
-    /* padding: 10px; */
-    /* margin: 5px; */
- }
+        div.modalProfile {
+            /* min-height: 50px;  */
+            height: auto;
+            /* height: max-content; */
+            width: 310px;
+            /* background-color: black; */
+            /* z-index: 1; */
+            position: relative;
+            /* bottom: 0; */
+            left: 81%;
+            /* right: 0%; */
+            display: flex;
+            /* flex-direction: column; */
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 5px;
+            position: fixed;
+            top: 22%;
+            left: 90%;
+            transform: translate(-50%, -50%);
+        }
 
- .modalProfile button:hover{
-    background-color: black;
-    color: gold;
-    transition: 2s;
- }
+        .modalProfile button {
+            height: 80px;
+            width: 40%;
+            font-weight: bold;
+            /* background-color: black; */
+            /* color: white; */
 
+            /* padding: 10px; */
+            /* margin: 5px; */
+        }
+
+        .modalProfile button:hover {
+            background-color: black;
+            color: gold;
+            transition: 2s;
+        }
+
+        .bot {
+            position: fixed;
+            bottom: 0;
+            right: 0%;
+        }
+
+        #botButton {
+            display: flex;
+            justify-content: center;
+            background-color: transparent;
+            border: 0;
+            padding-right: 10px;
+        }
+
+        #botIframe {
+            display: none;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
     <link rel="shortcut icon" href="/media/shop/icons/favicon.png" type="image/x-icon">
@@ -375,10 +393,10 @@ div.modalProfile{
                 <li><a href="/about/">About Us</a></li>
                 {% comment %} <li><a href="about.html">About Us</a></li> {% endcomment %}
                 <li><a href="/mycart/"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                    fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                    <path
-                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                </svg> My Cart</a></li>
+                            fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                        </svg> My Cart</a></li>
                 <!-- <li><a href="/logout/">Logout</a></li> -->
 
                 {% block navbar %}
@@ -407,8 +425,17 @@ div.modalProfile{
         <button >Logout</button>
     </div> -->
     {% block content %}
-
+;
     {% endblock %}
+    
+    <div class="bot">
+        <button id="botButton" style="width: 100%; background-color: orangered; padding: 5px; color: white;">
+            <img src="/media/shop/icons/bot.png" style="height: 80px;" alt="">
+            <br>
+            <p style="padding-top: 15px; font-weight: bold; color: white; background-color: transparent;">Talk With Bot</p>
+        </button>
+        <iframe id="botIframe" width="450" height="530" allow="microphone;" style="color: black;" src="https://console.dialogflow.com/api-client/demo/embedded/dadcc569-ac65-48a9-b79c-0d57e2ffb7de"></iframe>
+    </div>
 
     <!-- <div class="footer"> -->
     <!-- </div> -->
@@ -459,23 +486,28 @@ div.modalProfile{
 
     </footer> {% endcomment %}
 
-
     <script>
-        function logoutFunc(){
+        document.getElementById('botButton').addEventListener('click', function () {
+            var iframe = document.getElementById('botIframe');
+            iframe.style.display = (iframe.style.display === 'none') ? 'block' : 'none';
+        });
+    </script>
+    <script>
+        function logoutFunc() {
             location.href = "/logout"
         }
 
-        function profileFunc(){
+        function profileFunc() {
             location.href = "/profile/"
         }
         function toggleProfile() {
-                var profileDiv = document.getElementById("profileDiv");
-                if (profileDiv.style.display === "none") {
-                    profileDiv.style.display = "flex";
-                } else {
-                    profileDiv.style.display = "none";
-                }
+            var profileDiv = document.getElementById("profileDiv");
+            if (profileDiv.style.display === "none") {
+                profileDiv.style.display = "flex";
+            } else {
+                profileDiv.style.display = "none";
             }
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.js"
