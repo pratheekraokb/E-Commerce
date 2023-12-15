@@ -1031,10 +1031,14 @@ def mycart_page(request):
     }
     return render(request, 'main_pages/mycart.html', {"user_data": userData})
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def SendSMS(phone_number_to_send, body_Msg):
-    account_sid = 'AC6c882f43f1cda8b2248bf7f2a525d7c2'
-    auth_token = 'a341bcf8e7e0031c7c2706f0a0f0c40b'
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 
     twilio_phone_number = "+12566900192"
 
@@ -1059,11 +1063,11 @@ def SendSMS(phone_number_to_send, body_Msg):
         print("Failed to send messages")
 
 from twilio.rest import Client
-def SendWhatsapp(phone_number,body_msg):
-    # from twilio.rest import Client
 
-    account_sid = 'AC6c882f43f1cda8b2248bf7f2a525d7c2'
-    auth_token = 'a341bcf8e7e0031c7c2706f0a0f0c40b'
+def SendWhatsapp(phone_number,body_msg):
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
