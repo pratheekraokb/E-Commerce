@@ -1,3 +1,5 @@
+# PROJECT SETUP
+
 ## DATABASE & Twillio API SETUP Credentials
   1. Create a .env file in the same directory where manage.py file exists.
   2. Add the following lines there <br/>
