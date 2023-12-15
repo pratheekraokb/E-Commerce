@@ -1,4 +1,4 @@
-### DATABASE & Twillio API SETUP Credentials
+## DATABASE & Twillio API SETUP Credentials
   1. Create a .env file in the same directory where manage.py file exists.
   2. Add the following lines there <br/>
       a. TWILIO_ACCOUNT_SID=AC6c882f43f1cda8b2248bf7f2a525d7c2 <br/>
@@ -15,7 +15,7 @@
                 'PASSWORD': os.getenv('DATABASE_PASSWORD'),<br/> 
                 'HOST': 'localhost', <br/>
                 'PORT': '', <br/>
-            } <br/>
+            }
         } <br/>
          Change the Name to the name of your database, Set User to your username (In my case it is root) <br/>
 
