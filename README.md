@@ -25,7 +25,7 @@
   23. pip install uvloop==0.17.0 <br>
   24. pip install websockets==11.0.3 <br>
   25. pip install wheel==0.37.1 <br>
-  Or you can install it by the command, *pip install -r requirements.txt*
+  Or you can install it by the command, **pip install -r requirements.txt**
 
 ## DATABASE & Twillio API SETUP Credentials
   1. Create a .env file in the same directory where manage.py file exists.
