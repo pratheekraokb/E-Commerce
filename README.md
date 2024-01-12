@@ -37,8 +37,8 @@
       d. Next You will see your image and username. Which on click you will get option either to Logout or to view your Profile. <br/>
           Profile Page Will contain the user data and details <br/>
     <br/>
-    Next You will see the Each category name and the products belonging to that category. When you click *Explore More* button, you will be directed to a page where you can see all the products in that category. You can filter the products based on Money Range, Sort it in ascending or descending order of price, Filter by company,etc.<br/>When you click the product, *Product View* Page will be opened, where you can see the product name,image,description,add to cart option. Additionally you can see the comments section where even you can contribute to it. 
-    <br/>
+    Next You will see the Each category name and the products belonging to that category. When you click Explore More button, you will be directed to a page where you can see all the products in that category. You can filter the products based on Money Range, Sort it in ascending or descending order of price, Filter by company,etc.<br/>
+    When you click the product, Product View Page will be opened, where you can see the product name,image,description,add to cart option. Additionally you can see the comments section where even you can contribute to it.<br/>
     At the bottom you can see the Chatbot Option *Chat With Bot* which on click, a window will be present where you can talk with ***ShopEase BOT*** 
       
 
