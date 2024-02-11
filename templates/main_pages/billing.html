@@ -1,6 +1,8 @@
 {% extends 'main_pages/base.html' %}
 
 {% block styleCss %}
+
+
 <style>
     .mycart-container {
         width: 90vw;
@@ -22,7 +24,7 @@
     <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
         <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
         <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
-    </button>    
+    </button>
 </li>
 {% endblock %}
 
@@ -155,7 +157,7 @@
 <!-- Inside the script tag at the end of your template -->
 <script>
     var productsPurchaseDetails = []; // Initialize an array to store product purchase details
-    
+
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch cart data from localStorage
         var cartData = localStorage.getItem("cart");
@@ -177,6 +179,9 @@
                 var quantityCell = row.insertCell(4);
                 var totalCell = row.insertCell(5);
 
+                // Set the product ID as a data attribute in the table row
+                row.setAttribute('data-product-id', cart[i].product_id);
+
                 slNoCell.textContent = i + 1;
                 imageCell.innerHTML = `<img src="${cart[i].productImage}" alt="Product Image" style="padding:5px; max-width: 100px; max-height: 100px;">`;
                 productNameCell.textContent = cart[i].productName;
@@ -192,14 +197,11 @@
                 // Add product details to the array
                 var productDetails = {
                     "productId": cart[i].product_id,
-                    // "productName": cart[i].productName,
                     "quantity": cart[i].quantity,
-                    "subtotal": totalAmount,
-                    "purchaseDetails": productsPurchaseDetails
+                    "subtotal": totalAmount
                 };
 
                 productsPurchaseDetails.push(productDetails);
-                console.log(productDetails)
             }
 
             // Update the Sub Total and Total in the HTML
@@ -208,10 +210,10 @@
 
             // Set the total amount value in the input field
             document.getElementById("TotalAmmount").value = subTotal;
-            console.log(productsPurchaseDetails)
 
-            // Store productsPurchaseDetails in local storage
-            // localStorage.setItem("productsPurchaseDetails", JSON.stringify(productsPurchaseDetails));
+            // Now that the table is populated, call the function to get the products
+            var products = getProductsFromTable();
+            console.log("Purchased Products:", products);
         }
     });
 
@@ -227,17 +229,19 @@
 
             // Check if the required fields are not empty
             if (transactionId.trim() !== '' && address.trim() !== '') {
+                var products = getProductsFromTable();
                 var formData = {
                     "TransactionId": transactionId,
                     "Address": address,
                     "TotalAmmount": document.getElementById('TotalAmmount').value,
                     "Status": "Order Created",
                     "userId": document.getElementById("userId").value,
-                   
+                    "products_details": products,
+
                 };
                 formData = JSON.stringify(formData);
 
-                console.log(formData);
+                // console.log(formData);
 
                 fetch("/api/submit_order/", {
                     method: "POST",
@@ -254,7 +258,7 @@
 
                             alert(data.msg);
                         }
-                        
+
                     })
                     .catch(error => {
                         console.error("Error:", error);
@@ -266,6 +270,33 @@
     });
 
 </script>
+<script>
+    function getProductsFromTable() {
+        var products = [];
+        var table = document.querySelector("table");
+        var rows = table.querySelectorAll("tr:not(:first-child)");
+        rows.forEach(function (row) {
+            var product = {};
+            var cells = row.querySelectorAll("td");
+            // Retrieve product ID from the data attribute
+            product.id = parseInt(row.getAttribute('data-product-id'));
+            product.price = parseInt(cells[3].textContent.trim().replace("₹", "").replace(".00", "").trim());
+            product.quantity = parseInt(cells[4].querySelector("input").value.trim());
+            product.total = parseFloat(cells[5].textContent.trim().replace("₹", "").replace(".00", "").trim());
+
+            products.push(product);
+        });
+
+        return products;
+    }
+
+
+
+    var products = getProductsFromTable();
+    console.log("Purchased Products:", products);
+
+</script>
+
 
 
 {% endblock %}

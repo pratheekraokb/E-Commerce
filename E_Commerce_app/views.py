@@ -1102,8 +1102,8 @@ def billing(request):
 def submit_order(request):
     if request.method == 'POST':
         try:
-            # Get the JSON data from the request
             data = json.loads(request.body)
+
             user = request.user
             # Extract the required fields
             transaction_id = data.get('TransactionId')
@@ -1115,29 +1115,42 @@ def submit_order(request):
             user_id = int(user_id)
             total_amount = int(total_amount)
 
-            purchased_items = data.get('purchaseDetails')
+            purchased_items = data.get('products_details')
 
-            # Perform your desired actions with the data (e.g., save to the database)
+            # Save order to the database
+            current_datetime = timezone.now()
+            order = Order.objects.create(
+                user=user,
+                order_date=current_datetime,
+                total_amount=total_amount,
+                status=status,
+                transaction_id=transaction_id,
+                address=address
+            )
 
-            # Example: Save data to the database
-            current_datetime = datetime.now()
-            # print(address)
-            # print(transaction_id, total_amount)
-            # print(status, user_id, current_datetime)
+            # Save each purchased item to the database
+            for item in purchased_items:
+                product_id = item['id']
+                price = item['price']
+                quantity = item['quantity']
+                subtotal = item['total']
+                order_item = OrderItem.objects.create(
+                    order=order,
+                    product_id=product_id,
+                    quantity=quantity,
+                    subtotal=subtotal,
+                    order_date=current_datetime
+                )
 
-            print(purchased_items)
-
-            # Uncomment and modify the database insertion code as needed
-            query = f"""
-                INSERT INTO `Order` (order_date, total_amount, status, transaction_id, user_id, address)
-                VALUES ('{current_datetime}', {total_amount}, '{status}', '{transaction_id}', {user_id}, '{address}');
-            """
-
+                # Update stock quantity of the product
+                product = Product.objects.get(pk=product_id)
+                product.stock_quantity -= quantity
+                product.save()
 
             phoneNumber = user.phone_number
             email = user.email
             username = user.username
-            name = user.first_name + " " + user.last_name
+            name = user.get_full_name()
 
             name = name.upper()
             msg = f"""
@@ -1149,13 +1162,11 @@ def submit_order(request):
                 3. E-Mail: {email}
                 4. Contact Number: {phoneNumber}
 
-                
                 5. Order Transaction Id: {transaction_id}
                 6. Shipment Address:
                 {address}
                 7. Total Amount: {total_amount}.00 RS (INR)
 
-                
                 Your satisfaction is our priority. If you have any questions or need assistance, feel free to reach out.
 
                 We appreciate your business and look forward to serving you again!
@@ -1164,52 +1175,20 @@ def submit_order(request):
                 The ShopEase Team
             """
 
-            whatsappMsg = f"""
-                Thank you for shopping with ShopEase. This is your order confirmation.
-                
-                **Order Details:**
-                1. Name: *{name}*
-                2. Username: *{username}*
-                3. E-Mail: {email}
-                4. Contact Number: {phoneNumber}
-
-                **Order Transaction Id:** *{transaction_id}*
-                **Shipment Address:**
-                    {address}
-                **Total Amount:** {total_amount}.00 RS (INR)
-
-                Your satisfaction is our priority. If you have any questions or need assistance, feel free to reach out. We appreciate your business and look forward to serving you again!
-
-                *Best regards,
-                The ShopEase Team*
-            """
-
-            
-
-            
+            # Sending confirmation messages
+            # (Code for sending SMS and WhatsApp messages)
             try:
-                executeQuery(query)
-                # SendSMS(phoneNumber, msg)
-                try:
-                    SendSMS(phoneNumber, msg)
-                    SendWhatsapp(phoneNumber, msg)
-                except:
-                    pass
-                # return render(request, 'main_pages/mycart.html')
-                return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
-                
-            except Exception:
-                return JsonResponse({'status': 'error', 'message': 'Something went wrong!'})
+                # Sending SMS and WhatsApp messages
+                SendSMS(phoneNumber, msg)
+                SendWhatsapp(phoneNumber, msg)
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': f'Error sending messages: {str(e)}'})
 
-    
-            # return JsonResponse({'status': 'success', 'message': 'Order submitted successfully'})
-
-        except json.JSONDecodeError:
-            # Handle JSON decoding error
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'})
+            return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
+        
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Something went wrong: {str(e)}'})
 
     else:
         # Handle other HTTP methods if needed
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
-    
-
