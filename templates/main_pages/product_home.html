@@ -414,6 +414,9 @@ button.buyBtn:hover {
  
 
 </style>
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
 
 
 
@@ -439,10 +442,9 @@ button.buyBtn:hover {
 <div class="fluid-container" style="display: flex;flex-direction: column;">
     
     {% for category_data in data %}
-    <section class="banner" class="section-m1">
+    <section class="banner" class="section-m1" data-aos="flip-right" data-aos-duration="1000">
         <h4>{{ category_data.category_name }}</h4>
-        <h2>up to <span>70% off-</span> All {{ category_data.subcategory_name }}</h2>
-        {% comment %} <button>Explore More</button> {% endcomment %}
+        <h2 data-aos="slide-left" data-aos-duration="2000" style="font-weight: bold;">up to <span>70% off-</span> All {{ category_data.subcategory_name }}</h2>
         <a href="/subcategory/{{ category_data.subcategory_id }}">
             <button>Explore More</button>
         </a>
@@ -458,9 +460,14 @@ button.buyBtn:hover {
                 {% for product in subcategory_product_batch %}
                 <li class="product" style="max-width: 20%;">
                     <div class="image">
-                        <p style="text-align: center;"><span class="badge badgeGreen">In Stock</span></p>
+                        {% if product.stock > 0 %}
+                            <p style="text-align: center;"><span class="badge badgeGreen">In Stock</span></p>
+                        {% else %}
+                            <p style="text-align: center;"><span class="badge badgeRed">Out of Stock</span></p>
+                        {% endif %}
+                        <!-- <p style="text-align: center;"><span class="badge badgeGreen">In Stock</span></p> -->
                         
-                        <a href="product/{{ product.product_id }}"><img src="/media/{{ product.product_image }}" alt="{{ product.product_name }}"></a>
+                        <a href="product/{{ product.product_id }}"><img src="/media/{{ product.product_image }} " alt="{{ product.product_name }}"></a>
                     </div>
                    
                     <h3 class="two-line-heading">{{ product.product_name }}</h3>
@@ -493,6 +500,12 @@ button.buyBtn:hover {
 
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+    AOS.init();
+</script>
 
 
 <script>

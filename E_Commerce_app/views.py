@@ -589,6 +589,7 @@ def productsHome(request):
             # "lastName": user.last_name,
             # "phoneNumber": user.phone_number,
         }
+        print({"data":json_data,"user_data":userData})
         return render(request,'main_pages/product_home.html',{"data":json_data,"user_data":userData})
 
    

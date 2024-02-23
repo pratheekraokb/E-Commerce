@@ -39,15 +39,40 @@
             color: whitesmoke;
             /* border-radius: 15px; */
             display: flex;
-            /* justify-content: space-between; */
-            /* flex-direction: column; */
         }
-
-        .profileHeader img{
+        
+        
+        
+        .profileHeader img {
             border-radius: 50%;
-            padding: 15px;
             width: 20%;
+            margin: 30px;
+            animation: glow 3s infinite alternate; /* Apply the glow animation */
+            transition: box-shadow 2s ease; /* Smooth transition for box-shadow */
         }
+        
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px gold;
+            }
+            25% {
+                box-shadow: 0 0 30px white; /* Glow effect expanding */
+            }
+            50% {
+                box-shadow: 0 0 40px skyblue; /* Glow effect expanding more (Orange) */
+            }
+            75% {
+                box-shadow: 0 0 50px cyan; /* Glow effect expanding even more (Cyan) */
+            }
+            90% {
+                box-shadow: 0 0 60px silver;
+            }
+        }
+        
+        
+        
+        
+        
 
         .headerContent{
             /* background-color: aqua; */

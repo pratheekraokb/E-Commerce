@@ -241,6 +241,7 @@ class Address(models.Model):
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
