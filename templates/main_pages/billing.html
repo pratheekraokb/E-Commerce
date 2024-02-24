@@ -118,20 +118,25 @@
                         <input type="number" value="{{user_data.userid}}" id="userId" name="userId" hidden>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="TotalAmmountLabel">Total Ammount:- </label>
                             <input type="text" class="form-control" id="TotalAmmount" name="TotalAmmount"
                                 placeholder="Total Ammount in RS" readonly required
                                 style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;">
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="TransactionProofLabel">Upload Transaction Proof :- </label>
+                            <input type="file" name="image" id="imageInput" onchange="uploadImage()">
+                        </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="TransactionLabel">Transaction ID:- </label>
                             <input type="text" class="form-control" id="TransactionId" name="TransactionId"
                                 placeholder="Transaction ID" required
                                 style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
                                 required>
                         </div>
+                        
                     </div>
                     <div class="form-row" style="padding: 10px;">
                         <label for="addressLabel">Address:-</label>
@@ -155,6 +160,35 @@
 </div>
 
 <!-- Inside the script tag at the end of your template -->
+<script>
+    function uploadImage() {
+        const fileInput = document.getElementById('imageInput');
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        fetch('/api/authenticate_upi/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.upi_transaction_id) {
+                document.getElementById('TransactionId').value = data.upi_transaction_id;
+                // console.log('UPI Transaction ID:', data.upi_transaction_id);
+            } else {
+                console.log('Failed to extract UPI Transaction ID');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+
 <script>
     var productsPurchaseDetails = []; // Initialize an array to store product purchase details
 

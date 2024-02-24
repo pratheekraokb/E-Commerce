@@ -30,6 +30,42 @@ from datetime import datetime
 
 from datetime import datetime
 
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from django.http import HttpResponse
+
+import os
+from dotenv import load_dotenv
+import re
+import pytesseract
+from PIL import Image
+
+
+def extract_upi_transaction_id(image_path):
+    try:
+        image = Image.open(image_path)
+        text = pytesseract.image_to_string(image)
+        upi_transaction_id = None
+        for word in text.split():
+            if word == 'UPI':
+                match = re.search(r'\b\d{12}\b', text)
+                if match:
+                    upi_transaction_id = match.group()
+                    break
+        return upi_transaction_id
+    except Exception as e:
+        return ""
+
+
+
+
 def retrieveData(query):
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -48,6 +84,27 @@ def executeQuery(query):
         return None
 
 # Create your views here.
+    
+def authenticate_upi(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        image = request.FILES['image']
+        try:
+            # Save the image temporarily
+            with open('temp_image.jpg', 'wb') as f:
+                f.write(image.read())
+
+            # Extract UPI transaction ID
+                
+            upi_transaction_id = extract_upi_transaction_id('temp_image.jpg')
+            print(upi_transaction_id)
+            os.remove('temp_image.jpg')
+
+            return JsonResponse({'upi_transaction_id': upi_transaction_id})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 def adminHome(request):
 
     return render(request, 'admin_pages/home.html')
@@ -787,16 +844,6 @@ def viewSubCategory(request, subcategory_id):
     return HttpResponse("hai")
 
 
-import pandas as pd
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from django.http import HttpResponse
 
 
 def MLPredict(request, title, description):
@@ -1032,8 +1079,7 @@ def mycart_page(request):
     }
     return render(request, 'main_pages/mycart.html', {"user_data": userData})
 
-import os
-from dotenv import load_dotenv
+
 
 load_dotenv()
 

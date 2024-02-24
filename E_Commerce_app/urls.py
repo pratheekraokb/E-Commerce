@@ -49,6 +49,7 @@ urlpatterns = [
     path('api/get_companies/<int:comp_id>', views.get_companies_by_id, name='get_companiesById_api'),
     path('api/alter_company', views.alter_company, name='alter-company'),
 
+    path('api/authenticate_upi/', views.authenticate_upi, name="authenticateUPI"),
     # path('home', views.usersHome, name='usersHome'),
     path('ml/<str:title>/<str:description>/', views.MLPredict, name='MLPredict'),
 
