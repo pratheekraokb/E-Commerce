@@ -201,12 +201,18 @@ class OrderItem(models.Model):
     class Meta:
         db_table = 'OrderItem'
 
+
+
 @receiver(post_save, sender=OrderItem)
-def update_stock(sender, instance, **kwargs):
-    # Update the stock_quantity of the corresponding product
-    product = instance.product
-    product.stock_quantity -= instance.quantity
-    product.save()
+def update_stock(sender, instance, created, **kwargs):
+    if created:
+        product = instance.product
+        try:
+            product.stock_quantity = product.stock_quantity - instance.quantity
+            product.save()
+        except Exception as e:
+            print(f"Error updating stock quantity for product {product.name}: {e}")
+
 
 
 class OrderTracking(models.Model):

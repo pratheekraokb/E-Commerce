@@ -23,7 +23,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .models import Order, OrderItem
 from django.db import connection
-
+from django.core.exceptions import ObjectDoesNotExist
+from .models import OrderItem
 from django.db import IntegrityError
 from django.http import JsonResponse
 from datetime import datetime
@@ -1175,6 +1176,7 @@ def submit_order(request):
                 address=address
             )
 
+            print(purchased_items)
             # Save each purchased item to the database
             for item in purchased_items:
                 product_id = item['id']
@@ -1189,10 +1191,8 @@ def submit_order(request):
                     order_date=current_datetime
                 )
 
-                # Update stock quantity of the product
-                product = Product.objects.get(pk=product_id)
-                product.stock_quantity -= quantity
-                product.save()
+
+                
 
             phoneNumber = user.phone_number
             email = user.email
@@ -1239,3 +1239,39 @@ def submit_order(request):
     else:
         # Handle other HTTP methods if needed
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
+from collections import defaultdict
+
+def statsCategory(request):
+    try:
+        # Retrieve all OrderItems
+        order_items = OrderItem.objects.all()
+
+        # Calculate total products purchased for each category and subcategory
+        category_products_count = defaultdict(int)
+        subcategory_products_count = defaultdict(int)
+        for order_item in order_items:
+            category_name = order_item.product.category.name
+            subcategory_name = order_item.product.subcategory.name
+            category_products_count[category_name] += order_item.quantity
+            subcategory_products_count[subcategory_name] += order_item.quantity
+
+        # Extract category names and purchased sales
+        categories = list(category_products_count.keys())
+        category_sales = [category_products_count[category_name] for category_name in categories]
+
+        # Extract subcategory names and purchased sales
+        subcategories = list(subcategory_products_count.keys())
+        subcategory_sales = [subcategory_products_count[subcategory_name] for subcategory_name in subcategories]
+
+        return JsonResponse({'category_wise': [categories, category_sales], 'subcategory_wise': [subcategories, subcategory_sales]}, safe=False)
+    except ObjectDoesNotExist as e:
+        # Handle the ObjectDoesNotExist exception, for example:
+        return JsonResponse({'error': 'Object does not exist'}, status=404)
+    except Exception as e:
+        # Handle other exceptions, for example:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+    
+def statsPage(request):
+    return render(request, 'admin_pages/stats.html')

@@ -20,7 +20,7 @@ urlpatterns = [
     path('adminSector/products', views.adminProducts, name="adminProducts"),
     path('adminSector/company', views.adminCompany, name="adminCompany"),
     path('adminSector/catSubcat', views.adminCatSub, name="adminCatSub"),
-
+    path('adminSector/stats', views.statsPage, name="statsPage"),
     # User
     path('api/create_user', views.create_user, name='create-user-api'),
     path('api/update_user', views.edit_user, name='edit-user-api'),
@@ -38,6 +38,8 @@ urlpatterns = [
     path('api/create_company', views.create_company, name='create-company'),
 
     path('api/submit_order/', views.submit_order, name='submit_order'),
+
+    path('api/stats/category/', views.statsCategory, name="statsCategory"),
     # Comment
 
     path('api/add_comment', views.add_comment, name='add-comment'),
