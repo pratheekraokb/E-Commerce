@@ -1028,7 +1028,10 @@ def add_comment(request):
             return JsonResponse({'error': 'An error occurred while saving the comment'}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-        
+
+def is_verified_purchase(product_id, user_id):
+    return OrderItem.objects.filter(order__user_id=user_id, product_id=product_id).exists()
+
 def retrieve_comments_recursive(product_id, parent_comment_id=None):
     query1 = f"""
         SELECT C.comment_id, C.text, C.timestamp, C.parent_comment_id, C.user_id, U.username AS user_name, U.profile_image, PC.user_id AS parent_user_id, PU.username AS parent_username
@@ -1046,7 +1049,7 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
 
     for row in data:
         comment_id, text, timestamp, parent_comment_id, user_id, user_name, profile_image, parent_user_id, parent_username = row
-
+        is_verified = is_verified_purchase(product_id, user_id)
         comment = {
             "comment_id": comment_id,
             "text": text,
@@ -1056,6 +1059,7 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
             "profile_image": profile_image,
             "parent_user_id": parent_user_id,
             "parent_username": parent_username,
+            "is_verified_purchase": is_verified,
             "replies": retrieve_comments_recursive(product_id, comment_id)
         }
 
@@ -1074,9 +1078,6 @@ def mycart_page(request):
         "username": user.username,
         "email": user.email,
          "profile": user.profile_image,
-        # "firstName": user.first_name,
-        # "lastName": user.last_name,
-        # "phoneNumber": user.phone_number,
     }
     return render(request, 'main_pages/mycart.html', {"user_data": userData})
 

@@ -385,7 +385,11 @@
             <div class="commentRetrieval" style="background-color: transparent; padding-left: 10px;">
                 <div class="row" style="display: flex;">
                     <img src="/media/{{ comment.profile_image }}" alt="{{ comment.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
-                    <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp|slice:"19" }}</p>
+                    <p><span style="font-weight: bolder;padding-left: 3px; color: gold; background-color: black; padding: 3px; border-radius: 5px;"> @{{ comment.user_name }}</span> on {{ comment.timestamp|slice:"19" }}
+                    {% if comment.is_verified_purchase %}
+                        <span style="color: green; font-weight:bolder;">&nbsp;&#10004; Verified Purchaser</span>
+                    {% endif %}
+                    </p>
                 </div>
                 <div>
                     <p style="padding-left: 3%; color: black; font-weight: 550;">{{ comment.text }}
@@ -405,7 +409,11 @@
                         <div style="display: flex;">
                             <img src="/media/{{ reply.profile_image }}" alt="{{ reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
                             <div>
-                                <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp|slice:"19" }}</p>
+                                <p> <span style="font-weight: bold;padding-left: 3px;  ">@{{ reply.user_name }}</span> on {{ reply.timestamp|slice:"19" }}
+                                {% if reply.is_verified_purchase %}
+                                    <span style="color: green; font-weight:bolder;">&nbsp;&#10004; Verified Purchaser</span>
+                                {% endif %}
+                                </p>
                                 <span style="background-color: blueviolet; color: aliceblue; border-radius: 15px; padding: 5px; font-weight: bold; font-size: small;">&nbsp;Replied to @{{reply.parent_username}} &nbsp;</span>
                             </div>
                             
@@ -428,7 +436,11 @@
                                 <div style="display: flex;">
                                     <img src="/media/{{ reply_to_reply.profile_image }}" alt="{{ reply_to_reply.user_data.user_name }}" height="50px" width="50px" style="border-radius: 100%;">
                                     <div>
-                                        <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp|slice:"19" }}</p>
+                                        <p><span style="font-weight: bold;padding-left: 3px;">@{{ reply_to_reply.user_name }}</span> on {{ reply_to_reply.timestamp|slice:"19" }}
+                                        {% if reply_to_reply.is_verified_purchase %}
+                                            <span style="color: green; font-weight:bolder;">&nbsp;&#10004;Verified Purchaser</span>
+                                        {% endif %}
+                                        </p>
                                         <span style="background-color: blueviolet; color: aliceblue; border-radius: 15px; padding: 5px; font-weight: bold; font-size: small;">&nbsp; Replied to @{{reply_to_reply.parent_username}} &nbsp;</span>
                                     </div>
                                 </div>
