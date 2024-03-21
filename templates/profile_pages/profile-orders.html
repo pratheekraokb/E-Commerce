@@ -1,0 +1,128 @@
+{% extends 'profile_pages/base.html' %}
+
+{% block styleCSS %}
+<style>
+    table {
+        padding: 25px;
+    }
+
+    table tr th {
+        padding: 20px;
+        background-color: rgb(30, 28, 28);
+        color: gold;
+        font-size: 19px;
+    }
+
+    table tr td {
+        min-width: 180px;
+        padding: 10px;
+    }
+
+    .order-details-table {
+        display: none;
+        margin: 0 auto;
+        width: 100%;
+    }
+    
+    
+</style>
+{% endblock %}
+
+{% block profileImage %}
+<img src="/media/{{ user_data.profile }}" alt="">
+{% endblock %}
+
+{% block name %}
+{{ user_data.name }}
+{% endblock %}
+
+{% block username %}
+{{ user_data.username }}
+{% endblock %}
+
+{% comment %} Main Content Here {% endcomment %}
+{% block content %}
+<div class="orderDataDiv" style="text-align:center;margin:0,auto; justify-content:center; height:100%; color:white;">
+    <h2 style="padding: 15px;">Your Orders</h2>
+    <table class="table" border="1" style="margin-left: 5px;">
+        <thead>
+            <tr>
+                <th>Sl No</th>
+                <th>Order Id</th>
+                <th>Order Date</th>
+                <th>Status</th>
+                <th>Transaction ID</th>
+                <th>Address</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in order_data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ order.order_id }}</td>
+                <td>{{ order.order_date }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.transaction_id }}</td>
+                <td>{{ order.address }}</td>
+                <td style="font-weight: bolder;">{{ order.total_amount }}0</td>
+                <td><button type="button" class="btn btn-primary view-details-btn" data-order-id="{{ order.order_id }}" style="padding: 15px;cursor: pointer;font-weight: bold;">Click Here</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    {% for order in order_data %}
+    <table class="order-details-table" id="order-details-{{ order.order_id }}" border="1" >
+        <thead>
+            
+            <tr>
+                <th>Sl No</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.subtotal }}0</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="font-size: 18px; font-weight: bolder;">Total Amount: -</td>
+                <td style="font-weight: bolder;">{{ order.total_amount }}0</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const viewDetailsBtns = document.querySelectorAll('.view-details-btn');
+
+        viewDetailsBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                const orderDetailsTable = document.getElementById('order-details-' + orderId);
+                if (orderDetailsTable) {
+                    // Hide all other order details tables
+                    document.querySelectorAll('.order-details-table').forEach(function (table) {
+                        if (table.id !== 'order-details-' + orderId) {
+                            table.style.display = 'none';
+                        }
+                    });
+                    // Toggle the display of the clicked order details table
+                    orderDetailsTable.style.display = orderDetailsTable.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

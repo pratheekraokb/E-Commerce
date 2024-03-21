@@ -1082,6 +1082,49 @@ def mycart_page(request):
     return render(request, 'main_pages/mycart.html', {"user_data": userData})
 
 
+def myorders(request):
+    user = request.user
+
+    name = user.first_name + " " + user.last_name
+    userData = {
+        "userid": int(user.user_id),
+        "username": user.username,
+        "email": user.email,
+        "profile": user.profile_image,
+        "firstname": user.first_name,
+        "lastname": user.last_name,
+        "name": name,
+        "last_login": user.last_login,
+        "phone_number": user.phone_number,
+        "date_of_birth": user.date_of_birth,
+    }
+    orders = Order.objects.filter(user=user)
+    order_data = []
+
+    for order in orders:
+        order_items = OrderItem.objects.filter(order=order)
+        order_item_data = []
+        for order_item in order_items:
+            order_item_data.append({
+                'product_id': order_item.product.pk,
+                'name': order_item.product.name,
+                'quantity': order_item.quantity,
+                'subtotal': float(order_item.subtotal),
+            })
+
+        order_data.append({
+            'order_id': order.order_id,
+            'order_date': order.order_date,
+            'total_amount': float(order.total_amount),
+            'status': order.status,
+            'transaction_id': order.transaction_id,
+            'address': order.address,
+            'items': order_item_data,
+        })
+    print({"user_data": userData, "order_data": order_data})
+
+    
+    return render(request,"profile_pages/profile-orders.html",  {"user_data": userData, "order_data": order_data})
 
 load_dotenv()
 

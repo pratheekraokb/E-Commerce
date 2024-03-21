@@ -15,6 +15,7 @@ urlpatterns = [
     path('about/', views.aboutus, name="aboutus"),
     path('profile/', views.profile, name="profile"),
     path('profile/personalDetails/', views.profilePersonal, name="profilePersonal"),
+    path('myorders/', views.myorders, name="myorders"),
 
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),
@@ -62,6 +63,7 @@ urlpatterns = [
     
     path('product/<int:product_num>', views.product_display, name="product_display"),
     path('mycart/', views.mycart_page, name='mycart_page'),
+    
     path('billing/', views.billing, name='billing'),
     # Add more URLs as needed
 ]
