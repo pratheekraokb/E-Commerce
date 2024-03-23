@@ -51,6 +51,12 @@ import re
 import pytesseract
 from PIL import Image
 
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from itertools import chain
+from django.db.models import Q
+
 
 def extract_upi_transaction_id(image_path):
     try:
@@ -1323,6 +1329,49 @@ def statsCategory(request):
 def statsPage(request):
     return render(request, 'admin_pages/stats.html')
 
+
+# Algorthm
+# Prepare a set (Unique) which consist of all the words of query seperated by spaces, length of word ? 2
+# Then each of this word will be checked if present in 
+    # a product title, if yes add 5 points
+    # product desc, if yes add 1 points
+    # add the score and see if it is greater than or equal to half of lengtth of tokens generated if yess display that product to user
+def search_products(query):
+    try:
+        tokens = [word.lower() for word in word_tokenize(query) if len(word) > 2]
+
+        products = Product.objects.all()
+
+        scored_products = []
+        for product in products:
+            title_tokens = set(word.lower() for word in word_tokenize(product.name) if len(word) > 2)
+            description_tokens = set(word.lower() for word in word_tokenize(product.description) if len(word) > 2)
+
+            title_score = sum(5 for token in tokens if token in title_tokens)
+            description_score = sum(1 for token in tokens if token in description_tokens)
+
+            total_score = title_score + description_score
+            scored_products.append((product, total_score))
+
+        scored_products.sort(key=lambda x: x[1], reverse=True)
+
+        top_matches = []
+        for product, score in scored_products[:5]:
+            if not top_matches or score >= (top_matches[0]["algo_score"] / 2)+ 2:
+                top_matches.append({"product_name": product.name, "product_id": product.product_id, "algo_score": score})
+
+        return {"result": top_matches, "status_code": 4}
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return {"result": [], "status_code": 0}
+
+
+
+
+
+
+
 def process_query(query):
     if re.search(r'(\w+) under (\d+)', query):
         match = re.search(r'(\w+) under (\d+)', query)
@@ -1370,9 +1419,12 @@ def process_query(query):
             return {"result": result, "status_code": 2}
         except Order.DoesNotExist:
             return {"result": "Order not found", "status_code": 0}
-
+    
     else:
-        return "Query format not recognized"
+        search_results = search_products(query)
+        print(search_results)
+        return {"result": search_results, "status_code": 4}
+       
 
 
 
