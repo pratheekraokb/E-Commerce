@@ -41,6 +41,9 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from django.http import HttpResponse
+import nltk
+from nltk.tokenize import word_tokenize
+import re
 
 import os
 from dotenv import load_dotenv
@@ -1342,24 +1345,52 @@ def process_query(query):
                 }
                 products_list.append(product_dict)
             
-            return products_list
+            return {"result": products_list, "status_code": 1}
         
         except Tag.DoesNotExist:
             return []
     
+    elif re.search(r'order (id )?(\d+)', query):
+        match = re.search(r'order (id )?(\d+)', query)
+        order_id = match.group(2)
+
+        try:
+            order = Order.objects.get(order_id=order_id)
+            result = {
+                "order_id": order.order_id,
+                "order_date": order.order_date.date(),
+                "total_amount": order.total_amount,
+                "address": order.address,
+                "status": order.status,
+                "text": f"Your order with ID {order.order_id}, placed on {order.order_date.date()}, "
+                        f"totaling {order.total_amount}, and shipped to {order.address}, "
+                        f"ORDER STATUS is - {order.status}."
+            }
+
+            return {"result": result, "status_code": 2}
+        except Order.DoesNotExist:
+            return {"result": "Order not found", "status_code": 0}
+
     else:
-        return []
+        return "Query format not recognized"
 
 
 
 
 
 
+@csrf_exempt
 def chatbot(request):
-    # query = request.GET.get('query', '')
-    query = "laptop under 10000000"
-
-    response = process_query(query)
-    print(response)
-    
-    return HttpResponse(response)
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            query = body.get('query', '')
+            if query:
+                response = process_query(query)
+                return JsonResponse(response)
+            else:
+                return JsonResponse("")
+        except json.JSONDecodeError:
+            return JsonResponse("")
+    else:
+        return JsonResponse({'result': [], 'result_status': 0})
