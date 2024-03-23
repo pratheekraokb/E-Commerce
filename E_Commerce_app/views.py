@@ -647,7 +647,7 @@ def productsHome(request):
             # "lastName": user.last_name,
             # "phoneNumber": user.phone_number,
         }
-        print({"data":json_data,"user_data":userData})
+        # print({"data":json_data,"user_data":userData})
         return render(request,'main_pages/product_home.html',{"data":json_data,"user_data":userData})
 
    
@@ -800,7 +800,7 @@ def viewSubCategory(request, subcategory_id):
                     })
                 current_category_id = row[9]
                 current_category_name = row[10]
-                print(current_category_name)
+                # print(current_category_name)
                 current_subcategory_name = row[11]
                 subcategory_product_batch = [product_json]
                 subcategory_tags = set(product_json["tags"])  
@@ -1064,7 +1064,7 @@ def retrieve_comments_recursive(product_id, parent_comment_id=None):
         }
 
         comments.append(comment)
-        print(comment)
+        # print(comment)
 
     return comments
 
@@ -1121,7 +1121,7 @@ def myorders(request):
             'address': order.address,
             'items': order_item_data,
         })
-    print({"user_data": userData, "order_data": order_data})
+    # print({"user_data": userData, "order_data": order_data})
 
     
     return render(request,"profile_pages/profile-orders.html",  {"user_data": userData, "order_data": order_data})
@@ -1220,7 +1220,7 @@ def submit_order(request):
                 address=address
             )
 
-            print(purchased_items)
+            # print(purchased_items)
             # Save each purchased item to the database
             for item in purchased_items:
                 product_id = item['id']
@@ -1319,3 +1319,47 @@ def statsCategory(request):
     
 def statsPage(request):
     return render(request, 'admin_pages/stats.html')
+
+def process_query(query):
+    if re.search(r'(\w+) under (\d+)', query):
+        match = re.search(r'(\w+) under (\d+)', query)
+        tag_name = match.group(1)
+        max_price = int(match.group(2))
+        
+        try:
+            # Get all products associated with tags containing the tag_name and filter by selling_price
+            unique_products = set()
+            for product_tag in ProductTag.objects.filter(tag__name__icontains=tag_name):
+                if product_tag.product.selling_price <= max_price and len(unique_products) < 5:
+                    unique_products.add(product_tag.product)
+
+            products_list = []
+            for product in unique_products:
+                product_dict = {
+                    'product_name': product.name,
+                    'product_id': product.product_id,
+                    'selling_price': product.selling_price
+                }
+                products_list.append(product_dict)
+            
+            return products_list
+        
+        except Tag.DoesNotExist:
+            return []
+    
+    else:
+        return []
+
+
+
+
+
+
+def chatbot(request):
+    # query = request.GET.get('query', '')
+    query = "laptop under 10000000"
+
+    response = process_query(query)
+    print(response)
+    
+    return HttpResponse(response)

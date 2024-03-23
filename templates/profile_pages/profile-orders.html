@@ -24,6 +24,12 @@
         width: 100%;
     }
     
+    table tr td a{
+        color: rgb(233, 197, 197);
+        text-decoration: underline;
+        font-style: italic;
+        font-weight: 700;
+    }
     
 </style>
 {% endblock %}
@@ -54,7 +60,7 @@
                 <th>Transaction ID</th>
                 <th>Address</th>
                 <th>Amount</th>
-                <th>Action</th>
+                <th>Order Details</th>
             </tr>
         </thead>
         <tbody>
@@ -89,7 +95,7 @@
             {% for item in order.items %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.name }}</td>
+                <td><a href="/product/{{ item.product_id }}">{{ item.name }}</a></td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.subtotal }}0</td>
             </tr>

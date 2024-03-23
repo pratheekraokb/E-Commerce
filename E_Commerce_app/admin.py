@@ -33,6 +33,7 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(ProductTag)
 class ProductTagAdmin(admin.ModelAdmin):
     list_display = ('product', 'tag')
+    list_filter = ('tag',)
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):

@@ -65,5 +65,7 @@ urlpatterns = [
     path('mycart/', views.mycart_page, name='mycart_page'),
     
     path('billing/', views.billing, name='billing'),
+
+    path('chatbot/', views.chatbot, name="chatbot"),
     # Add more URLs as needed
 ]
