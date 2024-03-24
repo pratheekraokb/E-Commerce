@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>ShopEase</title>
     {% block head %}
     {% endblock %}
@@ -348,7 +348,7 @@
 
         .bot {
             position: fixed;
-            bottom: 0;
+            bottom: 50%;
             right: 0%;
         }
 
@@ -358,6 +358,7 @@
             background-color: transparent;
             border: 0;
             padding-right: 10px;
+
         }
 
         #botIframe {
@@ -366,26 +367,130 @@
 
         /* Width of the scrollbar */
         ::-webkit-scrollbar {
-            width: 6px; /* Adjust as needed */
+            width: 6px;
+            /* Adjust as needed */
         }
 
         /* Track (background) of the scrollbar */
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; /* Light grey */
+            background: #f1f1f1;
+            /* Light grey */
         }
 
         /* Handle (thumb) of the scrollbar */
         ::-webkit-scrollbar-thumb {
-            background: #2196F3; /* Blue */
+            background: #2196F3;
+            /* Blue */
             border-radius: 3px;
         }
 
         /* Handle on hover */
         ::-webkit-scrollbar-thumb:hover {
-            background: #0b7dda; /* Darker blue */
+            background: #0b7dda;
+            /* Darker blue */
+        }
+    </style>
+    <style>
+        .chatSystem {
+            height: 60vh;
+            /* background-color: skyblue; */
+            width: 25vw;
+            border: 3px solid rgba(0, 0, 0, 0.5);;
         }
 
+        .chatDisplay {
+            height: calc(100% - 40px);
+            /* Subtract the height of chatSubmit */
+            background-color: antiquewhite;
+            padding: 10px;
+            overflow-y: scroll;
+            /* Vertical scrollbar */
+            scroll-behavior: smooth;
+            /* Add smooth scrolling */
+            /* border: 3px solid rgba(0, 0, 0, 0.5);; */
+        }
 
+        .chatSubmit {
+            height: 15%;
+            background-color: black;
+            color: white;
+            /* border: 3px solid rgba(0, 0, 0, 0.5);; */
+
+        }
+
+        .userChat {
+            background-color: darkblue;
+            color: white;
+            width: 60%;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 18px;
+            text-align: center;
+            /* min-height: 60px; */
+            padding: 15px;
+            border-radius: 15px;
+            padding: 10px;
+
+            margin-left: auto;
+            margin-top: 10px;
+        }
+
+        .botChat {
+            background-color: skyblue;
+            width: 70%;
+            min-height: 60px;
+            border-radius: 15px;
+            /* text-align: center; */
+            font-weight: 500;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 6px;
+            padding: 10px;
+            border: 3px solid rgba(0, 0, 0, 0.5);;
+
+        }
+
+        .chatSubmit textarea {
+            width: 80%;
+            padding: 5px;
+            font-weight: 600;
+            color: black;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .chatSubmit button {
+            width: 20%;
+            font-weight: bold;
+        }
+
+        .boldTxt {
+            font-weight: bold;
+        }
+
+        .headline h1 {
+            font-size: 22px;
+            background-color: aliceblue;
+            /* padding: 5px; */
+            font-weight: bold;
+            font-family: 'Times New Roman', Times, serif;
+            text-align: center;
+        }
+
+        #botIframe {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            /* right: 0; */
+            /* left: 0; */
+            left: 74%;
+            top: 20%;
+            /* bottom: 0; */
+            z-index: 9999;
+            background-color: transparent;
+            /* Set a high z-index to ensure it's above everything else */
+            /* background-color:  */
+            /* Semi-transparent background */
+        }
+
+        /* Adjust the chatSystem height to fit within the #botIframe */
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
     <link rel="shortcut icon" href="/media/shop/icons/favicon.png" type="image/x-icon">
@@ -449,71 +554,128 @@
         <button >Logout</button>
     </div> -->
     {% block content %}
-;
+    ;
     {% endblock %}
-    
+
     <div class="bot">
         <button id="botButton" style="width: 100%; background-color: transparent; padding: 5px; color: black;">
             <img src="/media/shop/icons/bot.png" style="height: 80px;" alt="">
             <br>
-            <p style="padding-top: 15px; font-weight: bold; color: black; background-color: transparent;">Talk With Bot</p>
+            <!-- <p style="padding-top: 15px; font-weight: bold; color: black; background-color: transparent;">Talk With Bot
+            </p> -->
         </button>
-        <iframe id="botIframe" width="450" height="660" allow="microphone;" style="color: black;" src="https://console.dialogflow.com/api-client/demo/embedded/dadcc569-ac65-48a9-b79c-0d57e2ffb7de"></iframe>
-    </div>
+        <div class="container-fluid mycart-container" id="botIframe">
+            <div class="chatSystem">
+                <div class="headline">
+                    <h1>Welcome to ShopEase.com Chatbot &nbsp;<button style="width: 60px; margin: 5px;"
+                            id="closeBotButton">X</button></h1>
+                </div>
+                <div class="chatDisplay">
 
-    <!-- <div class="footer"> -->
-    <!-- </div> -->
-    {% comment %} <footer class="section-p1">
-        <div class="col col-1">
-            <img src="images/Logo.png" alt="" height="100px" width="100px">
-            <h4>Contact</h4>
-            <p><strong>Address: </strong>Lbscek,Povval, Muliyar, Kasaragod, Kerala 671542</p>
-            <p><strong>Phone: </strong>+91 7561853218/+91 9400831368</p>
-            <p><strong>Hours: </strong>10:00 - 18:00, mon-sat</p>
-            <div class="follow">
-                <h4>Follow us</h4>
-                <div class="icons">
-                    <!-- Facebook -->
-                    <i class="fab fa-facebook-f"></i>
+                    <div class="botChat">
+                        Hey! Welcome to ShopEase.com Feel free to ask your query in the below textbox
+                    </div>
 
-                    <!-- Twitter -->
-                    <i class="fab fa-twitter"></i>
 
-                    <!-- Google -->
-                    <i class="fab fa-google"></i>
+                </div>
+                <div class="chatSubmit" style="display: flex;">
+                    <textarea name="" id="" cols="35" rows="4"
+                        placeholder="Enter queries like 'Laptops under 40000', 'Show me laptop with 8gb ram', 'What is status of my order 15', etc"></textarea>
+                    <button onclick="appendUserMessage()">Submit</button>
 
-                    <!-- Instagram -->
-                    <i class="fab fa-instagram"></i>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col">
-            <h4>About</h4>
-            <a href="about.html">About us</a>
-        </div>
 
-        <div class="col">
-            <h4>My Account</h4>
-            <a href="#">Sign in</a>
-            <a href="cart.html">view cart</a>
-        </div>
+    <script>
+        function appendUserMessage() {
+            var message = document.querySelector('.chatSubmit textarea').value;
+            var userChat = document.createElement('div');
+            userChat.classList.add('userChat');
+            userChat.textContent = message;
+            document.querySelector('.chatDisplay').appendChild(userChat);
+            document.querySelector('.chatSubmit textarea').value = '';
+            fetch('/chatbot/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status_code === 1) {
+                        data.result.forEach(product => {
+                            var botChat = document.createElement('div');
+                            let productName = product.product_name;
+                            if (productName.length > 400) {
+                                productName = productName.slice(0, 400) + "...";
+                            }
+                            botChat.classList.add('botChat');
+                            botChat.innerHTML = `
+                        <p><span class="boldTxt">Name:</span> ${product.product_name}</p>
+                        <p><span class="boldTxt">Price:</span> ${product.selling_price}</p>
+                        <p><span class="boldTxt">Link:</span> <a href="/product/${product.product_id}" target="_blank"><span class="boldTxt">Click Here</span></a></p>
+                    `;
 
-        <div class="col">
-            <h4>Secured Payment Gateways</h4>
-            <img src="images/Payment-Gateway1.png" alt="">
-        </div>
+                            // Append the botChat element to the chatDisplay
+                            document.querySelector('.chatDisplay').appendChild(botChat);
+                        });
+                    }
+                    else if (data.status_code === 2) {
+                        var botChat = document.createElement('div');
+                        botChat.classList.add('botChat');
+                        botChat.innerHTML = `
+                            <p><span class="boldTxt">Order Id:</span> ${data.result.order_id}</p>
+                            <p><span class="boldTxt">Date of Order:</span> ${data.result.order_date}</p>
+                            <p><span class="boldTxt">Total Amount:</span> ${data.result.total_amount}</p>
+                            <p><span class="boldTxt">Address:</span> ${data.result.address}</p>
+                            <p><span class="boldTxt">Status:</span> ${data.result.status}</p>
+                            <p>For more informations, <a href="/myorders/" target="_blank"><span class="boldTxt">Click Here</span></a></p>
+                        `;
 
-        <div class="copyright">
-            <p>© DBMS Project 2023, Group-9, E-Commerce website</p>
-        </div>
+                        // Append the botChat element to the chatDisplay
+                        document.querySelector('.chatDisplay').appendChild(botChat);
+                    }
+                    else if (data.status_code === 4) {
+                        data.result.result.forEach(product => {
+                            var botChat = document.createElement('div');
+                            botChat.classList.add('botChat');
+                            botChat.innerHTML = `
+                                <p><span class="boldTxt">Name:</span> ${product.product_name}</p>
+                                <p><span class="boldTxt">Link:</span> <a href="/product/${product.product_id}" target="_blank">Click Here</a></p>
+                            `;
 
-    </footer> {% endcomment %}
+                            // Append the botChat element to the chatDisplay
+                            document.querySelector('.chatDisplay').appendChild(botChat);
+                        });
+                    } else {
+                        var botChat = document.createElement('div');
+                        botChat.classList.add('botChat');
+                        botChat.innerHTML = `
+                                <p>Sorry! Something went wrong. Please verify your query</p>
+                            `;
 
+                        // Append the botChat element to the chatDisplay
+                        document.querySelector('.chatDisplay').appendChild(botChat);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
     <script>
         document.getElementById('botButton').addEventListener('click', function () {
             var iframe = document.getElementById('botIframe');
             iframe.style.display = (iframe.style.display === 'none') ? 'block' : 'none';
+        });
+        document.getElementById('closeBotButton').addEventListener('click', function () {
+            var iframe = document.getElementById('botIframe');
+            iframe.style.display = 'none';
         });
     </script>
     <script>

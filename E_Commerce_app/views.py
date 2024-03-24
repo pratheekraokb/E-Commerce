@@ -1439,6 +1439,7 @@ def chatbot(request):
             query = body.get('query', '')
             if query:
                 response = process_query(query)
+                print(response)
                 return JsonResponse(response)
             else:
                 return JsonResponse("")
@@ -1446,3 +1447,4 @@ def chatbot(request):
             return JsonResponse("")
     else:
         return JsonResponse({'result': [], 'result_status': 0})
+    
