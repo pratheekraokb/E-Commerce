@@ -23,7 +23,6 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
 
-        # Check if 'is_staff' is True, and if so, make the user a superuser
         if extra_fields.get("is_staff") is True:
             user.is_superuser = True
             user.save()

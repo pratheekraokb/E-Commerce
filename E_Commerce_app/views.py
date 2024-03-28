@@ -62,8 +62,10 @@ def extract_upi_transaction_id(image_path):
     try:
         image = Image.open(image_path)
         text = pytesseract.image_to_string(image)
+        print(text)
         upi_transaction_id = None
         for word in text.split():
+            
             if word == 'UPI':
                 match = re.search(r'\b\d{12}\b', text)
                 if match:
