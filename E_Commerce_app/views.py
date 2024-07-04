@@ -987,6 +987,37 @@ def product_display(request, product_num):
     for img in result:
         img_array.append(img[0])
     # print(img_array)
+        
+    recommend_prod_query = f"""
+        SELECT category_id, subcategory_id, company_id
+        INTO @category_id, @subcategory_id, @company_id
+        FROM Product
+        WHERE product_id = {product_num};
+    """ 
+    retrieveData(recommend_prod_query)
+
+    recommend_prod_query = f"""
+        SELECT *
+        FROM Product
+        WHERE (category_id = @category_id OR subcategory_id = @subcategory_id OR company_id = @company_id)
+        AND product_id != {product_num}
+        ORDER BY RAND()
+        LIMIT 8;
+    """
+    rec_products= retrieveData(recommend_prod_query)
+    # print(rec_products)
+    rec_products_list = []
+    for prod in rec_products:
+        rec_product_data = {
+            "id": prod[0],
+            "name": prod[1],
+            "mrp_price": str(prod[3]),
+            "selling_price": str(prod[4]),
+            "image": prod[6],
+          
+        }
+        rec_products_list.append(rec_product_data)
+    
 
     userData = {
         "userid": user.user_id,
@@ -999,7 +1030,7 @@ def product_display(request, product_num):
 
 
     
-    return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array, "retrieve_comments": all_comments})
+    return render(request,'main_pages/product_display.html', { "user_data": userData ,"product_display": jsonDataToSend, "additional_images": img_array, "retrieve_comments": all_comments, "rec_prods": rec_products_list})
 
 
 def add_comment(request):
