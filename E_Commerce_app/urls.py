@@ -42,6 +42,7 @@ urlpatterns = [
 
     path('api/stats/category/', views.statsCategory, name="statsCategory"),
     path('api/stats/company/', views.statsCompany, name='statsCompany'),
+    path('api/stats/amountWiseSales/', views.statsSales, name='statsSales'),
     # Comment
 
     path('api/add_comment', views.add_comment, name='add-comment'),

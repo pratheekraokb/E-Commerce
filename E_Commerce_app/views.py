@@ -1376,6 +1376,24 @@ def statsCompany(request):
 
         return JsonResponse({'error': str(e)}, status=500)
     
+def statsSales(request):
+    try:
+        # Initialize counters for different ranges
+        below_1000_count = Order.objects.filter(total_amount__lt=1000).count()
+        between_1001_5000_count = Order.objects.filter(total_amount__range=(1001, 5000)).count()
+        between_5001_10000_count = Order.objects.filter(total_amount__range=(5001, 10000)).count()
+        above_10000_count = Order.objects.filter(total_amount__gt=10000).count()
+
+        # Construct labels and values
+        labels = ['Below ₹1000', '₹1001 - ₹5000', '₹5001 - ₹10000', '₹10000+']
+        values = [below_1000_count, between_1001_5000_count, between_5001_10000_count, above_10000_count]
+
+       
+        return JsonResponse({'amnt_wise': [labels, values]}, safe=False)
+        
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def statsPage(request):
     return render(request, 'admin_pages/stats.html')

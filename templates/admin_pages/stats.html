@@ -36,53 +36,87 @@
         margin: 0 auto;
     }
 
-    #subCategoryChart, #companySalesChartBar,#categoryChart {
+    #subCategoryChart,
+    #companySalesChartBar,
+    #categoryChart, 
+    #orderAmntChartPie,
+    #orderAmntChartBar {
         width: 40%;
         height: 400px;
         margin: 0 auto;
     }
-   
 </style>
 <div class="content container-fluid">
-
-    <div class="addStats">
-        <div class="heading">
-            <h1>Category and Subcategory Wise Sales Statistics</h1>
-        </div>
-
-        <div>
-            <div class="btns">
-                <button class="diagramBtns" onclick="CatSubDisplay('pie')">Pie Diagram</button>
-                <button class="diagramBtns" onclick="CatSubDisplay('bar')">Bar Diagram</button>
-            </div>
-            <div class="chartCanvas" style="max-height: 500px;">
-                <br>
-                <canvas id="categoryChart"></canvas>
-                <canvas id="subCategoryChart"></canvas>
-            </div>
-        </div>
-
+    <!-- <div class="heading"> -->
+        <div style="display: flex; align-items: center; justify-content: center;" class="heading">
+            <a href="#CatSubCatStats" style="flex: 1; text-align: center; font-size: 20px; font-weight: bolder;">Category & Sub Category Wise Stats</a>
+            <a href="#CompStats" style="flex: 1; text-align: center; font-size: 20px; font-weight: bolder;">Company Wise Sales Stats</a>
+            <a href="#AmntStats" style="flex: 1; text-align: center; font-size: 20px; font-weight: bolder;">Amountwise Order Issual Stats</a>
+        <!-- </div> -->
+        
     </div>
 
-   
+    <a name="CatSubCatStats">
+        <div class="addStats">
+            <div class="heading">
+                <h1>Category and Subcategory Wise Sales Statistics</h1>
+            </div>
+    
+            <div>
+                <div class="btns">
+                    <button class="diagramBtns" onclick="CatSubDisplay('pie')">Pie Diagram</button>
+                    <button class="diagramBtns" onclick="CatSubDisplay('bar')">Bar Diagram</button>
+                </div>
+                <div class="chartCanvas" style="max-height: 500px;">
+                    <br>
+                    <canvas id="categoryChart"></canvas>
+                    <canvas id="subCategoryChart"></canvas>
+                </div>
+            </div>
+    
+        </div>
+    </a>
+
+
     <br>
-    <div class="addStats">
+    <a name="CompStats">
 
-        <div class="heading">
-            <h1>Company Wise Sales Statistics</h1>
-        </div>
-
-        <div>
-          
-            <div class="chartCanvas" style="max-height: 500px;">
-                <br>
-                <canvas id="companySalesChartPie"></canvas>
-                <canvas id="companySalesChartBar"></canvas>
+        <div class="addStats">
+    
+            <div class="heading">
+                <h1>Company Wise Sales Statistics</h1>
             </div>
+    
+            <div>
+    
+                <div class="chartCanvas" style="max-height: 500px;">
+                    <br>
+                    <canvas id="companySalesChartPie"></canvas>
+                    <canvas id="companySalesChartBar"></canvas>
+                </div>
+            </div>
+    
         </div>
+    </a>
 
-    </div>
-
+    <br>
+    <a name="AmntStats">
+        <div class="addStats">
+    
+            <div class="heading">
+                <h1>Order Total Amount Wise Statistics</h1>
+            </div>
+            <div>
+                <div class="chartCanvas" style="max-height: 500px;">
+                    <br>
+                    <canvas id="orderAmntChartPie"></canvas>
+                    <canvas id="orderAmntChartBar"></canvas>
+                </div>
+            </div>
+    
+        </div>
+    </a>
+    <br>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -150,6 +184,26 @@
         });
     }
 
+    
+
+    function orderAmntDisplay() {
+        $.ajax({
+            url: "/api/stats/amountWiseSales/",
+            type: "GET",
+            success: function (response) {
+                const amntWiseLabels = response.amnt_wise[0];
+                const amntWiseData = response.amnt_wise[1];
+
+                buildDiagram("bar", "orderAmntChartBar", amntWiseLabels, amntWiseData, "Total Orders Issued", "Amount Wise Order Made");
+                buildDiagram("pie", "orderAmntChartPie", amntWiseLabels, amntWiseData, "Total Orders Issued", "Amount Wise Order Made");
+                
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
     function companyDisplay() {
         $.ajax({
             url: "/api/stats/company/",
@@ -168,8 +222,11 @@
             }
         });
     }
+
+
     CatSubDisplay('pie');
     companyDisplay();
+    orderAmntDisplay();
 
 </script>
 
