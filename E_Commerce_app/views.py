@@ -1333,7 +1333,7 @@ def statsCategory(request):
         # Retrieve all OrderItems
         order_items = OrderItem.objects.all()
 
-        # Calculate total products purchased for each category and subcategory
+       
         category_products_count = defaultdict(int)
         subcategory_products_count = defaultdict(int)
         for order_item in order_items:
@@ -1342,7 +1342,7 @@ def statsCategory(request):
             category_products_count[category_name] += order_item.quantity
             subcategory_products_count[subcategory_name] += order_item.quantity
 
-        # Extract category names and purchased sales
+
         categories = list(category_products_count.keys())
         category_sales = [category_products_count[category_name] for category_name in categories]
 
@@ -1358,7 +1358,25 @@ def statsCategory(request):
         # Handle other exceptions, for example:
         return JsonResponse({'error': str(e)}, status=500)
     
+def statsCompany(request):
+    try:
+        order_items = OrderItem.objects.all()
+        company_sales_count = defaultdict(int)
+        for order_item in order_items:
+            product = order_item.product
+            company_name = product.company.name
+            company_sales_count[company_name] += order_item.quantity
+        companies = list(company_sales_count.keys())
+        company_sales = [company_sales_count[company_name] for company_name in companies]
+
+        return JsonResponse({'company_wise': [companies, company_sales]}, safe=False)
+    except ObjectDoesNotExist as e:
+        return JsonResponse({'error': 'Object does not exist'}, status=404)
+    except Exception as e:
+
+        return JsonResponse({'error': str(e)}, status=500)
     
+
 def statsPage(request):
     return render(request, 'admin_pages/stats.html')
 

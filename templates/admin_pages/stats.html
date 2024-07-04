@@ -5,22 +5,24 @@
 
 {% block content %}
 <style>
-    .btns{
+    .btns {
         display: flex;
         justify-content: space-around;
     }
-    .diagramBtns{
+
+    .diagramBtns {
         padding: 15px;
         width: 30%;
         font-weight: bold;
         cursor: pointer;
     }
-    .addStats h2{
+
+    .addStats h2 {
         font-weight: bold;
         font-family: 'Times New Roman', Times, serif;
         padding: 10px;
     }
-    
+
     .chartCanvas {
         display: flex;
         max-width: 100%;
@@ -28,24 +30,26 @@
         justify-content: space-between;
     }
 
-    #categoryChart{
-        width: 40%; 
-        height: 400px; 
-        margin: 0 auto; 
+    #companySalesChartPie {
+        width: 40%;
+        height: 400px;
+        margin: 0 auto;
     }
-    #subCategoryChart{
-        width: 40%; 
-        height: 400px; 
-        margin: 0 auto; 
+
+    #subCategoryChart, #companySalesChartBar,#categoryChart {
+        width: 40%;
+        height: 400px;
+        margin: 0 auto;
     }
+   
 </style>
-<div class="content container-fluid">     
+<div class="content container-fluid">
 
     <div class="addStats">
         <div class="heading">
             <h1>Category and Subcategory Wise Sales Statistics</h1>
         </div>
-        
+
         <div>
             <div class="btns">
                 <button class="diagramBtns" onclick="CatSubDisplay('pie')">Pie Diagram</button>
@@ -57,86 +61,121 @@
                 <canvas id="subCategoryChart"></canvas>
             </div>
         </div>
-          
-        
-        
-        
+
     </div>
 
-    <br>
-    <br>
    
+    <br>
+    <div class="addStats">
+
+        <div class="heading">
+            <h1>Company Wise Sales Statistics</h1>
+        </div>
+
+        <div>
+          
+            <div class="chartCanvas" style="max-height: 500px;">
+                <br>
+                <canvas id="companySalesChartPie"></canvas>
+                <canvas id="companySalesChartBar"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     function buildDiagram(typeTxt, carvasId, labelsList, dataList, labelName, title) {
-    const ctx = document.getElementById(carvasId);
-    if (ctx.chart) {
-        ctx.chart.destroy(); // Destroy existing chart instance
-    }
-    let width = 300; 
-    let height = 300; 
+        const ctx = document.getElementById(carvasId);
+        if (ctx.chart) {
+            ctx.chart.destroy(); // Destroy existing chart instance
+        }
+        let width = 300;
+        let height = 300;
+        // console.log("hai2")
+        ctx.style.width = width + 'px'; // Set canvas width
+        ctx.style.height = height + 'px'; // Set canvas height
 
-    ctx.style.width = width + 'px'; // Set canvas width
-    ctx.style.height = height + 'px'; // Set canvas height
-
-    ctx.chart = new Chart(ctx, {
-        type: typeTxt,
-        data: {
-            labels: labelsList,
-            datasets: [{
-                label: labelName,
-                data: dataList,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: title,
-                    padding: {
-                        top: 10,
-                        bottom: 30
-                    }
-                },
-             
+        ctx.chart = new Chart(ctx, {
+            type: typeTxt,
+            data: {
+                labels: labelsList,
+                datasets: [{
+                    label: labelName,
+                    data: dataList,
+                    borderWidth: 1
+                }]
             },
-            // maintainAspectRatio: false
-        }
-    });
-}
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                        padding: {
+                            top: 10,
+                            bottom: 30
+                        }
+                    },
 
-function CatSubDisplay(typeBtn) {
-    $.ajax({
-        url: "/api/stats/category/",
-        type: "GET",
-        success: function(response) {
-            const categoryLabels = response.category_wise[0];
-            const categoryData = response.category_wise[1];
-            const subcategoryLabels = response.subcategory_wise[0];
-            const subcategoryData = response.subcategory_wise[1];
-            if (typeBtn === "bar") {
-                buildDiagram("bar", "categoryChart", categoryLabels, categoryData, "Total Products Purchased", "Category Wise Sales");
-                buildDiagram("bar", "subCategoryChart", subcategoryLabels, subcategoryData, "Total Products Purchased", "Sub Category Wise Sales");
-            } else {
-                buildDiagram("pie", "categoryChart", categoryLabels, categoryData, "Total Products Purchased", "Category Wise Sales");
-                buildDiagram("pie", "subCategoryChart", subcategoryLabels, subcategoryData, "Total Products Purchased", "Sub Category Wise Sales");
+                },
+                // maintainAspectRatio: false
             }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching data:", error);
-        }
-    });
-}
+        });
+    }
 
-  </script>
+    function CatSubDisplay(typeBtn) {
+        $.ajax({
+            url: "/api/stats/category/",
+            type: "GET",
+            success: function (response) {
+                const categoryLabels = response.category_wise[0];
+                const categoryData = response.category_wise[1];
+                const subcategoryLabels = response.subcategory_wise[0];
+                const subcategoryData = response.subcategory_wise[1];
+                if (typeBtn === "bar") {
+                    buildDiagram("bar", "categoryChart", categoryLabels, categoryData, "Total Products Purchased", "Category Wise Sales");
+                    buildDiagram("bar", "subCategoryChart", subcategoryLabels, subcategoryData, "Total Products Purchased", "Sub Category Wise Sales");
+                } else {
+                    buildDiagram("pie", "categoryChart", categoryLabels, categoryData, "Total Products Purchased", "Category Wise Sales");
+                    buildDiagram("pie", "subCategoryChart", subcategoryLabels, subcategoryData, "Total Products Purchased", "Sub Category Wise Sales");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+    function companyDisplay() {
+        $.ajax({
+            url: "/api/stats/company/",
+            type: "GET",
+            success: function (response) {
+                // console.log("hai, clicked", response);
+                const companyLabels = response.company_wise[0];
+                const companyData = response.company_wise[1];
+                // console.log(companyLabels, companyData)
+                buildDiagram("pie", "companySalesChartPie", companyLabels, companyData, "Total Products Purchased", "Company Wise Sales");
+                buildDiagram("bar", "companySalesChartBar", companyLabels, companyData, "Total Products Purchased", "Company Wise Sales");
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+    CatSubDisplay('pie');
+    companyDisplay();
+
+</script>
 
 
-   
+
 
 {% endblock %}
 
-{% block direBtn %}Stats{% endblock %} 
+{% block direBtn %}Stats{% endblock %}
