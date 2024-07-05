@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="CodeHim">
+    <title> ShopEase_{{order.order_id}} </title>
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Demo CSS (No need to include it into your project) -->
+    <link rel="stylesheet" href="./css/demo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <style>
+        .cd__main {
+            /* background: linear-gradient(to right, black, brown) !important; */
+
+            background-color: rgb(153, 142, 142);
+        }
+
+        body {
+            background: #EEE;
+            /* font-size:0.9em !important; */
+        }
+
+        .invoice {
+            background: #fff;
+            width: 970px !important;
+            /* margin: 50px auto; */
+        }
+
+        .invoice .invoice-header {
+            padding: 25px 25px 15px;
+        }
+
+        .invoice .invoice-header h1 {
+            margin: 0;
+        }
+
+        .invoice .invoice-header .media .media-body {
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        .invoice .invoice-body {
+            border-radius: 10px;
+            padding: 25px;
+            background: #FFF;
+        }
+
+        .invoice .invoice-footer {
+            padding: 15px;
+            font-size: 0.9em;
+            text-align: center;
+            color: #999;
+        }
+
+        .logo {
+            max-height: 70px;
+            border-radius: 10px;
+        }
+
+        .dl-horizontal {
+            margin: 0;
+        }
+
+        .dl-horizontal dt {
+            float: left;
+            width: 80px;
+            overflow: hidden;
+            clear: left;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 90px;
+        }
+
+        .rowamount {
+            padding-top: 15px !important;
+        }
+
+        .rowtotal {
+            font-size: 1.3em;
+        }
+
+        .colfix {
+            width: 12%;
+        }
+
+        .mono {
+            font-family: monospace;
+        }
+        table thead th{
+            text-align: center;
+            font-weight: bolder;
+        }
+        .product-name {
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+
+        .fixed-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000; /* Ensure it's above other content */
+        background-color: #007bff; /* Example background color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Style for button hover effect */
+    .fixed-button:hover {
+        background-color: #0056b3; /* Darker shade of primary color */
+    }
+    </style>
+</head>
+
+<body>
+    <main class="cd__main">
+        <div class="container invoice">
+            <div class="invoice-header">
+                <div class="row">
+                    <div class="col-xs-8">
+                        <h1>Invoice</h1>
+                        <h4 class="text-muted">NO: {{order.order_id}} | {{ order.order_date }}</h4>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="media">
+                            <div class="media-left">
+                                <img class="media-object logo" src="https://dummyimage.com/70x70/000/fff&text=ShopEase" />
+                            </div>
+                            <ul class="media-body list-unstyled">
+                                <li><strong>ShopEase.Com</strong></li>
+                                <li>an eCommerce Platform</li>
+                                <li>LBSCEK Student Venture</li>
+                                <li>shopease.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-body">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Company Details</h3>
+                            </div>
+                            <div class="panel-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Name</dt>
+                                    <dd><strong>ShopEase Corporation Ltd</strong></dd>
+                                    <dt>Industry</dt>
+                                    <dd>eCommerce Platform</dd>
+                                    <dt>Address</dt>
+                                    <dd>Povval, Kasaragod (Dist), Kerala</dd>
+                                    <dt>Phone</dt>
+                                    <dd>+91 9072450650</dd>
+                                    <dt>Email</dt>
+                                    <dd>shopease@outlook.com</dd>
+                                    <dt>Tax NO</dt>
+                                    <dd class="mono">123456789</dd>
+                                    <dt>Tax Office</dt>
+                                    <dd>Bengaluru</dd>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Customer Details</h3>
+                            </div>
+                            <div class="panel-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Name</dt>
+                                    <dd>{{ user_full_name }}</dd>
+                                    
+                                    <dt>Address</dt>
+                                    <dd>{{ order.address }}</dd>
+                                    
+                                    <dt>Phone</dt>
+                                    <dd>{{ user_phone }}</dd>
+                                    
+                                    <dt>Email</dt>
+                                    <dd>{{ user_email }}</dd>
+                                    
+                                    <dt>&nbsp;</dt>
+                                    <dd>&nbsp;</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Services / Products</h3>
+                    </div>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Item / Details</th>
+                                <th class="text-center colfix">Quantity</th>
+                                <th class="text-center colfix">Mrp (Per Qty)</th>
+                                <th class="text-center colfix">Selling Price (Per Qty)</th>
+                                <!-- <th class="text-center colfix">Discount</th> -->
+                                <!-- <th class="text-center colfix">Tax</th> -->
+                                <th class="text-center colfix">Sub Total</th>
+                                <th class="text-center colfix">Amount Saved</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order_items %}
+                            <tr>
+                                <td>
+                                    {{ item.product_name }}
+                                    <br>
+                                    <small class="text-muted">Company: {{ item.company_name }}</small>
+                                </td>
+                                <td class="text-right">
+                                    <span class="mono">{{ item.quantity }}</span>
+                                </td>
+                                <td class="text-right">
+                                    <span class="mono">₹{{ item.mrp_price }}</span>
+                                    
+                                </td>
+                                <td class="text-right">
+                                    <span class="mono">₹{{ item.selling_price }}</span>
+                                </td>
+                                
+                                <td class="text-right">
+                                    <strong class="mono">₹{{ item.subtotal }}</strong>
+                                </td>
+                               
+                                <td class="text-right">
+                                    <span class="mono">₹{{ item.amount_saved }}</span>
+                                </td>
+                                
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel panel-default">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <td class="text-center col-xs-1">Total Amount Saved</td>
+                                <!-- <td class="text-center col-xs-1">Discount</td> -->
+                                <td class="text-center col-xs-1">Final Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center rowtotal mono">₹{{ amount_saved }}</th>
+                                <!-- <th class="text-center rowtotal mono">-$1,800.00</th> -->
+                                <th class="text-center rowtotal mono"><strong>₹{{ total_amount }}</strong></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <i>Comments / Notes</i>
+                                <hr style="margin:3px 0 5px" /> 
+                                <ol>
+                                    <li><strong>Return Policy :</strong>Items can be returned within 30 days of purchase with the original receipt.</li>
+                                    <li>If you have any questions about your order, please contact our customer service at (123) 456-7890 or email support@shopease.com.</li>
+                                </ol>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Payment Method</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p>Payment Status: <strong style="color: green; font-size: 20px;">PAID</strong></p>
+                                <p>Transaction Id: <strong>{{ order.transaction_id }}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-footer">
+                Thank you for choosing our services.
+                <br /> We hope to see you again soon
+                <br />
+                <strong>~ShopEase.com~</strong>
+            </div>
+        </div>
+        <!-- END EDMO HTML (Happy Coding!)-->
+        <button class="fixed-button" style="font-weight: bolder;" onclick="window.print()">Download Bill</button>
+    </main>
+    
+    <!-- Script JS -->
+    <script src="./js/script.js"></script>
+    <!--$%analytics%$-->
+</body>
+
+</html>

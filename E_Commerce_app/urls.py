@@ -16,6 +16,7 @@ urlpatterns = [
     path('profile/', views.profile, name="profile"),
     path('profile/personalDetails/', views.profilePersonal, name="profilePersonal"),
     path('myorders/', views.myorders, name="myorders"),
+    path('bill/<int:order_id>/', views.generateBill, name='generateBill'),
 
     path('adminSector', views.adminHome, name='adminHome'),
     path('adminSector/products', views.adminProducts, name="adminProducts"),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('api/stats/category/', views.statsCategory, name="statsCategory"),
     path('api/stats/company/', views.statsCompany, name='statsCompany'),
     path('api/stats/amountWiseSales/', views.statsSales, name='statsSales'),
+    # path('api/downloadBill/<int:orderid>/', views.downloadBill, name='downloadBill'),
     # Comment
 
     path('api/add_comment', views.add_comment, name='add-comment'),

@@ -56,7 +56,9 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from itertools import chain
 from django.db.models import Q
-
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from .models import Order, OrderItem, Product
 
 def extract_upi_transaction_id(image_path):
     try:
@@ -1394,6 +1396,72 @@ def statsSales(request):
     
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+import requests
+import pdfkit
+
+
+
+
+       
+def generateBill(request, order_id):
+    try:
+        # Retrieve the order details
+        order = get_object_or_404(Order, order_id=order_id)
+        
+        # Retrieve the user details
+        user = order.user
+
+        # Retrieve all order items for the given order
+        order_items = OrderItem.objects.filter(order=order)
+        
+        if not order_items:
+            return HttpResponse("No items found for this order.", status=404)
+        
+        # Prepare a list to hold detailed information about each order item
+        items_details = []
+        totalAmntSaved = 0
+        for item in order_items:
+            product = item.product
+            company = product.company
+            
+            item_details = {
+                'product_name': product.name,
+                'mrp_price': product.mrp_price,
+                'selling_price': product.selling_price,
+                'quantity': item.quantity,
+                'subtotal': item.subtotal,
+                'company_name': company.name,
+                'amount_saved': (product.mrp_price * item.quantity) - (product.selling_price * item.quantity)
+            }
+            totalAmntSaved += ((product.mrp_price * item.quantity) - (product.selling_price * item.quantity))
+            items_details.append(item_details)
+        
+        # Prepare context for the template
+        context = {
+            'order': order,
+            'order_items': items_details,
+            'total_amount': order.total_amount,
+            'user_full_name': f"{user.first_name} {user.last_name}",
+            'user_phone': user.phone_number,
+            'user_email': user.email,
+            'amount_saved': totalAmntSaved
+        }
+        print(context)
+        return render(request, "auth_pages/bill.html", context)
+    
+    except Order.DoesNotExist:
+        return HttpResponse("Order not found.", status=404)
+    except OrderItem.DoesNotExist:
+        return HttpResponse("Order items not found.", status=404)
+    except Product.DoesNotExist:
+        return HttpResponse("Product not found.", status=404)
+    except Exception as e:
+        return HttpResponse(f"An error occurred: {e}", status=500)
+    
+
+
 
 def statsPage(request):
     return render(request, 'admin_pages/stats.html')

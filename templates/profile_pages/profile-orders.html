@@ -33,6 +33,17 @@
     .view-details-btn:hover{
         text-decoration: underline;
     }
+
+    .tdBtns{
+        padding: 15px;
+        font-weight: bold;
+        color: goldenrod;
+        background-color: black;
+    }
+    .tdBtns:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
     
 </style>
 {% endblock %}
@@ -82,6 +93,9 @@
         </tbody>
     </table>
     <br>
+    <hr/>
+    <br>
+    <h2>Order Details</h2>
     <br>
     {% for order in order_data %}
     <table class="order-details-table" id="order-details-{{ order.order_id }}" border="1" >
@@ -106,6 +120,13 @@
             <tr>
                 <td colspan="3" style="font-size: 18px; font-weight: bolder;">Total Amount: -</td>
                 <td style="font-weight: bolder;">{{ order.total_amount }}0</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+               <td colspan="2">
+                   <a href="/bill/{{order.order_id}}/" target="_blank"><button class="tdBtns">View Bill</button></a>
+               </td> 
+               
             </tr>
         </tbody>
     </table>
