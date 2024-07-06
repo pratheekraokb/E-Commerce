@@ -17,7 +17,17 @@ font-size:28px;
 h2.label{
 color:white;
 <!-- font-style:none; -->
+}    <h1 style="text-align: center;color:white;">Personal Details</h1>
+<br />
+
+div.row{
+    display: flex;
 }
+.col{
+    width: 50%;
+}
+
+
 
 {% endblock %}
 
@@ -39,51 +49,53 @@ color:white;
 <h1 style="text-align: center;color:white;">Personal Details</h1>
 <br />
 
-<br/>
-<br/>
+<br />
+<br />
 
-    <div style="color: white; display: flex;">
-        <div class="row">
-            <h2 class="label">First Name:- </h2>
-            <h2>{{ user_data.firstname }}</h2>
-        </div>
-    
-        <div class="row" style="display: flex;">
-            <h2 class="label">Last Name:- </h2>
-            <h2>{{ user_data.lastname }}</h2>
-        </div>
-    
-        <div class="row">
-            <h2 class="label">Complete Name:- </h2>
-            <h2>{{ user_data.name }}</h2>
-        </div>
+<div style="color: white; display: flex;">
+    <div class="row">
+        <h2 class="label">First Name:- </h2>
+        <h2>{{ user_data.firstname }}</h2>
     </div>
-    
-    
-    <div style="color: white; display: flex;">
-    
-        <div class="row" style="display: flex;">
-            <h2 class="label">Phone Number:- </h2>
-            <h2>{{ user_data.phone_number }}</h2>
-        </div>
-        
-        <div class="row">
-            <h2 class="label">E-Mail ID:- </h2>
-            <h2>{{ user_data.email }}</h2>
-        </div>
+
+    <div class="row" style="display: flex;">
+        <h2 class="label">Last Name:- </h2>
+        <h2>{{ user_data.lastname }}</h2>
     </div>
-    
-    <div style="color: white; display: flex;">
-        <div class="row">
-            <h2 class="label">Last Login:- </h2>
-            <h2>{{user_data.last_login}}</h2>
-        </div>
-    
-        <div class="row">
-            <h2 class="label">Date of Birth:- </h2>
-            <h2>{{ user_data.date_of_birth }}</h2>
-        </div>
-    
+
+    <div class="row">
+        <h2 class="label">Complete Name:- </h2>
+        <h2>{{ user_data.name }}</h2>
     </div>
-    
+</div>
+
+
+<div style="color: white; display: flex;">
+
+    <div class="row" style="display: flex;">
+        <h2 class="label">Phone Number:- </h2>
+        <h2>{{ user_data.phone_number }}</h2>
+    </div>
+
+    <div class="row">
+        <h2 class="label">E-Mail ID:- </h2>
+        <h2>{{ user_data.email }}</h2>
+    </div>
+</div>
+
+<div style="color: white; display: flex;">
+    <div class="row">
+        <h2 class="label">Last Login:- </h2>
+        <h2>{{user_data.last_login}}</h2>
+    </div>
+
+    <div class="row">
+        <h2 class="label">Date of Birth:- </h2>
+        <h2>{{ user_data.date_of_birth }}</h2>
+    </div>
+
+</div>
+
+
+
 {% endblock %}

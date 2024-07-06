@@ -3,7 +3,7 @@
 
 {% block styleCss %}
 <style>
-    .about {
+    .heading {
        font-size: 60px;
        color: #088178;
        margin-left: 50px;
@@ -29,6 +29,19 @@
         font-style: normal;
         color: rgb(49, 103, 99);
     }
+    .flowChart{
+        justify-content: center;
+    }
+    .flowChart img{
+        max-width: 40%;
+        margin: 10px;
+        border: 5px solid whitesmoke;
+        border-radius: 20px;
+        margin-left: 20px;
+    }
+    div.row{
+        display: flex;
+    }
 </style>
 
 
@@ -46,7 +59,7 @@
 
 {% block content %}
 
-<h1 class="about">
+<h1 class="heading">
     About US
 </h1>
 <div class="content">
@@ -57,8 +70,8 @@
         Welcome to our ecommerce website! We're thrilled to have you here.
     </p>
     <p class="p3">
-        Our platform was meticulously crafted by our dedicated team - <span>Asish, Pratheek, Noushad,</span> and <span>
-            Rajin </span>. Each of them brought their unique skills and perspectives to build a user-friendly, secure,
+        Our platform was meticulously crafted by our dedicated team - <span>Pratheek Rao K B, Jacob George, Parthiv Vinay,</span> and <span>
+            Sarthak Raj M S </span>. Each of them brought their unique skills and perspectives to build a user-friendly, secure,
         and efficient shopping experience for you.
     </p>
     <p class="p4">
@@ -77,7 +90,17 @@
         Best Regards,<br>
         Team ShopEase
     </p>
+    <h1 class="heading" style="margin-left: 0;">Technical Details</h1>
+    <div style="max-height: 100vh;overflow-y: scroll;">
+        <div class="flowChart row" style="display: flex; width: 100%;">
+            <img src="/media/shop/admin_images/ShopEase_FlowDiagram.png" alt="Flow Chart">
+            <img src="/media/shop/admin_images/UML_Diagram.png" alt="UML Diagram">
+            <img src="/media/shop/admin_images/ShopEase_ER_Diagram.png" alt="ER Diagram">
+            <!-- <br> -->
+        </div>
+    </div>
 </div>
+
 
 
 <script>
