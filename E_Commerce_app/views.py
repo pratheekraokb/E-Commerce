@@ -1618,3 +1618,36 @@ def chatbot(request):
     
 def help(request):
     return render(request,'main_pages/help.html')
+
+
+def calculate_discount_percentage(mrp_price, selling_price):
+    if mrp_price > 0:
+        return round(((mrp_price - selling_price) / mrp_price) * 100)
+    return 0
+
+
+def product_catelogue(request):
+    products = Product.objects.select_related('company', 'category', 'subcategory').all()
+    product_details = []
+
+    for product in products:
+        discount_percentage = calculate_discount_percentage(product.mrp_price, product.selling_price)
+        product_details.append({
+            'name': product.name,
+            'image': product.image.url,
+            'mrp_price': product.mrp_price,
+            'selling_price': product.selling_price,
+            'discount_percentage': discount_percentage,
+            'company_name': product.company.name,
+            'category_name': product.category.name,
+            'subcategory_name': product.subcategory.name
+        })
+
+    context = {
+        'product_details': product_details
+    }
+    return render(request, 'main_pages/product_catelogue.html', context)   
+    # return render(request, 'product_list.html', context)
+
+
+    # products = Product.objects.select_related('category', 'subcategory', 'company').all()

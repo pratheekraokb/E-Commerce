@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalogue</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+
+        .product-name {
+            width: 25%;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            /* Ensure it's above other content */
+            background-color: #007bff;
+            /* Example background color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Style for button hover effect */
+        .fixed-button:hover {
+            background-color: #0056b3;
+            /* Darker shade of primary color */
+        }
+
+        @media (max-width: 768px) {
+
+            th,
+            td {
+                padding: 10px;
+            }
+
+            .product-name {
+                width: 100%;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            tr {
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 10px;
+            }
+
+            th,
+            td {
+                text-align: right;
+                padding: 10px 20px;
+                position: relative;
+            }
+
+            th {
+                background-color: #007bff;
+                color: white;
+                text-align: left;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 20px;
+                width: calc(100% - 40px);
+                font-weight: bold;
+                text-align: left;
+            }
+
+            td {
+                text-align: left;
+                padding-left: 150px;
+            }
+        }
+
+        @media print {
+            @page {
+                size: landscape;
+                scale: 0.95;
+            }
+
+            .header {
+                background-color: #007bff;
+                color: white;
+            }
+
+            thead {
+                display: table-header-group;
+                /* Ensure headers are displayed only once */
+            }
+
+
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>ShopEase Product Catelogue</h1>
+        <button onclick="downloadPDF()" class="fixed-button">Download</button>
+    </div>
+    <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Sl No</th>
+                    <th>Image</th>
+                    <th class="product-name">Product Name</th>
+                    <th>MRP Price</th>
+                    <th>Selling Price</th>
+                    <th>% Discount</th>
+                    <th>Company Name</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in product_details %}
+                <tr>
+                    <td data-label="Sl No">{{ forloop.counter }}</td>
+                    <td data-label="Image"><img src="{{ product.image }}" alt="{{ product.name }}" width="50"></td>
+                    <td data-label="Product Name" class="product-name">{{ product.name }}</td>
+                    <td data-label="MRP Price">₹{{ product.mrp_price }}</td>
+                    <td data-label="Selling Price">₹{{ product.selling_price }}</td>
+                    <td data-label="% Discount">{{ product.discount_percentage }}%</td>
+                    <td data-label="Company Name">{{ product.company_name }}</td>
+                    <td data-label="Category">{{ product.category_name }}</td>
+                    <td data-label="Sub Category">{{ product.subcategory_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function downloadPDF() {
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
