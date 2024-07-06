@@ -1556,6 +1556,37 @@ def process_query(query):
             return {"result": result, "status_code": 2}
         except Order.DoesNotExist:
             return {"result": "Order not found", "status_code": 0}
+        
+    elif re.search(r'developers|technical (aspect|side)|about shopease', query, re.IGNORECASE):
+        # Provide information about developers or technical aspects
+        technical_details = {
+            "developers": [
+                {"name": "Pratheek Rao K B"},
+                {"name": "Jacob George"},
+                {"name": "Sarthak Raj M S"},
+                {"name": "Parthiv Vinay"}
+            ],
+            "technical_aspects": {
+                "backend": "Django",
+                "database": "MySQL",
+                "frontend": ["HTML", "CSS", "JavaScript"],
+                "features": [
+                    "Machine learning for Product Categorization",
+                    "Chatbot System",
+                    "Dynamic Home Page",
+                    "Secure Checkout Process",
+                    "Hierarchical Comment Section"
+                ]
+            },
+            "project": "ShopEase",
+            "description": "An e-commerce platform combining cutting-edge technology with user-friendly design. Developed as a Mini Project at LBS College Of Engineering, Kasaragod.",
+            "Documents": {
+                "ER_Diagram": "/media/shop/admin_images/ShopEase_ER_Diagram.png",
+                "UML_Diagram": "/media/shop/admin_images/UML_Diagram.png",
+                "Flow_Chart": "/media/shop/admin_images/ShopEase_FlowDiagram.png"
+            }
+        }
+        return {"result": technical_details, "status_code": 3}
     
     else:
         search_results = search_products(query)

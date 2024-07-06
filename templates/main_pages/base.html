@@ -490,6 +490,10 @@
             /* Semi-transparent background */
         }
 
+        .botChat img{
+            max-width: 90%;
+        }
+
         /* Adjust the chatSystem height to fit within the #botIframe */
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
@@ -580,7 +584,7 @@
                 </div>
                 <div class="chatSubmit" style="display: flex;">
                     <textarea name="" id="" cols="35" rows="4"
-                        placeholder="Enter queries like 'Laptops under 40000', 'Show me laptop with 8gb ram', 'What is status of my order 15', etc"></textarea>
+                        placeholder="Enter queries like 'Laptops under 40000', 'Show me laptop with 8gb ram', 'What is status of my order 15', 'tell me about technical aspect of this project.' etc"></textarea>
                     <button onclick="appendUserMessage()">Submit</button>
 
                 </div>
@@ -639,6 +643,39 @@
                         // Append the botChat element to the chatDisplay
                         document.querySelector('.chatDisplay').appendChild(botChat);
                     }
+                    
+                    else if (data.status_code === 3) {
+                        var botChat = document.createElement('div');
+                        botChat.classList.add('botChat');
+
+                        let content = `<p>Project: ${data.result.project}</p>`;
+                        content += `<p>Description: ${data.result.description}</p>`;
+                        
+                        content += '<h5>Developers:</h5>';
+                        data.result.developers.forEach(dev => {
+                            content += `<p>${dev.name} </p>`;
+                        });
+
+                        content += '<h5>Technical Aspects:</h5>';
+                        content += `<p>Backend: ${data.result.technical_aspects.backend}</p>`;
+                        content += `<p>Database: ${data.result.technical_aspects.database}</p>`;
+                        content += `<p>Frontend: ${data.result.technical_aspects.frontend.join(', ')}</p>`;
+                        content += '<h4>Features:</h4>';
+                        data.result.technical_aspects.features.forEach(feature => {
+                            content += `<li>${feature}</li>`;
+                        });
+                        // content += '';
+
+                        content += '<br><h5>Technical Diagrams:</h5>';
+                        
+                        content += `<p style="text-align:center;"><a href="${data.result.Documents.ER_Diagram}" target="_blank">ER Diagram</a></p>`;
+                        content += `<p style="text-align:center;"><a href="${data.result.Documents.UML_Diagram}" target="_blank">UML Diagram</a></p>`;
+                        content += `<p style="text-align:center;"><a href="${data.result.Documents.Flow_Chart}" target="_blank">Flow Chart</a></p>`;
+
+                        botChat.innerHTML = content;
+                        document.querySelector('.chatDisplay').appendChild(botChat);
+                    }
+                    
                     else if (data.status_code === 4) {
                         data.result.result.forEach(product => {
                             var botChat = document.createElement('div');
