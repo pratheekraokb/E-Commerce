@@ -1,0 +1,86 @@
+{% extends 'main_pages/base.html' %}
+
+
+{% block styleCss %}
+<style>
+    .heading {
+       font-size: 60px;
+       color: #088178;
+       margin-left: 50px;
+       margin-top: 80px;
+       font-weight: bold;
+       font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    
+    .content {
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 50px;
+    }
+    .content p {
+        font-size: 20px;
+        font-weight: bold;
+        font-style: oblique;
+        max-height: 90%;
+        overflow-y: scroll;
+        
+    }
+    .row{
+        display: flex;
+    }
+    .row p{
+        text-align: center;
+    }
+    .col{
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+
+{% endblock %}
+
+{% block navbar %}
+
+<li style="display: flex; flex-direction: column;" class="" id="userListItem">
+    <button style="background-color: transparent; border: none;" onclick="toggleProfile()">
+        <img src="/media/{{ user_data.profile }}" height="55px" style="border-radius: 50%;" alt="">
+        <span style="padding-left: 10px; font-weight: bold;">{{ user_data.username }}</span>
+    </button>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="heading">
+    How to Use this Application ?
+</h1>
+<div class="content row">
+    <div class="col">
+        <iframe width="500" height="315" src="https://www.youtube.com/embed/HyO4i85VBnY?si=i6GH5mzGvXwOQ-hQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <p>Video about how to SignIn and SignUp.</p>
+    </div>
+    <div class="col">
+        <iframe width="500" height="315" src="https://www.youtube.com/embed/oldUfbJ69bo?si=_5-dsqOrCK0hUei9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <p>Video about how to use Product Home page.</p>
+    </div>
+    <div class="col">
+        <iframe width="500" height="315" src="https://www.youtube.com/embed/JlHqz7X7szE?si=l4tI76m_yKhPd89Z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <p>Video about how to use chatbot effectively.</p>
+    </div>
+    <div class="col">
+        <iframe width="500" height="315" src="https://www.youtube.com/embed/ny1C0JDKwGk?si=KupFX9nGggvPjh-M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <p style="text-align: left;">Video about Managing and Viewing MyCart</p>
+    </div>
+</div>
+
+
+
+<script>
+
+</script>
+
+
+
+
+{% endblock %}

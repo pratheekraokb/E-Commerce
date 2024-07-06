@@ -71,4 +71,5 @@ urlpatterns = [
     path('billing/', views.billing, name='billing'),
 
     path('chatbot/', views.chatbot, name="chatbot"),
+    path('help/', views.help, name="help"),
 ]

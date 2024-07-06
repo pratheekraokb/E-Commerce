@@ -1616,3 +1616,5 @@ def chatbot(request):
     else:
         return JsonResponse({'result': [], 'result_status': 0})
     
+def help(request):
+    return render(request,'main_pages/help.html')
