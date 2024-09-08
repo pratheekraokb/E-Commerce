@@ -136,7 +136,7 @@
                                 style="padding: 15px; font-size: small; font-weight: bold; font-style: italic;"
                                 required>
                         </div>
-                        
+
                     </div>
                     <div class="form-row" style="padding: 10px;">
                         <label for="addressLabel">Address:-</label>
@@ -173,18 +173,18 @@
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.upi_transaction_id) {
-                document.getElementById('TransactionId').value = data.upi_transaction_id;
-                // console.log('UPI Transaction ID:', data.upi_transaction_id);
-            } else {
-                console.log('Failed to extract UPI Transaction ID');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.upi_transaction_id) {
+                    document.getElementById('TransactionId').value = data.upi_transaction_id;
+                    // console.log('UPI Transaction ID:', data.upi_transaction_id);
+                } else {
+                    console.log('Failed to extract UPI Transaction ID');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 </script>
 
@@ -259,7 +259,7 @@
             // Gather data from the form
             var transactionId = document.getElementById('TransactionId').value;
             var address = document.getElementById('Address').value;
-            localStorage.clear();
+            // localStorage.clear();
 
             // Check if the required fields are not empty
             if (transactionId.trim() !== '' && address.trim() !== '') {
@@ -284,18 +284,25 @@
                     },
                     body: formData,
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        console.log("Response status:", response.status); // Log response status
+                        // alert(response.json());
+                        return response.json(); // Ensure this line parses the JSON response
+                    })
                     .then(data => {
                         // Handle the response from the server
-                        localStorage.clear();
-                        if (data.msgcode == 1) {
-
-                            alert(data.msg);
+                        if (data.msgCode === 1) {
+                            localStorage.clear(); // Clear local storage only if the order is successful
+                            alert(data.message);
+                        } else {
+                            alert(data.message);
                         }
 
                     })
                     .catch(error => {
                         console.error("Error:", error);
+                        localStorage.clear();
+                        // alert("An error occurred while submitting the order.", error);
                     });
             } else {
                 alert("Address and TransactionId are required!");

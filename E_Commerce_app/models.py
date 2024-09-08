@@ -102,7 +102,8 @@ class Category(models.Model):
         return self.name
     class Meta:
         db_table = 'Category'
-    
+
+
 class Subcategory(models.Model):
     subcategory_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)

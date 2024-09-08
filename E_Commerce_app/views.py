@@ -59,6 +59,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Order, OrderItem, Product
+from twilio.rest import Client
 
 def extract_upi_transaction_id(image_path):
     try:
@@ -300,7 +301,10 @@ def create_product(request):
                 company=company,
                 image=form.cleaned_data['file']
             )
+
+            print(new_product)
             new_product.save()
+            print("Sucess added product")
             # images = request.FILES.getlist('images')
             tags_data = request.POST.get('tagsData')  
             
@@ -314,7 +318,7 @@ def create_product(request):
                     ProductTag.objects.create(product=new_product, tag=tag)
                     # print(tags_array)
 
-        
+            print("Tags added")
 
                 
             # print(images)
@@ -328,7 +332,8 @@ def create_product(request):
             for image in additional_images:
                 product_image = ProductImage(product=new_product, image=image)
                 product_image.save()
-           
+
+            print("Additional images added")
             
             return JsonResponse({'message': 'Product updated successfully'}, status=200)
 
@@ -1173,32 +1178,28 @@ def myorders(request):
 load_dotenv()
 
 def SendSMS(phone_number_to_send, body_Msg):
-    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    try:
+        
 
-    twilio_phone_number = "+12566900192"
+        account_sid = 'AC6c882f43f1cda8b2248bf7f2a525d7c2'
+        auth_token = '7c8a30dc261c6f205dda22668492ca8c'
+        client = Client(account_sid, auth_token)
 
-    recipient_phone_number = phone_number_to_send
+        message = client.messages.create(
+            from_='+13343784929',
+            body=str(body_Msg),
+            to=str(f'+91{phone_number_to_send}')
+        )
+        print(message.body)
 
+        if message.sid:
+            print("SMS message sent successfully")
+        else:
+            print("Failed to send SMS message")
 
-    message_body = body_Msg
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
-    client = Client(account_sid, auth_token)
-
-    sms_message = client.messages.create(
-        body=message_body,
-        from_=twilio_phone_number,
-        to=recipient_phone_number
-    )
-
-    
-     # Check if messages were sent successfully
-    if sms_message.sid:
-        print("SMS messages sent successfully")
-    else:
-        print("Failed to send messages")
-
-from twilio.rest import Client
 
 def SendWhatsapp(phone_number,body_msg):
     account_sid = os.getenv('TWILIO_ACCOUNT_SID')
@@ -1207,7 +1208,7 @@ def SendWhatsapp(phone_number,body_msg):
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='whatsapp:+13343784929',
         body={body_msg},
         to=f'whatsapp:{phone_number}'
     )
@@ -1233,7 +1234,7 @@ def billing(request):
     return render(request, 'main_pages/billing.html', {"user_data": userData})
 
 
-
+@login_required
 @csrf_exempt
 def submit_order(request):
     if request.method == 'POST':
@@ -1247,14 +1248,14 @@ def submit_order(request):
             total_amount = data.get('TotalAmmount')
             status = data.get('Status')
             user_id = data.get('userId')
-
-            user_id = int(user_id)
-            total_amount = int(total_amount)
-
             purchased_items = data.get('products_details')
 
-            # Save order to the database
+            if not (transaction_id and address and total_amount and status and user_id and purchased_items):
+                return JsonResponse({'status': 'error', 'message': 'Missing required fields'})
+
+            total_amount = int(total_amount)
             current_datetime = timezone.now()
+
             order = Order.objects.create(
                 user=user,
                 order_date=current_datetime,
@@ -1264,68 +1265,74 @@ def submit_order(request):
                 address=address
             )
 
-            # print(purchased_items)
-            # Save each purchased item to the database
             for item in purchased_items:
                 product_id = item['id']
                 price = item['price']
                 quantity = item['quantity']
                 subtotal = item['total']
-                order_item = OrderItem.objects.create(
+                OrderItem.objects.create(
                     order=order,
                     product_id=product_id,
                     quantity=quantity,
                     subtotal=subtotal,
                     order_date=current_datetime
                 )
-
-
-                
-
-            phoneNumber = user.phone_number
-            email = user.email
-            username = user.username
-            name = user.get_full_name()
-
-            name = name.upper()
-            msg = f"""
-                Thank you for shopping with ShopEase. This is your order confirmation.
-
-                Order Details:
-                1. Name: {name}
-                2. Username: {username}
-                3. E-Mail: {email}
-                4. Contact Number: {phoneNumber}
-
-                5. Order Transaction Id: {transaction_id}
-                6. Shipment Address:
-                {address}
-                7. Total Amount: {total_amount}.00 RS (INR)
-
-                Your satisfaction is our priority. If you have any questions or need assistance, feel free to reach out.
-
-                We appreciate your business and look forward to serving you again!
-
-                Best regards,
-                The ShopEase Team
-            """
-
-            # Sending confirmation messages
-            # (Code for sending SMS and WhatsApp messages)
-            try:
-                # Sending SMS and WhatsApp messages
-                SendSMS(phoneNumber, msg)
-                SendWhatsapp(phoneNumber, msg)
-            except Exception as e:
-                return JsonResponse({'status': 'error', 'message': f'Error sending messages: {str(e)}'})
-
+            print("Hai Testing...")
+            # return redirect('/')
             return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
+
+            # print(msg)
+
+            # try:
+            #     user = request.user
+            #     phoneNumber = user.phone_number
+            #     email = user.email
+            #     username = user.username
+            #     name = f"{user.first_name} {user.last_name}"
+            #     name = name.upper()
+            #     print("Hai testing 2....")
+
+            #     print(user, phoneNumber, email, username, name)
+                
+            #     msg = f"""
+            #         Thank you for shopping with ShopEase. This is your order confirmation.
+
+            #         Order Details:
+            #         1. Name: {name}
+            #         2. Username: {username}
+            #         3. E-Mail: {email}
+            #         4. Contact Number: {phoneNumber}
+
+            #         5. Order Transaction Id: {transaction_id}
+            #         6. Shipment Address:
+            #         {address}
+            #         7. Total Amount: {total_amount}.00 RS (INR)
+
+            #         Your satisfaction is our priority. If you have any questions or need assistance, feel free to reach out.
+
+            #         We appreciate your business and look forward to serving you again!
+
+            #         Best regards,
+            #         The ShopEase Team
+            #     """
+            #     # print(msg)
+            #     # phoneNumber = f"+91{phoneNumber}"
+
+
+            #     # SendSMS(phoneNumber, msg)
+            #     return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
+            #     # SendWhatsapp(phoneNumber, msg)
+            # except Exception as e:
+            #     return JsonResponse({'status': 'error', 'message': f'Order placed but error sending messages: {str(e)}'})
+
+            # return JsonResponse({'status': 'success', 'message': 'Order submitted successfully', 'msgCode': 1})
         
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Something went wrong: {str(e)}'})
 
     else:
-        # Handle other HTTP methods if needed
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
 from collections import defaultdict
@@ -1550,7 +1557,9 @@ def process_query(query):
                 "status": order.status,
                 "text": f"Your order with ID {order.order_id}, placed on {order.order_date.date()}, "
                         f"totaling {order.total_amount}, and shipped to {order.address}, "
-                        f"ORDER STATUS is - {order.status}."
+                        f"ORDER STATUS is - {order.status}.",
+                "link": f"/bill/{order.order_id}/"
+                
             }
 
             return {"result": result, "status_code": 2}
@@ -1607,7 +1616,7 @@ def chatbot(request):
             query = body.get('query', '')
             if query:
                 response = process_query(query)
-                print(response)
+                # print(response)
                 return JsonResponse(response)
             else:
                 return JsonResponse("")

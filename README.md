@@ -1,9 +1,60 @@
-# PROJECT SETUP
-## Packages Installation
+# ShopEase - an advanced eCommerce Application
+
+## Brief Introduction
+
+ShopEase is an advanced eCommerce platform developed to provide a seamless and user-friendly online shopping experience. Designed to meet the evolving demands of the modern market, ShopEase leverages cutting-edge technologies to ensure secure transactions, authentic user reviews, and efficient product categorization. The platform aims to empower small local businesses by enhancing their online presence and expanding their reach.
+
+### Key Features
+
+- **User Authentication System:**
+  - **Secure Sign-in and Sign-up Pages:** User-friendly interfaces for account creation and login.
+  - **Hashed Password Storage:** Utilizes bcrypt for secure password handling.
+  - **Role-Based Access Control:** Differentiates between admin and normal users for tailored experiences.
+
+
+- **Product Management:**
+  - **Dynamic Product Catalog:** Regular updates and maintenance of product listings.
+  - **Product Categorization:** Machine learning algorithms for accurate and personalized product categorization.
+
+- **Comment Section:**
+  - **Hierarchical Comment System:** Recursive algorithm and tree data structure for nested comments and structured discussions.
+  - **Verified Purchaser Badge:** Marks comments from users who have purchased the product, ensuring authenticity.
+
+- **Admin Dashboard:**
+  - **Comprehensive Analytics:** Visualizations such as bar and pie charts for sales analysis, category-wise and company-wise metrics.
+  - **Product Management:** Tools for managing products, categories, and companies.
+
+- **User Experience Enhancements:**
+  - **Downloadable Product Brochures:** Access detailed product information in PDF format.
+  - **Invoice and Bill Downloads:** Clear and organized records of transactions available in PDF format.
+  - **Responsive Chatbot:** Assists with order tracking, product searches, and technical queries.
+  - **MyCart Page:** Manage selected items before checkout.
+
+- **Security Features:**
+  - **Encrypted Password Storage:** Protection of user credentials using advanced encryption.
+  - **Secure Data Transmission:** Encryption protocols to ensure safe data handling.
+
+- **Help and Support:**
+  - **Help Section with Tutorials:** Embedded YouTube videos for site usage and feature explanations.
+  - **About Section:** Information about the project, its objectives, and the development team.
+
+## Technologies Used
+
+- **Backend Framework:** Django
+- **Database:** MySQL
+- **Machine Learning:** scikit-learn
+- **Frontend Technologies:** HTML, CSS, JavaScript, AJAX
+- **Testing Tools:** Selenium, ThunderClient (VS Code extension)
+
+
+
+
+## PROJECT SETUP
+### Packages Installation
   
   Install all packages using the command, **pip install -r requirements.txt** in the same directory where the manage.py file exists. <br/>
 
-## DATABASE & Twillio API SETUP Credentials
+### DATABASE & Twillio API SETUP Credentials
   1. Create a .env file in the same directory where manage.py file exists.
   2. Add the following lines there <br/>
       a. TWILIO_ACCOUNT_SID= < Paste Your Account sid ><br/>
@@ -42,4 +93,27 @@
     At the bottom you can see the Chatbot Option *Chat With Bot* which on click, a window will be present where you can talk with ***ShopEase BOT*** 
       
 
-  
+  ## API Documentation
+  ### Overview
+  The ShopEase API provides endpoints for managing users, products, and sales statistics. It includes functionalities for user management (checking availability, creating, updating, and deleting users), product management (creating, updating, and deleting products), and retrieving sales statistics (by category, company, and amount).
+
+### Key Endpoints
+
+**User Management**
+- **Check Email**: `/api/check_email/`
+- **Check Username**: `/api/check_username/`
+- **Create User**: `/api/create_user/`
+- **Update User**: `/api/update_user/`
+- **Delete User**: `/api/delete_user/<int:user_id>/`
+
+**Product Management**
+- **Create Product**: `/api/create_product/`
+- **Update Product**: `/api/update_product/<int:product_id>/`
+- **Delete Product**: `/api/delete_product/<int:product_id>/`
+
+**Sales Statistics**
+- **Category Sales Stats**: `/api/stats/category/`
+- **Company Sales Stats**: `/api/stats/company/`
+- **Sales Amount Stats**: `/api/stats/amountWiseSales/`
+
+For detailed information, please refer to the [full API documentation](https://drive.google.com/file/d/1A5l-ebL2DxDH0GgU9w75zU_r5NMhMP1R/view?usp=drive_link).
